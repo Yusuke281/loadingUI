@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECサイト利用実験</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="experiment-container">
+        <!-- 0. 実験開始画面 -->
+        <div id="start-screen">
+            <h2>ECサイト利用に関する実験</h2>
+            <p>ご協力ありがとうございます。「実験開始」ボタンを押して、最初のタスクを開始してください。</p>
+            <button id="start-experiment-btn">実験開始</button>
+        </div>
+
+        <!-- 1. タスク指示画面 (デフォルトで非表示) -->
+        <div id="task-screen" class="hidden">
+            <h2>タスク指示</h2>
+            <p id="task-description"><strong>トマト</strong>と<strong>ケーキ</strong>をカートに入れてください</p>
+            <button id="start-task-btn">タスク開始</button>
+        </div>
+
+        <!-- 2. ECサイト画面 (デフォルトで非表示) -->
+        <div id="ec-site-screen" class="hidden">
+            <div class="loading-overlay" style="display: none;">
+                <!-- ローダー用のコンテナ -->
+            </div>
+
+            <header>
+                <h1>ECサイト</h1>
+                <p id="header-task-description" style="margin: 0 auto; padding: 0 2rem; font-size: 1.1rem; color: #c9302c; font-weight: 600;"></p>
+                <div class="header-right">
+                    <div id="cart-container">
+                        <span id="cart-count">0</span>
+                        <svg id="cart-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <ul id="cart-items">
+                            <!-- カート内商品はここに表示 -->
+                        </ul>
+                    </div>
+                    <button id="complete-task-btn">完了を報告する</button>
+                </div>
+            </header>
+
+            <div id="ec-main-container">
+                <nav id="category-nav">
+                    <a href="#" data-category="home">ホーム</a>
+                    <a href="#" data-category="vegetables">野菜</a>
+                    <a href="#" data-category="fruits">果物</a>
+                    <a href="#" data-category="sweets">お菓子・デザート</a>
+                    <a href="#" data-category="drinks">飲み物</a>
+                </nav>
+
+                <main>
+                    <div id="product-list">
+                        <!-- 商品カードはここに動的に挿入されます -->
+                    </div>
+                </main>
+
+                <!-- カートサイドバー -->
+                <aside id="cart-sidebar">
+                    <div class="cart-sidebar-header">
+                        <h2>カート</h2>
+                    </div>
+                    <div id="cart-sidebar-body">
+                        <!-- カートの内容がここに表示される -->
+                    </div>
+                </aside>
+            </div>
+
+            <div id="toast-notification" class="toast"></div>
+
+            <button id="back-to-loader-selection-btn">ローダー選択に戻る</button>
+        </div>
+
+        <!-- 3. アンケート画面 (デフォルトで非表示) -->
+        <div id="survey-screen" class="hidden">
+            <h2>アンケート</h2>
+            <p>ご協力ありがとうございます。以下のアンケートにご回答ください。</p>
+            <iframe id="survey-frame" src="" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+            <button id="next-task-btn">次のタスクへ</button>
+        <!-- 4. 実験終了画面 (デフォルトで非表示) -->
+        <div id="experiment-complete-screen" class="hidden">
+            <h2>実験終了</h2>
+            <p>ご協力いただき、誠にありがとうございました。すべてのタスクが完了しました。</p>
+        </div>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // --- 商品データ ---
+    const products = {
+        vegetables: [
+            { id: 'v1', name: 'トマト', price: 150, image: 'images/tomato.jpg' },
+            { id: 'v2', name: 'ピーマン', price: 120, image: 'images/bell-pepper.jpg' },
+            { id: 'v3', name: 'ブロッコリー', price: 180, image: 'images/broccoli.jpg' },
+            { id: 'v4', name: 'にんじん', price: 100, image: 'images/carrot.jpg' },
+            { id: 'v5', name: 'カリフラワー', price: 200, image: 'images/cauliflower.jpg' },
+            { id: 'v6', name: 'きゅうり', price: 90, image: 'images/cucumber.jpg' },
+            { id: 'v7', name: 'なす', price: 130, image: 'images/eggplant.jpg' },
+            { id: 'v8', name: 'ほうれん草', price: 160, image: 'images/spinach.jpg' }
+        ],
+        fruits: [
+            { id: 'f1', name: 'りんご', price: 200, image: 'images/apple.jpg' },
+            { id: 'f2', name: 'バナナ', price: 100, image: 'images/banana.jpg' },
+            { id: 'f3', name: 'キウイ', price: 150, image: 'images/kiwi.jpg' },
+            { id: 'f4', name: 'メロン', price: 1200, image: 'images/melon.jpg' },
+            { id: 'f5', name: 'オレンジ', price: 180, image: 'images/orange.jpg' },
+            { id: 'f6', name: 'パイナップル', price: 500, image: 'images/pineapple.jpg' },
+            { id: 'f7', name: 'いちご', price: 450, image: 'images/strawberry.jpg' }
+        ],
+        sweets: [
+            { id: 's1', name: 'ケーキ', price: 500, image: 'images/cake.jpg' },
+            { id: 's2', name: 'チーズケーキ', price: 550, image: 'images/cheesecake.jpg' },
+            { id: 's3', name: 'チョコレート', price: 250, image: 'images/chocolate.jpg' },
+            { id: 's4', name: 'クッキー', price: 300, image: 'images/cookies.jpg' },
+            { id: 's5', name: 'アイスクリーム', price: 200, image: 'images/ice-cream.jpg' },
+            { id: 's6', name: 'プリン', price: 220, image: 'images/pudding.jpg' },
+            { id: 's7', name: 'ポテトチップス', price: 150, image: 'images/potato-chips.jpg' }
+        ],
+        drinks: [
+            { id: 'd1', name: '緑茶', price: 120, image: 'images/greentea.jpg' },
+            { id: 'd2', name: 'コーラ', price: 150, image: 'images/cola.jpg' },
+            { id: 'd3', name: 'オレンジジュース', price: 160, image: 'images/orange-juice.jpg' },
+            { id: 'd4', name: 'コーヒー', price: 180, image: 'images/coffee.jpg' },
+            { id: 'd5', name: '紅茶', price: 180, image: 'images/black-tea.jpg' },
+            { id: 'd6', name: '牛乳', price: 140, image: 'images/milk.jpg' },
+            { id: 'd7', name: '麦茶', price: 110, image: 'images/barley-tea.jpg' },
+            { id: 'd8', name: 'スポーツドリンク', price: 150, image: 'images/sports-drink.jpg' }
+        ]
+    };
+
+    // --- 実験トライアル定義 (固定タスク + UI/時間) ---
+    const experimentTrials = [
+        { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'none', time: 2000 },
+        { taskHTML: '<strong>ピーマン</strong>と<strong>ケーキ</strong>をカートに入れてください', loader: 'none', time: 5000 },
+        { taskHTML: '<strong>ブロッコリー</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'none', time: 7000 },
+        { taskHTML: '<strong>バナナ</strong>と<strong>チーズケーキ</strong>をカートに入れてください', loader: 'spinner', time: 2000 },
+        { taskHTML: '<strong>キウイ</strong>と<strong>コーラ</strong>をカートに入れてください', loader: 'spinner', time: 5000 },
+        { taskHTML: '<strong>チョコレート</strong>と<strong>にんじん</strong>をカートに入れてください', loader: 'spinner', time: 7000 },
+        { taskHTML: '<strong>カリフラワー</strong>と<strong>メロン</strong>をカートに入れてください', loader: 'bar', time: 2000 },
+        { taskHTML: '<strong>きゅうり</strong>と<strong>クッキー</strong>をカートに入れてください', loader: 'bar', time: 5000 },
+        { taskHTML: '<strong>なす</strong>と<strong>オレンジジュース</strong>をカートに入れてください', loader: 'bar', time: 7000 },
+        { taskHTML: '<strong>オレンジ</strong>と<strong>アイスクリーム</strong>をカートに入れてください', loader: 'skeleton', time: 2000 },
+        { taskHTML: '<strong>パイナップル</strong>と<strong>ほうれん草</strong>をカートに入れてください', loader: 'skeleton', time: 5000 },
+        { taskHTML: '<strong>プリン</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'skeleton', time: 7000 },
+        { taskHTML: '<strong>トマト</strong>と<strong>いちご</strong>をカートに入れてください', loader: 'spinner-color', time: 2000 },
+        { taskHTML: '<strong>ピーマン</strong>と<strong>ポテトチップス</strong>をカートに入れてください', loader: 'spinner-color', time: 5000 },
+        { taskHTML: '<strong>りんご</strong>と<strong>ケーキ</strong>をカートに入れてください', loader: 'spinner-color', time: 7000 },
+        { taskHTML: '<strong>にんじん</strong>と<strong>コーヒー</strong>をカートに入れてください', loader: 'bar-color', time: 2000 },
+        { taskHTML: '<strong>バナナ</strong>と<strong>チョコレート</strong>をカートに入れてください', loader: 'bar-color', time: 5000 },
+        { taskHTML: '<strong>ブロッコリー</strong>と<strong>クッキー</strong>をカートに入れてください', loader: 'bar-color', time: 7000 },
+        { taskHTML: '<strong>キウイ</strong>と<strong>なす</strong>をカートに入れてください', loader: 'skeleton-color', time: 2000 },
+        { taskHTML: '<strong>チーズケーキ</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'skeleton-color', time: 5000 },
+        { taskHTML: '<strong>ほうれん草</strong>と<strong>オレンジ</strong>をカートに入れてください', loader: 'skeleton-color', time: 7000 },
+    ];
+
+    // --- GoogleフォームのURL ---
+    const SURVEY_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeNm6z4Aj-gI1O4mEVCt5jzXbdq8FDYU3jf4lHNsvjIVMze4Q/viewform?usp=header';
+
+    // --- DOM要素の取得 ---
+    const startScreen = document.getElementById('start-screen');
+    const taskScreen = document.getElementById('task-screen');
+    const ecSiteScreen = document.getElementById('ec-site-screen');
+    const surveyScreen = document.getElementById('survey-screen');
+    const experimentCompleteScreen = document.getElementById('experiment-complete-screen');
+    const taskDescription = document.getElementById('task-description');
+    
+    const startExperimentBtn = document.getElementById('start-experiment-btn');
+    const startTaskBtn = document.getElementById('start-task-btn');
+    const productListContainer = document.getElementById('product-list');
+    const categoryNav = document.getElementById('category-nav');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const toastNotification = document.getElementById('toast-notification');
+    const completeTaskBtn = document.getElementById('complete-task-btn');
+    const surveyFrame = document.getElementById('survey-frame');
+    const nextTaskBtn = document.getElementById('next-task-btn');
+    const cartCount = document.getElementById('cart-count');
+    const cartSidebarBody = document.getElementById('cart-sidebar-body');
+
+    // --- 計測用変数 ---
+    let rageClickCount = 0;
+    const lastClicks = [];
+    const RAGE_CLICK_THRESHOLD_TIME = 500;
+    const RAGE_CLICK_THRESHOLD_COUNT = 3;
+    let totalMouseDistance = 0;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let isMeasuringMouseDistance = false;
+    let taskStartTime = 0;
+    const taskTimings = [];
+
+    // --- 状態管理 ---
+    let currentPatternIndex = 0;
+    let selectedLoader = 'spinner';
+    let loadingTimeMs = 2000;
+    let currentCategory = 'home';
+    let cartItems = [];
+    let cartItemIdCounter = 0;
+
+    // --- 関数定義 ---
+    function showScreen(screenToShow) {
+        [startScreen, taskScreen, ecSiteScreen, surveyScreen, experimentCompleteScreen].forEach(screen => {
+            if(screen) screen.classList.add('hidden');
+        });
+        if(screenToShow) screenToShow.classList.remove('hidden');
+    }
+
+    function startTrial(patternIndex) {
+        const currentTrial = experimentTrials[patternIndex];
+        selectedLoader = currentTrial.loader;
+        loadingTimeMs = currentTrial.time;
+        taskDescription.innerHTML = currentTrial.taskHTML;
+
+        showScreen(taskScreen);
+    }
+
+    function renderCart() {
+        cartCount.textContent = cartItems.length;
+        cartSidebarBody.innerHTML = '';
+        if (cartItems.length === 0) {
+            cartSidebarBody.innerHTML = '<p>カートは空です</p>';
+        } else {
+            const ul = document.createElement('ul');
+            cartItems.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${item.name} (¥${item.price})</span>
+                    <button class="delete-cart-item-btn" data-cart-id="${item.cartId}">&times;</button>
+                `;
+                ul.appendChild(li);
+            });
+            cartSidebarBody.appendChild(ul);
+        }
+    }
+
+    function renderHome() {
+        productListContainer.style.display = 'block';
+        const searchBarHtml = `
+            <div class="home-search-container">
+                <h2>商品を検索</h2>
+                <div class="search-bar">
+                    <input type="search" placeholder="キーワードを入力...">
+                    <button type="button">検索</button>
+                </div>
+            </div>
+        `;
+        productListContainer.innerHTML = searchBarHtml;
+    }
+
+    function renderProducts(category) {
+        productListContainer.style.display = 'grid';
+        const productData = products[category];
+        if (!productData) {
+            productListContainer.innerHTML = '<p>このカテゴリーの商品は現在ありません。</p>';
+            return;
+        }
+        const categoryTitle = categoryNav.querySelector(`[data-category="${category}"]`).textContent;
+        productListContainer.innerHTML = `<h2>${categoryTitle}</h2>` + productData.map(product => `
+            <div class="product-card">
+                <img src="${product.image}" alt="${product.name}">
+                <div class="product-card-content">
+                    <h3>${product.name}</h3>
+                    <p class="price">¥${product.price.toLocaleString()}</p>
+                </div>
+                <button class="add-to-cart-btn" data-product-id="${product.id}">カートに入れる</button>
+            </div>
+        `).join('');
+    }
+
+    function getLoaderType() { return selectedLoader; }
+
+    function showLoading() {
+        const loaderType = getLoaderType();
+        loadingOverlay.innerHTML = '';
+        if (loaderType.startsWith('bar')) {
+            loadingOverlay.innerHTML = '<div class="progress-bar-container"><div class="progress-bar"></div></div>';
+            const progressBar = loadingOverlay.querySelector('.progress-bar');
+            if (progressBar) {
+                if (loaderType === 'bar-color') progressBar.classList.add('color');
+                progressBar.style.transitionDuration = `${loadingTimeMs}ms`;
+                setTimeout(() => { progressBar.style.width = '100%'; }, 10);
+            }
+        } else if (loaderType.startsWith('spinner')) {
+            loadingOverlay.innerHTML = '<div class="spinner"></div>';
+            const spinner = loadingOverlay.querySelector('.spinner');
+            if (spinner && loaderType === 'spinner-color') spinner.classList.add('color');
+        }
+        loadingOverlay.style.display = 'flex';
+    }
+
+    function hideLoading() { loadingOverlay.style.display = 'none'; }
+
+    function showToast(message) {
+        toastNotification.textContent = message;
+        toastNotification.classList.add('show');
+        setTimeout(() => { toastNotification.classList.remove('show'); }, 3000);
+    }
+
+    // --- イベントリスナー ---
+    startExperimentBtn.addEventListener('click', () => {
+        startTrial(currentPatternIndex);
+    });
+
+    startTaskBtn.addEventListener('click', () => {
+        const taskDescriptionHTML = taskDescription.innerHTML;
+        const headerTaskDescription = document.getElementById('header-task-description');
+        headerTaskDescription.innerHTML = `タスク ${currentPatternIndex + 1}/21: ${taskDescriptionHTML}`;
+        
+        const strongElements = headerTaskDescription.getElementsByTagName('strong');
+        for (let strong of strongElements) {
+            strong.style.backgroundColor = 'yellow';
+            strong.style.color = '#000';
+            strong.style.padding = '2px 4px';
+            strong.style.borderRadius = '3px';
+        }
+
+        showScreen(ecSiteScreen);
+
+        currentCategory = 'home';
+        const homeLink = categoryNav.querySelector('[data-category="home"]');
+        categoryNav.querySelector('.active')?.classList.remove('active');
+        if (homeLink) homeLink.classList.add('active');
+        renderHome();
+
+        totalMouseDistance = 0;
+        lastMouseX = 0;
+        lastMouseY = 0;
+        isMeasuringMouseDistance = true;
+        taskStartTime = performance.now();
+        cartItems = [];
+        renderCart();
+    });
+
+    categoryNav.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'A') return;
+        e.preventDefault();
+        const newCategory = e.target.dataset.category;
+        if (newCategory === currentCategory) return;
+
+        const startTime = performance.now();
+        const loaderType = getLoaderType();
+
+        if (loaderType.startsWith('skeleton') && newCategory !== 'home') {
+            productListContainer.style.display = 'grid';
+            const categoryTitle = categoryNav.querySelector(`[data-category="${newCategory}"]`).textContent;
+            const skeletonClass = loaderType === 'skeleton-color' ? 'skeleton-card color' : 'skeleton-card';
+            const skeletonHtml = Array(8).fill('').map(() => `<div class="${skeletonClass}"><div class="skeleton-image"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>`).join('');
+            productListContainer.innerHTML = `<h2>${categoryTitle}</h2>` + skeletonHtml;
+        } else if (loaderType !== 'none') {
+            showLoading();
+        }
+
+        categoryNav.querySelector('.active')?.classList.remove('active');
+        e.target.classList.add('active');
+
+        setTimeout(() => {
+            if (loaderType !== 'none' && !loaderType.startsWith('skeleton')) hideLoading();
+            if (newCategory === 'home') renderHome();
+            else renderProducts(newCategory);
+            const endTime = performance.now();
+            taskTimings.push({ action: 'Category Change', from: currentCategory, to: newCategory, loader: loaderType, time: endTime - startTime, simulatedDelay: loadingTimeMs });
+            currentCategory = newCategory;
+        }, loadingTimeMs);
+    });
+
+    productListContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('add-to-cart-btn')) {
+            const productId = e.target.dataset.productId;
+            const product = Object.values(products).flat().find(p => p.id === productId);
+            if (product) {
+                cartItems.push({ ...product, cartId: cartItemIdCounter++ });
+                renderCart();
+                showToast(`「${product.name}」をカートに追加しました！`);
+            }
+        }
+    });
+
+    cartSidebarBody.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-cart-item-btn')) {
+            const cartId = parseInt(e.target.dataset.cartId, 10);
+            cartItems = cartItems.filter(item => item.cartId !== cartId);
+            renderCart();
+        }
+    });
+
+    completeTaskBtn.addEventListener('click', () => {
+        isMeasuringMouseDistance = false;
+        const taskDuration = performance.now() - taskStartTime;
+        taskTimings.push({
+            trial: currentPatternIndex + 1,
+            task: experimentTrials[currentPatternIndex].taskHTML.replace(/<strong>/g, '').replace(/<\/strong>/g, ''),
+            action: 'Task Completed', 
+            rageClicks: rageClickCount, 
+            mouseDistance: totalMouseDistance,
+            taskDuration: taskDuration, 
+            loaderType: selectedLoader, 
+            simulatedLoadingTime: loadingTimeMs,
+            cartContents: cartItems.map(item => item.name), 
+            timestamp: new Date().toISOString()
+        });
+        console.log(`Trial ${currentPatternIndex + 1} completed. Data:`, taskTimings[taskTimings.length - 1]);
+        showScreen(surveyScreen);
+        surveyFrame.src = SURVEY_FORM_URL;
+    });
+
+    nextTaskBtn.addEventListener('click', () => {
+        currentPatternIndex++;
+        if (currentPatternIndex < experimentTrials.length) {
+            startTrial(currentPatternIndex);
+        } else {
+            showScreen(experimentCompleteScreen);
+            console.log("Experiment finished. All data:", taskTimings);
+        }
+    });
+
+    // 初期画面表示
+    showScreen(startScreen);
+});
+    </script>
+</body>
+</html>

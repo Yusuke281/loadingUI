@@ -1,0 +1,528 @@
+/* 全体スタイル */
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    margin: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* ヘッダーとナビゲーション */
+header {
+    background-color: #fff;
+    padding: 0 1rem; /* ← 左右のpaddingを縮小 */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* --- メインレイアウトコンテナ --- */
+#ec-main-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* --- サイドバーナビゲーション --- */
+#category-nav {
+    flex: 0 0 240px; /* サイドバーの幅を固定 */
+    background-color: #fdfdfd;
+    border-right: 1px solid #eee;
+    padding: 1.5rem 1rem;
+    height: calc(100vh - 60px); /* ヘッダーの高さを引いたビューポートの高さ */
+    position: sticky;
+    top: 60px; /* ヘッダーの高さ分オフセット */
+}
+
+#category-nav a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 0.75rem 1.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+#category-nav a:hover {
+    background-color: #f0f0f0;
+}
+
+#category-nav a.active {
+    color: #007bff;
+    font-weight: 600;
+    background-color: #e9f5ff;
+    border-left-color: #007bff;
+}
+
+/* --- メインコンテンツエリア --- */
+main {
+    flex-grow: 1;
+    padding: 0; /* mainのパディングを削除 */
+}
+
+/* 商品一覧 */
+#product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 最小幅を縮小 */
+    gap: 1rem; /* 隙間を縮小 */
+    padding: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+#product-list h2 {
+    grid-column: 1 / -1; /* h2をグリッドの全幅に広げる */
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+/* 商品カード */
+.product-card {
+    background: #fff;
+    border-radius: 8px; /* 少し小さく */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+    width: 100%;
+    height: 140px; /* 画像高さを縮小 */
+    object-fit: contain;
+}
+
+.product-card-content {
+    padding: 0.8rem; /* パディングを縮小 */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card h3 {
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+    font-size: 1rem; /* 文字サイズを縮小 */
+}
+
+.product-card p {
+    font-size: 0.9rem; /* 文字サイズを縮小 */
+    color: #666;
+    flex-grow: 1;
+}
+
+.product-card .price {
+    font-size: 1rem; /* 文字サイズを縮小 */
+    font-weight: bold;
+    color: #e63946;
+    margin-bottom: 0.8rem;
+}
+
+/* カートに入れるボタン */
+.add-to-cart-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.8rem; /* パディングを縮小 */
+    margin: 0.8rem;
+    margin-top: auto; /* ボタンをカード下部に固定 */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem; /* 文字サイズを縮小 */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #0056b3;
+}
+
+/* ローディングオーバーレイ */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    display: none; /* デフォルトは非表示 */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+}
+
+/* スピナー */
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* プログレスバー */
+.progress-bar-container {
+    width: 200px;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0; /* 初期幅を0に */
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 4px;
+    /* 加速的な動きを表現するtransition */
+    transition: width 0s cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+
+/* トースト通知 */
+#toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateX(calc(100% + 20px));
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 10000;
+    opacity: 0;
+}
+
+#toast-notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* 画面表示/非表示 */
+.hidden {
+    display: none !important;
+}
+
+/* タスク完了ボタン */
+#complete-task-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #28a745; /* 成功を意味する緑色 */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#complete-task-btn:hover {
+    background-color: #218838;
+}
+
+/* ホーム画面の検索コンテナ */
+.home-search-container {
+    text-align: center;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 4rem); /* padding分を考慮 */
+}
+
+.home-search-container h2 {
+    grid-column: initial; /* グリッドレイアウトの影響をリセット */
+    border-bottom: none;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.search-bar {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar input {
+    flex-grow: 1;
+    border: 1px solid #ddd;
+    border-right: none;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border-radius: 8px 0 0 8px;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.search-bar button {
+    border: none;
+    background-color: #007bff;
+    color: white;
+    padding: 0 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 0 8px 8px 0;
+}
+
+.search-bar button:hover {
+    background-color: #0056b3;
+}
+
+/* 開始・タスク・終了画面共通スタイル */
+#start-screen, #task-screen, #experiment-complete-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    padding: 2rem;
+}
+
+#start-screen button, #task-screen button, #next-task-btn {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    margin-top: 2rem;
+    cursor: pointer;
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+#start-screen button:hover, #task-screen button:hover, #next-task-btn:hover {
+    background-color: #0056b3;
+}
+
+/* タスク指示の強調 */
+#task-description strong {
+    background-color: yellow;
+    color: #000;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+
+/* スケルトンスクリーン */
+.skeleton-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.5rem;
+}
+
+.skeleton-image, .skeleton-text {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 5px;
+}
+
+.skeleton-image {
+    width: 100%;
+    height: 180px;
+    margin-bottom: 1.5rem;
+}
+
+.skeleton-text {
+    height: 20px;
+    margin-bottom: 1rem;
+}
+
+.skeleton-text:last-child {
+    margin-bottom: 0;
+}
+
+.skeleton-text.short {
+    width: 60%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+#back-to-loader-selection-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #6c757d;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+#back-to-loader-selection-btn:hover {
+    background-color: #5a6268;
+}
+
+/* --- カラーバージョン --- */
+
+/* カラースピナー */
+.spinner.color {
+    border-color: #f3f3f3;
+    border-top-color: #4285F4;
+    border-right-color: #DB4437;
+    border-bottom-color: #F4B400;
+    border-left-color: #0F9D58;
+}
+
+/* カラープログレスバー */
+.progress-bar.color {
+    background: linear-gradient(90deg, #4285F4, #0F9D58, #F4B400, #DB4437);
+}
+
+/* カラースケルトン */
+.skeleton-card.color .skeleton-image,
+.skeleton-card.color .skeleton-text {
+    background: linear-gradient(
+        90deg,
+        #ffadad, /* Light Red */
+        #ffd6a5, /* Light Orange */
+        #fdffb6, /* Light Yellow */
+        #caffbf, /* Light Green */
+        #9bf6ff, /* Light Blue */
+        #a0c4ff, /* Light Indigo */
+        #ffadad  /* Repeat Red for smooth loop */
+    );
+    background-size: 200% 100%; /* アニメーションのために背景サイズを再指定 */
+}
+
+/* --- カート表示用スタイル --- */
+.header-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* この要素を右端に寄せる */
+}
+
+#cart-container {
+    position: relative;
+    margin-right: 1.5rem; /* ボタンとの間に余白を追加 */
+}
+
+#cart-icon {
+    color: #333;
+}
+
+#cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #c9302c;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid white;
+}
+
+/* --- カートサイドバー --- */
+#cart-sidebar {
+    flex: 0 0 280px; /* サイドバーの幅を固定 */
+    background-color: #fdfdfd;
+    border-left: 1px solid #eee;
+    height: calc(100vh - 60px); /* ヘッダーの高さを引いたビューポートの高さ */
+    position: sticky;
+    top: 60px; /* ヘッダーの高さ分オフセット */
+}
+
+.cart-sidebar-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-sidebar-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+#cart-sidebar-body {
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+#cart-sidebar-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#cart-sidebar-body li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.delete-cart-item-btn {
+    background: none;
+    border: none;
+    color: #c9302c;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    line-height: 1;
+}
+
+.delete-cart-item-btn:hover {
+    color: #a94442;
+}
