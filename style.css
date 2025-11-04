@@ -526,3 +526,219 @@ main {
 .delete-cart-item-btn:hover {
     color: #a94442;
 }
+
+/* --- ホーム画面の追加スタイル --- */
+
+#product-list:not(:has(.product-card)) {
+    display: block;
+    padding: 0;
+}
+
+.hero-section {
+    position: relative;
+    height: 400px;
+    background-image: url('images/pudding.jpg'); /* プリンの画像を背景に設定 */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    padding: 2rem;
+}
+
+.hero-content h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.hero-cta-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.hero-cta-btn:hover {
+    background-color: #0056b3;
+}
+
+.home-section {
+    padding: 3rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.home-section h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    grid-column: initial;
+    border-bottom: none;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.category-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 250px;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.category-card span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+    padding: 1.5rem 1rem 1rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: left;
+}
+
+.home-search-container {
+    background-color: #f0f4f8;
+    border-radius: 8px;
+    height: auto; /* 高さを自動調整に変更 */
+}
+
+/* --- ホーム画面2のスタイル --- */
+
+.hero-section-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 2rem;
+    background-color: #fff;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero-content-2 {
+    flex: 1;
+    padding-right: 2rem;
+}
+
+.hero-content-2 h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.hero-content-2 p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.search-bar-2 {
+    display: flex;
+    max-width: 400px;
+}
+
+.search-bar-2 input {
+    flex-grow: 1;
+    border: 1px solid #ddd;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border-radius: 5px 0 0 5px;
+}
+
+.search-bar-2 input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.search-bar-2 button {
+    border: none;
+    background-color: #007bff;
+    color: white;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+}
+
+.hero-image-2 {
+    flex: 1;
+    max-width: 50%;
+}
+
+.hero-image-2 img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.featured-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+#switch-home-layout-btn {
+    display: block;
+    margin: 2rem auto;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #007bff;
+    background-color: transparent;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#switch-home-layout-btn:hover {
+    background-color: #007bff;
+    color: white;
+}
