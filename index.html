@@ -15,6 +15,27 @@
             <button id="start-experiment-btn">実験開始</button>
         </div>
 
+        <!-- チュートリアル開始画面 -->
+        <div id="tutorial-start-screen" class="hidden">
+            <h2>チュートリアル</h2>
+            <p>まずはじめに、操作に慣れていただくためのチュートリアルを2回行います。</p>
+            <button id="start-tutorial-btn">チュートリアル開始</button>
+        </div>
+
+        <!-- チュートリアル完了画面 -->
+        <div id="tutorial-complete-screen" class="hidden">
+            <h2>チュートリアル完了</h2>
+            <p>チュートリアルお疲れ様でした。次は本番の実験です。</p>
+            <button id="start-main-experiment-btn">実験に進む</button>
+        </div>
+
+        <!-- チュートリアルタスク完了画面 -->
+        <div id="tutorial-task-complete-screen" class="hidden">
+            <h2>チュートリアルタスク完了</h2>
+            <p>本番ではアンケートの画面が表示されます。</p>
+            <button id="next-tutorial-task-btn">次のチュートリアルへ</button>
+        </div>
+
         <!-- 1. タスク指示画面 (デフォルトで非表示) -->
         <div id="task-screen" class="hidden">
             <h2>タスク指示</h2>
@@ -74,13 +95,15 @@
             <button id="back-to-loader-selection-btn">ローダー選択に戻る</button>
         </div>
 
-        <!-- 3. アンケート画面 (デフォルトで非表示) -->
         <div id="survey-screen" class="hidden">
             <h2>アンケート</h2>
-            <p>ご協力ありがとうございます。以下のアンケートにご回答ください。</p>
-            <iframe id="survey-frame" src="" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
-            <button id="next-task-btn">次のタスクへ</button>
-        <!-- 4. 実験終了画面 (デフォルトで非表示) -->
+            <p>タスク<span id="survey-task-number"></span>のアンケートです。</p>
+            <p>アンケートを記入して下さい。</p>
+            <p>アンケートの記入が終わったら次のタスクへ移動してください。</p>
+            <div class="next-task-container">
+                <button id="next-task-btn">次のタスクへ</button>
+            </div>
+        </div>
         <div id="experiment-complete-screen" class="hidden">
             <h2>実験終了</h2>
             <p>ご協力いただき、誠にありがとうございました。すべてのタスクが完了しました。</p>

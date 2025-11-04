@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- 商品データ ---
     const products = {
@@ -41,29 +42,34 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
 
+    const tutorialTrials = [
+        { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'none', time: 3000 },
+        { taskHTML: '<strong>ケーキ</strong>をカートに入れてください', loader: 'spinner', time: 3000 },
+    ];
+
     // --- 実験トライアル定義 (固定タスク + UI/時間) ---
     const experimentTrials = [
-        { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'none', time: 2000 },
-        { taskHTML: '<strong>ピーマン</strong>と<strong>ケーキ</strong>をカートに入れてください', loader: 'none', time: 5000 },
-        { taskHTML: '<strong>ブロッコリー</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'none', time: 7000 },
-        { taskHTML: '<strong>バナナ</strong>と<strong>チーズケーキ</strong>をカートに入れてください', loader: 'spinner', time: 2000 },
-        { taskHTML: '<strong>キウイ</strong>と<strong>コーラ</strong>をカートに入れてください', loader: 'spinner', time: 5000 },
-        { taskHTML: '<strong>チョコレート</strong>と<strong>にんじん</strong>をカートに入れてください', loader: 'spinner', time: 7000 },
-        { taskHTML: '<strong>カリフラワー</strong>と<strong>メロン</strong>をカートに入れてください', loader: 'bar', time: 2000 },
-        { taskHTML: '<strong>きゅうり</strong>と<strong>クッキー</strong>をカートに入れてください', loader: 'bar', time: 5000 },
-        { taskHTML: '<strong>なす</strong>と<strong>オレンジジュース</strong>をカートに入れてください', loader: 'bar', time: 7000 },
-        { taskHTML: '<strong>オレンジ</strong>と<strong>アイスクリーム</strong>をカートに入れてください', loader: 'skeleton', time: 2000 },
-        { taskHTML: '<strong>パイナップル</strong>と<strong>ほうれん草</strong>をカートに入れてください', loader: 'skeleton', time: 5000 },
-        { taskHTML: '<strong>プリン</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'skeleton', time: 7000 },
-        { taskHTML: '<strong>トマト</strong>と<strong>いちご</strong>をカートに入れてください', loader: 'spinner-color', time: 2000 },
-        { taskHTML: '<strong>ピーマン</strong>と<strong>ポテトチップス</strong>をカートに入れてください', loader: 'spinner-color', time: 5000 },
-        { taskHTML: '<strong>りんご</strong>と<strong>ケーキ</strong>をカートに入れてください', loader: 'spinner-color', time: 7000 },
-        { taskHTML: '<strong>にんじん</strong>と<strong>コーヒー</strong>をカートに入れてください', loader: 'bar-color', time: 2000 },
-        { taskHTML: '<strong>バナナ</strong>と<strong>チョコレート</strong>をカートに入れてください', loader: 'bar-color', time: 5000 },
-        { taskHTML: '<strong>ブロッコリー</strong>と<strong>クッキー</strong>をカートに入れてください', loader: 'bar-color', time: 7000 },
-        { taskHTML: '<strong>キウイ</strong>と<strong>なす</strong>をカートに入れてください', loader: 'skeleton-color', time: 2000 },
-        { taskHTML: '<strong>チーズケーキ</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'skeleton-color', time: 5000 },
-        { taskHTML: '<strong>ほうれん草</strong>と<strong>オレンジ</strong>をカートに入れてください', loader: 'skeleton-color', time: 7000 },
+        { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'none', time: 1500 },
+        { taskHTML: '<strong>ピーマン</strong>と<strong>ケーキ</strong>をカートに入れてください', loader: 'none', time: 3000 },
+        { taskHTML: '<strong>ブロッコリー</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'none', time: 5000 },
+        { taskHTML: '<strong>バナナ</strong>と<strong>チーズケーキ</strong>をカートに入れてください', loader: 'spinner', time: 1500 },
+        { taskHTML: '<strong>キウイ</strong>と<strong>コーラ</strong>をカートに入れてください', loader: 'spinner', time: 3000 },
+        { taskHTML: '<strong>チョコレート</strong>と<strong>にんじん</strong>をカートに入れてください', loader: 'spinner', time: 5000 },
+        { taskHTML: '<strong>カリフラワー</strong>と<strong>メロン</strong>をカートに入れてください', loader: 'bar', time: 1500 },
+        { taskHTML: '<strong>きゅうり</strong>と<strong>クッキー</strong>をカートに入れてください', loader: 'bar', time: 3000 },
+        { taskHTML: '<strong>なす</strong>と<strong>オレンジジュース</strong>をカートに入れてください', loader: 'bar', time: 5000 },
+        { taskHTML: '<strong>オレンジ</strong>と<strong>アイスクリーム</strong>をカートに入れてください', loader: 'skeleton', time: 1500 },
+        { taskHTML: '<strong>パイナップル</strong>と<strong>ほうれん草</strong>をカートに入れてください', loader: 'skeleton', time: 3000 },
+        { taskHTML: '<strong>プリン</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'skeleton', time: 5000 },
+        { taskHTML: '<strong>トマト</strong>と<strong>いちご</strong>をカートに入れてください', loader: 'spinner-color', time: 1500 },
+        { taskHTML: '<strong>ピーマン</strong>と<strong>ポテトチップス</strong>をカートに入れてください', loader: 'spinner-color', time: 3000 },
+        { taskHTML: '<strong>りんご</strong>と<strong>ケーキ</strong>をカートに入れてください', loader: 'spinner-color', time: 5000 },
+        { taskHTML: '<strong>にんじん</strong>と<strong>コーヒー</strong>をカートに入れてください', loader: 'bar-color', time: 1500 },
+        { taskHTML: '<strong>バナナ</strong>と<strong>チョコレート</strong>をカートに入れてください', loader: 'bar-color', time: 3000 },
+        { taskHTML: '<strong>ブロッコリー</strong>と<strong>クッキー</strong>をカートに入れてください', loader: 'bar-color', time: 5000 },
+        { taskHTML: '<strong>キウイ</strong>と<strong>なす</strong>をカートに入れてください', loader: 'skeleton-color', time: 1500 },
+        { taskHTML: '<strong>チーズケーキ</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'skeleton-color', time: 3000 },
+        { taskHTML: '<strong>ほうれん草</strong>と<strong>オレンジ</strong>をカートに入れてください', loader: 'skeleton-color', time: 5000 },
     ];
 
     // --- GoogleフォームのURL ---
@@ -71,6 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DOM要素の取得 ---
     const startScreen = document.getElementById('start-screen');
+    const tutorialStartScreen = document.getElementById('tutorial-start-screen');
+    const tutorialCompleteScreen = document.getElementById('tutorial-complete-screen');
     const taskScreen = document.getElementById('task-screen');
     const ecSiteScreen = document.getElementById('ec-site-screen');
     const surveyScreen = document.getElementById('survey-screen');
@@ -78,13 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskDescription = document.getElementById('task-description');
     
     const startExperimentBtn = document.getElementById('start-experiment-btn');
+    const startTutorialBtn = document.getElementById('start-tutorial-btn');
+    const startMainExperimentBtn = document.getElementById('start-main-experiment-btn');
     const startTaskBtn = document.getElementById('start-task-btn');
     const productListContainer = document.getElementById('product-list');
     const categoryNav = document.getElementById('category-nav');
     const loadingOverlay = document.querySelector('.loading-overlay');
     const toastNotification = document.getElementById('toast-notification');
     const completeTaskBtn = document.getElementById('complete-task-btn');
-    const surveyFrame = document.getElementById('survey-frame');
+    const surveyTaskNumber = document.getElementById('survey-task-number');
     const nextTaskBtn = document.getElementById('next-task-btn');
     const cartCount = document.getElementById('cart-count');
     const cartSidebarBody = document.getElementById('cart-sidebar-body');
@@ -102,6 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskTimings = [];
 
     // --- 状態管理 ---
+    let isTutorial = true;
+    let tutorialTrialIndex = 0;
     let currentPatternIndex = 0;
     let selectedLoader = 'spinner';
     let loadingTimeMs = 2000;
@@ -112,10 +124,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 関数定義 ---
     function showScreen(screenToShow) {
-        [startScreen, taskScreen, ecSiteScreen, surveyScreen, experimentCompleteScreen].forEach(screen => {
+        [startScreen, tutorialStartScreen, tutorialCompleteScreen, taskScreen, ecSiteScreen, surveyScreen, experimentCompleteScreen].forEach(screen => {
             if(screen) screen.classList.add('hidden');
         });
         if(screenToShow) screenToShow.classList.remove('hidden');
+    }
+
+    function startTutorialTrial(trialIndex) {
+        const currentTrial = tutorialTrials[trialIndex];
+        selectedLoader = currentTrial.loader;
+        loadingTimeMs = currentTrial.time;
+        taskDescription.innerHTML = currentTrial.taskHTML;
+        showScreen(taskScreen);
     }
 
     function startTrial(patternIndex) {
@@ -123,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedLoader = currentTrial.loader;
         loadingTimeMs = currentTrial.time;
         taskDescription.innerHTML = currentTrial.taskHTML;
-
         showScreen(taskScreen);
     }
 
@@ -151,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
         productListContainer.innerHTML = `
             <div class="hero-section">
                 <div class="hero-content">
-                    <h1>新鮮な食材を、もっと手軽に。</h1>
+                    <h1>新鮮な食材を、<br>もっと手軽に。</h1>
                     <p>毎日の食卓を彩る、旬の野菜や果物を取り揃えています。</p>
                     <button class="hero-cta-btn" onclick="document.querySelector('[data-category=vegetables]').click()">商品を見る</button>
                 </div>
@@ -290,13 +309,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- イベントリスナー ---
     startExperimentBtn.addEventListener('click', () => {
+        showScreen(tutorialStartScreen);
+    });
+
+    startTutorialBtn.addEventListener('click', () => {
+        isTutorial = true;
+        tutorialTrialIndex = 0;
+        startTutorialTrial(tutorialTrialIndex);
+    });
+
+    startMainExperimentBtn.addEventListener('click', () => {
+        isTutorial = false;
+        currentPatternIndex = 0;
         startTrial(currentPatternIndex);
     });
 
     startTaskBtn.addEventListener('click', () => {
         const taskDescriptionHTML = taskDescription.innerHTML;
         const headerTaskDescription = document.getElementById('header-task-description');
-        headerTaskDescription.innerHTML = `タスク ${currentPatternIndex + 1}/21: ${taskDescriptionHTML}`;
+        if (isTutorial) {
+            headerTaskDescription.innerHTML = `チュートリアル ${tutorialTrialIndex + 1}/${tutorialTrials.length}: ${taskDescriptionHTML}`;
+        } else {
+            headerTaskDescription.innerHTML = `タスク ${currentPatternIndex + 1}/${experimentTrials.length}: ${taskDescriptionHTML}`;
+        }
         
         const strongElements = headerTaskDescription.getElementsByTagName('strong');
         for (let strong of strongElements) {
@@ -361,18 +396,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderProducts(newCategory);
             }
             const endTime = performance.now();
-            taskTimings.push({ action: 'Category Change', from: currentCategory, to: newCategory, loader: loaderType, time: endTime - startTime, simulatedDelay: loadingTimeMs });
+            if (!isTutorial) {
+                taskTimings.push({ action: 'Category Change', from: currentCategory, to: newCategory, loader: loaderType, time: endTime - startTime, simulatedDelay: loadingTimeMs });
+            }
             currentCategory = newCategory;
         }, loadingTimeMs);
     });
 
     productListContainer.addEventListener('click', (e) => {
+        const categoryCard = e.target.closest('.category-card');
+
         if (e.target.id === 'switch-home-layout-btn') {
             homeVersion = homeVersion === 1 ? 2 : 1;
             if (homeVersion === 1) {
                 renderHome();
             } else {
                 renderHome2();
+            }
+            return;
+        }
+
+        if (categoryCard) {
+            const category = categoryCard.dataset.category;
+            const categoryLink = categoryNav.querySelector(`[data-category="${category}"]`);
+            if (categoryLink) {
+                categoryLink.click();
             }
             return;
         }
@@ -397,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     completeTaskBtn.addEventListener('click', () => {
-        const currentTrial = experimentTrials[currentPatternIndex];
+        const currentTrial = isTutorial ? tutorialTrials[tutorialTrialIndex] : experimentTrials[currentPatternIndex];
         const requiredItems = (currentTrial.taskHTML.match(/<strong>(.*?)<\/strong>/g) || []).map(item => item.replace(/<\/?strong>/g, ''));
         const cartItemNames = cartItems.map(item => item.name);
 
@@ -408,24 +456,33 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        isMeasuringMouseDistance = false;
-        const taskDuration = performance.now() - taskStartTime;
-        taskTimings.push({
-            trial: currentPatternIndex + 1,
-            task: currentTrial.taskHTML.replace(/<strong>/g, '').replace(/<\/strong>/g, ''),
-            action: 'Task Completed', 
-            rageClicks: rageClickCount, 
-            mouseDistance: totalMouseDistance,
-            taskDuration: taskDuration, 
-            loaderType: selectedLoader, 
-            simulatedLoadingTime: loadingTimeMs,
-            cartContents: cartItems.map(item => item.name), 
-            taskSuccess: true,
-            timestamp: new Date().toISOString()
-        });
-        console.log(`Trial ${currentPatternIndex + 1} completed. Data:`, taskTimings[taskTimings.length - 1]);
-        showScreen(surveyScreen);
-        surveyFrame.src = SURVEY_FORM_URL;
+        if (isTutorial) {
+            tutorialTrialIndex++;
+            if (tutorialTrialIndex < tutorialTrials.length) {
+                startTutorialTrial(tutorialTrialIndex);
+            } else {
+                showScreen(tutorialCompleteScreen);
+            }
+        } else {
+            isMeasuringMouseDistance = false;
+            const taskDuration = performance.now() - taskStartTime;
+            taskTimings.push({
+                trial: currentPatternIndex + 1,
+                task: currentTrial.taskHTML.replace(/<strong>/g, '').replace(/<\/strong>/g, ''),
+                action: 'Task Completed', 
+                rageClicks: rageClickCount, 
+                mouseDistance: totalMouseDistance,
+                taskDuration: taskDuration, 
+                loaderType: selectedLoader, 
+                simulatedLoadingTime: loadingTimeMs,
+                cartContents: cartItems.map(item => item.name), 
+                taskSuccess: true,
+                timestamp: new Date().toISOString()
+            });
+            console.log(`Trial ${currentPatternIndex + 1} completed. Data:`, taskTimings[taskTimings.length - 1]);
+            showScreen(surveyScreen);
+            surveyTaskNumber.textContent = currentPatternIndex + 1;
+        }
     });
 
     nextTaskBtn.addEventListener('click', () => {
@@ -441,3 +498,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初期画面表示
     showScreen(startScreen);
 });
+

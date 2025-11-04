@@ -742,3 +742,32 @@ main {
     background-color: #007bff;
     color: white;
 }
+
+/* --- アンケート画面のスタイル --- */
+#survey-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* 上寄せに変更 */
+    height: 100vh;
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+}
+
+#survey-screen p, #survey-screen a {
+    margin: 1rem 0;
+}
+
+#survey-frame {
+    width: 80vw; /* ビューポート幅の80% */
+    height: 70vh; /* ビューポート高さの70% */
+    border: 1px solid #ddd; /* 境界線を設定 */
+    border-radius: 8px;
+}
+
+.next-task-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
