@@ -49,27 +49,111 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 実験トライアル定義 (固定タスク + UI/時間) ---
     const experimentTrials = [
-        { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'none', time: 1500 },
-        { taskHTML: '<strong>ピーマン</strong>と<strong>ケーキ</strong>をカートに入れてください', loader: 'none', time: 3000 },
-        { taskHTML: '<strong>ブロッコリー</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'none', time: 5000 },
-        { taskHTML: '<strong>バナナ</strong>と<strong>チーズケーキ</strong>をカートに入れてください', loader: 'spinner', time: 1500 },
-        { taskHTML: '<strong>キウイ</strong>と<strong>コーラ</strong>をカートに入れてください', loader: 'spinner', time: 3000 },
-        { taskHTML: '<strong>チョコレート</strong>と<strong>にんじん</strong>をカートに入れてください', loader: 'spinner', time: 5000 },
-        { taskHTML: '<strong>カリフラワー</strong>と<strong>メロン</strong>をカートに入れてください', loader: 'bar', time: 1500 },
-        { taskHTML: '<strong>きゅうり</strong>と<strong>クッキー</strong>をカートに入れてください', loader: 'bar', time: 3000 },
-        { taskHTML: '<strong>なす</strong>と<strong>オレンジジュース</strong>をカートに入れてください', loader: 'bar', time: 5000 },
-        { taskHTML: '<strong>オレンジ</strong>と<strong>アイスクリーム</strong>をカートに入れてください', loader: 'skeleton', time: 1500 },
-        { taskHTML: '<strong>パイナップル</strong>と<strong>ほうれん草</strong>をカートに入れてください', loader: 'skeleton', time: 3000 },
-        { taskHTML: '<strong>プリン</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'skeleton', time: 5000 },
-        { taskHTML: '<strong>トマト</strong>と<strong>いちご</strong>をカートに入れてください', loader: 'spinner-color', time: 1500 },
-        { taskHTML: '<strong>ピーマン</strong>と<strong>ポテトチップス</strong>をカートに入れてください', loader: 'spinner-color', time: 3000 },
-        { taskHTML: '<strong>りんご</strong>と<strong>ケーキ</strong>をカートに入れてください', loader: 'spinner-color', time: 5000 },
-        { taskHTML: '<strong>にんじん</strong>と<strong>コーヒー</strong>をカートに入れてください', loader: 'bar-color', time: 1500 },
-        { taskHTML: '<strong>バナナ</strong>と<strong>チョコレート</strong>をカートに入れてください', loader: 'bar-color', time: 3000 },
-        { taskHTML: '<strong>ブロッコリー</strong>と<strong>クッキー</strong>をカートに入れてください', loader: 'bar-color', time: 5000 },
-        { taskHTML: '<strong>キウイ</strong>と<strong>なす</strong>をカートに入れてください', loader: 'skeleton-color', time: 1500 },
-        { taskHTML: '<strong>チーズケーキ</strong>と<strong>緑茶</strong>をカートに入れてください', loader: 'skeleton-color', time: 3000 },
-        { taskHTML: '<strong>ほうれん草</strong>と<strong>オレンジ</strong>をカートに入れてください', loader: 'skeleton-color', time: 5000 },
+        {
+            "taskHTML": "<strong>ブロッコリー</strong>と<strong>クッキー</strong>をカートに入れてください",
+            "loader": "bar-color",
+            "time": 5000
+        },
+        {
+            "taskHTML": "<strong>なす</strong>と<strong>オレンジジュース</strong>をカートに入れてください",
+            "loader": "bar",
+            "time": 5000
+        },
+        {
+            "taskHTML": "<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください",
+            "loader": "none",
+            "time": 1500
+        },
+        {
+            "taskHTML": "<strong>キウイ</strong>と<strong>コーラ</strong>をカートに入れてください",
+            "loader": "spinner",
+            "time": 3000
+        },
+        {
+            "taskHTML": "<strong>ピーマン</strong>と<strong>ケーキ</strong>をカートに入れてください",
+            "loader": "none",
+            "time": 3000
+        },
+        {
+            "taskHTML": "<strong>ほうれん草</strong>と<strong>オレンジ</strong>をカートに入れてください",
+            "loader": "skeleton-color",
+            "time": 5000
+        },
+        {
+            "taskHTML": "<strong>バナナ</strong>と<strong>チーズケーキ</strong>をカートに入れてください",
+            "loader": "spinner",
+            "time": 1500
+        },
+        {
+            "taskHTML": "<strong>にんじん</strong>と<strong>コーヒー</strong>をカートに入れてください",
+            "loader": "bar-color",
+            "time": 1500
+        },
+        {
+            "taskHTML": "<strong>ブロッコリー</strong>と<strong>緑茶</strong>をカートに入れてください",
+            "loader": "none",
+            "time": 5000
+        },
+        {
+            "taskHTML": "<strong>きゅうり</strong>と<strong>クッキー</strong>をカートに入れてください",
+            "loader": "bar",
+            "time": 3000
+        },
+        {
+            "taskHTML": "<strong>カリフラワー</strong>と<strong>メロン</strong>をカートに入れてください",
+            "loader": "bar",
+            "time": 1500
+        },
+        {
+            "taskHTML": "<strong>プリン</strong>と<strong>緑茶</strong>をカートに入れてください",
+            "loader": "skeleton",
+            "time": 5000
+        },
+        {
+            "taskHTML": "<strong>ピーマン</strong>と<strong>ポテトチップス</strong>をカートに入れてください",
+            "loader": "spinner-color",
+            "time": 3000
+        },
+        {
+            "taskHTML": "<strong>キウイ</strong>と<strong>なす</strong>をカートに入れてください",
+            "loader": "skeleton-color",
+            "time": 1500
+        },
+        {
+            "taskHTML": "<strong>チョコレート</strong>と<strong>にんじん</strong>をカートに入れてください",
+            "loader": "spinner",
+            "time": 5000
+        },
+        {
+            "taskHTML": "<strong>チーズケーキ</strong>と<strong>緑茶</strong>をカートに入れてください",
+            "loader": "skeleton-color",
+            "time": 3000
+        },
+        {
+            "taskHTML": "<strong>オレンジ</strong>と<strong>アイスクリーム</strong>をカートに入れてください",
+            "loader": "skeleton",
+            "time": 1500
+        },
+        {
+            "taskHTML": "<strong>りんご</strong>と<strong>ケーキ</strong>をカートに入れてください",
+            "loader": "spinner-color",
+            "time": 5000
+        },
+        {
+            "taskHTML": "<strong>トマト</strong>と<strong>いちご</strong>をカートに入れてください",
+            "loader": "spinner-color",
+            "time": 1500
+        },
+        {
+            "taskHTML": "<strong>バナナ</strong>と<strong>チョコレート</strong>をカートに入れてください",
+            "loader": "bar-color",
+            "time": 3000
+        },
+        {
+            "taskHTML": "<strong>パイナップル</strong>と<strong>ほうれん草</strong>をカートに入れてください",
+            "loader": "skeleton",
+            "time": 3000
+        }
     ];
 
     // --- GoogleフォームのURL ---
@@ -94,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingOverlay = document.querySelector('.loading-overlay');
     const toastNotification = document.getElementById('toast-notification');
     const completeTaskBtn = document.getElementById('complete-task-btn');
+    const downloadCsvBtn = document.getElementById('download-csv-btn');
     const surveyTaskNumber = document.getElementById('survey-task-number');
     const nextTaskBtn = document.getElementById('next-task-btn');
     const cartCount = document.getElementById('cart-count');
@@ -482,6 +567,39 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Trial ${currentPatternIndex + 1} completed. Data:`, taskTimings[taskTimings.length - 1]);
             showScreen(surveyScreen);
             surveyTaskNumber.textContent = currentPatternIndex + 1;
+        }
+    });
+
+    function downloadCSV(data) {
+        const headers = Object.keys(data[0]);
+        const csv = [
+            headers.join(','),
+            ...data.map(row => headers.map(header => {
+                let value = row[header];
+                if (typeof value === 'string' && value.includes(',')) {
+                    value = `"${value}"`;
+                }
+                return value;
+            }).join(','))
+        ].join('\n');
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'task_timings.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    downloadCsvBtn.addEventListener('click', () => {
+        const completedTasks = taskTimings.filter(task => task.action === 'Task Completed');
+        if (completedTasks.length > 0) {
+            downloadCSV(completedTasks);
+        } else {
+            alert('データがありません。');
         }
     });
 
