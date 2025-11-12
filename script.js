@@ -184,6 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartCount = document.getElementById('cart-count');
     const cartSidebarBody = document.getElementById('cart-sidebar-body');
 
+    // --- デバッグモード ---
+    let isDebugMode = false;
+
     // --- 計測用変数 ---
     let rageClickCount = 0;
     const lastClicks = [];
@@ -346,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${product.name}</h3>
                     <p class="price">¥${product.price.toLocaleString()}</p>
                 </div>
-                <button class="add-to-cart-btn" data-product-id="${product.id}">カートに入れる</button>
+                <a href="#" class="add-to-cart-btn" data-product-id="${product.id}" role="button">カートに入れる</a>
             </div>
         `).join('');
     }
@@ -460,7 +463,20 @@ document.addEventListener('DOMContentLoaded', () => {
             productListContainer.style.display = 'grid';
             const categoryTitle = categoryNav.querySelector(`[data-category="${newCategory}"]`).textContent;
             const skeletonClass = loaderType === 'skeleton-color' ? 'skeleton-card color' : 'skeleton-card';
-            const skeletonHtml = Array(8).fill('').map(() => `<div class="${skeletonClass}"><div class="skeleton-image"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>`).join('');
+            
+            // 表示する商品の数を取得し、その数だけスケルトンを生成する
+            const numProducts = products[newCategory] ? products[newCategory].length : 8;
+            
+            const skeletonHtml = Array(numProducts).fill('').map(() => `
+                <div class="${skeletonClass}">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text short"></div>
+                    </div>
+                    <div class="skeleton-button"></div>
+                </div>
+            `).join('');
             productListContainer.innerHTML = `<h2>${categoryTitle}</h2>` + skeletonHtml;
         } else if (loaderType !== 'none') {
             showLoading();
@@ -571,11 +587,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function downloadCSV(data) {
-        const headers = Object.keys(data[0]);
+        // 全てのオブジェクトからキーを収集して、ユニークなヘッダーリストを作成
+        const allKeys = data.reduce((keys, obj) => {
+            Object.keys(obj).forEach(key => {
+                if (!keys.includes(key)) {
+                    keys.push(key);
+                }
+            });
+            return keys;
+        }, []);
+
         const csv = [
-            headers.join(','),
-            ...data.map(row => headers.map(header => {
+            allKeys.join(','), // 全てのキーをヘッダーとして使用
+            ...data.map(row => allKeys.map(header => {
                 let value = row[header];
+                // 値が存在しない場合は空文字にする
+                if (value === undefined || value === null) {
+                    value = '';
+                }
                 if (typeof value === 'string' && value.includes(',')) {
                     value = `"${value}"`;
                 }
@@ -597,7 +626,17 @@ document.addEventListener('DOMContentLoaded', () => {
     downloadCsvBtn.addEventListener('click', () => {
         const completedTasks = taskTimings.filter(task => task.action === 'Task Completed');
         if (completedTasks.length > 0) {
-            downloadCSV(completedTasks);
+            const keysToExtract = ['trial', 'rageClicks', 'mouseDistance', 'taskDuration', 'loaderType', 'simulatedLoadingTime'];
+            const filteredData = completedTasks.map(task => {
+                        const filteredTask = {};
+                        keysToExtract.forEach(key => {
+                            if (task[key] !== undefined) {
+                                filteredTask[key] = task[key];
+                            }
+                        });
+                        return filteredTask;
+                    });
+            downloadCSV(filteredData);
         } else {
             alert('データがありません。');
         }
@@ -615,5 +654,126 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 初期画面表示
     showScreen(startScreen);
+
+    // --- デバッグモード有効化 ---
+    const urlParams = new URLSearchParams(window.location.search);
+    isDebugMode = urlParams.get('debug') === 'true';
+
+    if (isDebugMode) {
+        const headerRight = document.querySelector('.header-right');
+        if (headerRight) {
+            // --- Debug Download Button ---
+            const debugDownloadBtn = document.createElement('button');
+            debugDownloadBtn.id = 'debug-download-btn';
+            debugDownloadBtn.textContent = 'CSV DL (Debug)';
+            debugDownloadBtn.style.marginLeft = '10px';
+            debugDownloadBtn.style.backgroundColor = '#6c757d';
+            debugDownloadBtn.style.color = 'white';
+            debugDownloadBtn.style.border = 'none';
+            debugDownloadBtn.style.padding = '0.6rem 1.2rem';
+            debugDownloadBtn.style.fontSize = '0.9rem';
+            debugDownloadBtn.style.fontWeight = 'bold';
+            debugDownloadBtn.style.borderRadius = '5px';
+            debugDownloadBtn.style.cursor = 'pointer';
+
+            debugDownloadBtn.addEventListener('click', () => {
+                const completedTasks = taskTimings.filter(task => task.action === 'Task Completed');
+                if (completedTasks.length > 0) {
+                    const keysToExtract = ['trial', 'rageClicks', 'mouseDistance', 'taskDuration', 'loaderType', 'simulatedLoadingTime'];
+                    const filteredData = completedTasks.map(task => {
+                        const filteredTask = {};
+                        keysToExtract.forEach(key => {
+                            if (task[key] !== undefined) {
+                                filteredTask[key] = task[key];
+                            }
+                        });
+                        return filteredTask;
+                    });
+                    downloadCSV(filteredData);
+                } else {
+                    alert('ダウンロード対象の完了済みタスクデータがありません。');
+                }
+            });
+            headerRight.appendChild(debugDownloadBtn);
+
+            // --- Loader Showcase Button & Modal Logic ---
+            const viewLoadersBtn = document.createElement('button');
+            viewLoadersBtn.id = 'view-loaders-btn';
+            viewLoadersBtn.textContent = 'ローダー一覧';
+            viewLoadersBtn.style.marginLeft = '10px';
+            viewLoadersBtn.style.backgroundColor = '#007bff';
+            viewLoadersBtn.style.color = 'white';
+            viewLoadersBtn.style.border = 'none';
+            viewLoadersBtn.style.padding = '0.6rem 1.2rem';
+            viewLoadersBtn.style.fontSize = '0.9rem';
+            viewLoadersBtn.style.fontWeight = 'bold';
+            viewLoadersBtn.style.borderRadius = '5px';
+            viewLoadersBtn.style.cursor = 'pointer';
+            headerRight.appendChild(viewLoadersBtn);
+
+            const loaderModal = document.getElementById('debug-loader-modal');
+            const closeModalBtn = loaderModal.querySelector('.modal-close-btn');
+
+            function showLoaderModal() {
+                if (loaderModal) {
+                    loaderModal.classList.remove('hidden');
+                    // Animate progress bars when modal is shown
+                    const progressBars = loaderModal.querySelectorAll('.progress-bar');
+                    progressBars.forEach(bar => {
+                        bar.style.transition = 'none';
+                        bar.style.width = '0%';
+                        setTimeout(() => {
+                            bar.style.transition = 'width 2s ease-in-out';
+                            bar.style.width = '100%';
+                        }, 100);
+                    });
+                }
+            }
+
+            function hideLoaderModal() {
+                if (loaderModal) loaderModal.classList.add('hidden');
+            }
+
+            viewLoadersBtn.addEventListener('click', showLoaderModal);
+            closeModalBtn.addEventListener('click', hideLoaderModal);
+            loaderModal.addEventListener('click', (e) => {
+                if (e.target === loaderModal) {
+                    hideLoaderModal();
+                }
+            });
+
+            console.log("デバッグモードが有効です。");
+        }
+    }
+
+    // --- ショートカット機能 ---
+    const shortcutTask = urlParams.get('task');
+    const shortcutCategory = urlParams.get('category');
+
+    if (shortcutTask) {
+        // タスク番号へのショートカット
+        const taskIndex = parseInt(shortcutTask, 10) - 1; // 1-based to 0-based
+        if (taskIndex >= 0 && taskIndex < experimentTrials.length) {
+            console.log(`タスクへのショートカット: ${shortcutTask}`);
+            isTutorial = false;
+            currentPatternIndex = taskIndex;
+            startTrial(currentPatternIndex);
+        } else {
+            console.error(`無効なタスク番号です: ${shortcutTask}`);
+        }
+    } else if (shortcutCategory && products[shortcutCategory]) {
+        // カテゴリページへのショートカット
+        console.log(`カテゴリへのショートカット: ${shortcutCategory}`);
+        showScreen(ecSiteScreen); // ECサイト画面を直接表示
+        renderProducts(shortcutCategory); // 指定されたカテゴリの商品をレンダリング
+
+        // ナビゲーションのアクティブ状態を更新
+        categoryNav.querySelector('.active')?.classList.remove('active');
+        const categoryLink = categoryNav.querySelector(`[data-category="${shortcutCategory}"]`);
+        if (categoryLink) {
+            categoryLink.classList.add('active');
+        }
+        currentCategory = shortcutCategory;
+    }
 });
 

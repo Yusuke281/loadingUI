@@ -1,0 +1,7 @@
+action,from,to,loader,time,simulatedDelay,trial,task,rageClicks,mouseDistance,taskDuration,loaderType,simulatedLoadingTime,cartContents,taskSuccess,timestamp
+Category Change,home,vegetables,bar-color,5004.299999952316,5000,,,,,,,,,,
+Category Change,vegetables,sweets,bar-color,5007.100000143051,5000,,,,,,,,,,
+Task Completed,,,,,,1,ブロッコリーとクッキーをカートに入れてください,0,3931.3617135536047,16160.5,bar-color,5000,ブロッコリー,クッキー,true,2025-11-12T00:29:18.710Z
+Category Change,home,vegetables,bar,5004.5,5000,,,,,,,,,,
+Category Change,vegetables,drinks,bar,5003.900000095367,5000,,,,,,,,,,
+Task Completed,,,,,,2,なすとオレンジジュースをカートに入れてください,0,3659.91367205961,17162,bar,5000,なす,オレンジジュース,true,2025-11-12T00:29:39.809Z

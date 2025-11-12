@@ -1,0 +1,230 @@
+/* --- Global Styles & Dark Theme --- */
+:root {
+    --bg-color: #1a1a1a;
+    --card-color: #2a2a2a;
+    --font-color: #e0e0e0;
+    --border-color: #444;
+    --primary-color: #007bff;
+    --code-bg-color: #1e1e1e;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    line-height: 1.6;
+}
+
+header {
+    text-align: center;
+    padding: 3rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: #aaa;
+    margin-top: 0.5rem;
+}
+
+main {
+    padding: 2rem;
+}
+
+/* --- Showcase Layout --- */
+.showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.showcase-card {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.showcase-card h2 {
+    margin: 0;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* --- Demo Box --- */
+.demo-box {
+    padding: 2rem;
+    min-height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-color);
+}
+
+.skeleton-demo-box {
+    height: 280px;
+    padding: 1.5rem;
+}
+
+
+/* --- Code Box --- */
+.code-box {
+    position: relative;
+    background-color: var(--code-bg-color);
+    border-top: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    flex-grow: 1;
+}
+
+.code-box pre {
+    margin: 0;
+    padding: 1.5rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #333;
+    color: var(--font-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s;
+}
+
+.copy-btn:hover {
+    background-color: #444;
+}
+
+.copy-btn.copied {
+    background-color: #28a745;
+    color: white;
+}
+
+
+/* --- Loader Styles (Copied from original project) --- */
+
+/* 1. Spinner */
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #555; /* Adjusted for dark theme */
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner.color {
+    /* Re-style for conic gradient */
+    border: none; /* Remove the old border */
+    background: conic-gradient(from 90deg at 50% 50%, #4285F4, #DB4437, #F4B400, #0F9D58, #4285F4);
+    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+    mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+}
+
+/* 2. Progress Bar */
+.progress-bar-container {
+    width: 80%;
+    height: 8px;
+    background-color: #3e3e3e;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0;
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    transition: width 2s ease-in-out;
+}
+
+.progress-bar.color {
+    background: linear-gradient(90deg, #4285F4, #0F9D58, #F4B400, #DB4437);
+}
+
+/* 3. Skeleton */
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.skeleton-image, .skeleton-text, .skeleton-button {
+    background: linear-gradient(90deg, #3c3c3c 25%, #444 50%, #3c3c3c 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton-image {
+    height: 50%;
+    width: 100%;
+}
+
+.skeleton-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-text {
+    height: 1rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-text.short {
+    width: 60%;
+}
+
+.skeleton-button {
+    height: 30px;
+    margin: 1rem;
+    margin-top: auto;
+    border-radius: 5px;
+}
+
+.skeleton-card.color .skeleton-image,
+.skeleton-card.color .skeleton-text,
+.skeleton-card.color .skeleton-button {
+    background: linear-gradient(
+        90deg,
+        #522d2d, #58432a, #5a5a31,
+        #3a583a, #315858, #334459,
+        #522d2d
+    );
+    background-size: 200% 100%;
+}
