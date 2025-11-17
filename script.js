@@ -587,7 +587,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function downloadCSV(data) {
-        // 全てのオブジェクトからキーを収集して、ユニークなヘッダーリストを作成
         const allKeys = data.reduce((keys, obj) => {
             Object.keys(obj).forEach(key => {
                 if (!keys.includes(key)) {
@@ -598,21 +597,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }, []);
 
         const csv = [
-            allKeys.join(','), // 全てのキーをヘッダーとして使用
+            allKeys.join(','),
             ...data.map(row => allKeys.map(header => {
                 let value = row[header];
-                // 値が存在しない場合は空文字にする
+
                 if (value === undefined || value === null) {
-                    value = '';
+                    return '';
                 }
-                if (typeof value === 'string' && value.includes(',')) {
-                    value = `"${value}"`;
+
+                // Special handling for arrays to prevent unquoted commas
+                if (Array.isArray(value)) {
+                    // Join with a different separator, or quote the whole thing
+                    // Let's quote the whole thing, which is more robust.
+                    value = value.join(', '); // e.g., "ブロッコリー, クッキー"
                 }
-                return value;
+                
+                let valueStr = String(value);
+
+                // Quote the string if it contains a comma or a double quote
+                if (valueStr.includes(',') || valueStr.includes('"')) {
+                    // Escape existing double quotes by doubling them, then wrap the whole string in quotes.
+                    valueStr = `"${valueStr.replace(/"/g, '""')}"`;
+                }
+                return valueStr;
             }).join(','))
         ].join('\n');
 
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        // 文字化け対策としてBOMを追加
+        const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
         link.setAttribute('href', url);
