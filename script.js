@@ -198,6 +198,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let isMeasuringMouseDistance = false;
     let taskStartTime = 0;
     const taskTimings = [];
+    let taskClickData = []; // For optimal distance calculation
+
+    // --- ヘルパー関数 ---
+    function getElementCenter(element) {
+        if (!element) return null;
+        const rect = element.getBoundingClientRect();
+        return {
+            x: rect.left + rect.width / 2 + window.scrollX,
+            y: rect.top + rect.height / 2 + window.scrollY
+        };
+    }
+
+    function calculateDistance(pos1, pos2) {
+        if (!pos1 || !pos2) return 0;
+        const dx = pos1.x - pos2.x;
+        const dy = pos1.y - pos2.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 
     // --- 状態管理 ---
     let isTutorial = true;
@@ -446,6 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lastMouseY = 0;
         isMeasuringMouseDistance = true;
         taskStartTime = performance.now();
+        taskClickData = []; // Reset click data for new task
         cartItems = [];
         renderCart();
     });
@@ -567,16 +586,38 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             isMeasuringMouseDistance = false;
             const taskDuration = performance.now() - taskStartTime;
+
+            // --- 最適距離の計算 ---
+            let optimalMouseDistance = 0;
+            const requiredItems = (currentTrial.taskHTML.match(/<strong>(.*?)<\/strong>/g) || []).map(item => item.replace(/<\/?strong>/g, ''));
+            
+            const itemClickPos = requiredItems.map(itemName => {
+                const clickRecord = taskClickData.find(c => c.target === `product-${itemName}`);
+                return clickRecord ? clickRecord.pos : null;
+            }).filter(pos => pos !== null);
+
+            const completeClickPos = taskClickData.find(c => c.target === 'complete-task')?.pos;
+
+            if (itemClickPos.length === requiredItems.length && completeClickPos && itemClickPos.length > 0) {
+                // A->B->Complete のような単純なパスで計算
+                let lastPos = itemClickPos[0];
+                for (let i = 1; i < itemClickPos.length; i++) {
+                    optimalMouseDistance += calculateDistance(lastPos, itemClickPos[i]);
+                    lastPos = itemClickPos[i];
+                }
+                optimalMouseDistance += calculateDistance(lastPos, completeClickPos);
+            }
+            // --- 計算終了 ---
+
             taskTimings.push({
                 trial: currentPatternIndex + 1,
-                task: currentTrial.taskHTML.replace(/<strong>/g, '').replace(/<\/strong>/g, ''),
                 action: 'Task Completed', 
                 rageClicks: rageClickCount, 
                 mouseDistance: totalMouseDistance,
+                optimalMouseDistance: optimalMouseDistance, // 新しいデータを追加
                 taskDuration: taskDuration, 
                 loaderType: selectedLoader, 
                 simulatedLoadingTime: loadingTimeMs,
-                cartContents: cartItems.map(item => item.name), 
                 taskSuccess: true,
                 timestamp: new Date().toISOString()
             });
