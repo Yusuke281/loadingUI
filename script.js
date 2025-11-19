@@ -577,12 +577,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (isTutorial) {
-            tutorialTrialIndex++;
-            if (tutorialTrialIndex < tutorialTrials.length) {
-                startTutorialTrial(tutorialTrialIndex);
-            } else {
-                showScreen(tutorialCompleteScreen);
-            }
+            // チュートリアルでもアンケート画面を表示
+            showScreen(surveyScreen);
+            surveyTaskNumber.textContent = `チュートリアル ${tutorialTrialIndex + 1}`;
         } else {
             isMeasuringMouseDistance = false;
             const taskDuration = performance.now() - taskStartTime;
@@ -696,12 +693,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     nextTaskBtn.addEventListener('click', () => {
-        currentPatternIndex++;
-        if (currentPatternIndex < experimentTrials.length) {
-            startTrial(currentPatternIndex);
+        if (isTutorial) {
+            tutorialTrialIndex++;
+            if (tutorialTrialIndex < tutorialTrials.length) {
+                startTutorialTrial(tutorialTrialIndex);
+            } else {
+                showScreen(tutorialCompleteScreen);
+            }
         } else {
-            showScreen(experimentCompleteScreen);
-            console.log("Experiment finished. All data:", taskTimings);
+            currentPatternIndex++;
+            if (currentPatternIndex < experimentTrials.length) {
+                startTrial(currentPatternIndex);
+            } else {
+                showScreen(experimentCompleteScreen);
+                console.log("Experiment finished. All data:", taskTimings);
+            }
         }
     });
 

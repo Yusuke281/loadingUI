@@ -4,6 +4,8 @@ import seaborn as sns
 import argparse
 import os
 import numpy as np
+import scipy.stats as stats
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
 def analyze_data(filepath):
     """
@@ -27,25 +29,28 @@ def analyze_data(filepath):
     print("\n" + "="*50 + "\n")
 
     # --- 正規化・純粋なタスク時間の計算 ---
-    # 純粋なタスク時間
     df['pureTaskDuration'] = df['taskDuration'] - df['simulatedLoadingTime']
     df['pureTaskDuration'] = df['pureTaskDuration'].clip(lower=0)
 
-    # 正規化マウス移動距離 (0除算を回避)
-    # optimalMouseDistanceが0またはNaNの場合は、非効率スコアを1（最適）とする
-    df['normalizedMouseDistance'] = df['mouseDistance'] / df['optimalMouseDistance']
-    df['normalizedMouseDistance'].replace([np.inf, -np.inf], np.nan, inplace=True)
-    df['normalizedMouseDistance'].fillna(1, inplace=True)
+    base_metrics = ['taskDuration', 'pureTaskDuration', 'mouseDistance', 'rageClicks']
+    metrics_to_analyze = list(base_metrics)
+
+    if 'optimalMouseDistance' in df.columns:
+        df['normalizedMouseDistance'] = df['mouseDistance'] / df['optimalMouseDistance']
+        df['normalizedMouseDistance'].replace([np.inf, -np.inf], np.nan, inplace=True)
+        df['normalizedMouseDistance'].fillna(1, inplace=True)
+        metrics_to_analyze.append('normalizedMouseDistance')
+    else:
+        print("警告: 'optimalMouseDistance' 列が見つかりません。正規化マウス移動距離の分析はスキップされます。")
 
 
     # --- 2. 基本統計量の表示 ---
     print("--- 全体の基本統計量 ---")
-    print(df[['taskDuration', 'pureTaskDuration', 'mouseDistance', 'normalizedMouseDistance', 'rageClicks']].describe())
+    print(df[metrics_to_analyze].describe())
     print("\n" + "="*50 + "\n")
 
     # --- 3. ローダーの種類ごとの集計 ---
     print("--- ローダーの種類ごとの平均値 ---")
-    metrics_to_analyze = ['taskDuration', 'pureTaskDuration', 'mouseDistance', 'normalizedMouseDistance', 'rageClicks']
     grouped_by_loader = df.groupby('loaderType')[metrics_to_analyze].mean()
     print(grouped_by_loader)
     print("\n" + "="*50 + "\n")
@@ -59,7 +64,26 @@ def analyze_data(filepath):
         print("simulatedLoadingTime 列が見つからないため、この集計はスキップされました。")
 
 
-    # --- 4. 可視化 ---
+    # --- 4. 仮説検定 (ANOVA & Tukey's HSD) ---
+    print("\n" + "="*50 + "\n")
+    print("--- 仮説検定: 分散分析 (ANOVA) ---")
+    
+    for metric in metrics_to_analyze:
+        groups = [df[df['loaderType'] == loader][metric] for loader in df['loaderType'].unique()]
+        f_val, p_val = stats.f_oneway(*groups)
+        print(f"{metric}の分散分析: F値 = {f_val:.4f}, p値 = {p_val:.4f}")
+
+    print("\n" + "="*50 + "\n")
+    print("--- 仮説検定: 多重比較 (Tukey's HSD) ---")
+
+    for metric in metrics_to_analyze:
+        tukey_result = pairwise_tukeyhsd(endog=df[metric], groups=df['loaderType'], alpha=0.05)
+        print(f"--- {metric}の多重比較結果 ---")
+        print(tukey_result)
+        print("\n" + "-"*50 + "\n")
+
+
+    # --- 5. 可視化 ---
     output_dir = 'analysis_results'
     os.makedirs(output_dir, exist_ok=True)
     print(f"グラフは '{output_dir}' フォルダに保存されます。")
@@ -89,15 +113,16 @@ def analyze_data(filepath):
     plt.close()
 
     # c. ローダーの種類別 正規化マウス移動距離 (非効率スコア)
-    plt.figure(figsize=(12, 7))
-    sns.boxplot(data=df, x='loaderType', y='normalizedMouseDistance', palette='viridis')
-    plt.title('ローダーの種類別 正規化マウス移動距離（非効率スコア）', fontsize=16)
-    plt.xlabel('ローダーの種類', fontsize=12)
-    plt.ylabel('非効率スコア (実績/最短)', fontsize=12)
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'normalized_distance_by_loader_boxplot.png'))
-    plt.close()
+    if 'normalizedMouseDistance' in metrics_to_analyze:
+        plt.figure(figsize=(12, 7))
+        sns.boxplot(data=df, x='loaderType', y='normalizedMouseDistance', palette='viridis')
+        plt.title('ローダーの種類別 正規化マウス移動距離（非効率スコア）', fontsize=16)
+        plt.xlabel('ローダーの種類', fontsize=12)
+        plt.ylabel('非効率スコア (実績/最短)', fontsize=12)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_dir, 'normalized_distance_by_loader_boxplot.png'))
+        plt.close()
 
     # d. ローダーの種類別レイジクリック数
     plt.figure(figsize=(12, 7))
