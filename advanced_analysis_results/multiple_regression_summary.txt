@@ -1,0 +1,35 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:     satisfaction_score   R-squared:                       0.624
+Model:                            OLS   Adj. R-squared:                  0.374
+Method:                 Least Squares   F-statistic:                     2.492
+Date:                Wed, 26 Nov 2025   Prob (F-statistic):             0.0747
+Time:                        11:03:51   Log-Likelihood:                -27.034
+No. Observations:                  21   AIC:                             72.07
+Df Residuals:                      12   BIC:                             81.47
+Df Model:                           8                                         
+Covariance Type:            nonrobust                                         
+=============================================================================================
+                                coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------------------
+const                         6.0898      2.158      2.822      0.015       1.387      10.792
+rageClicks                 1.034e-11   3.67e-12      2.819      0.015    2.35e-12    1.83e-11
+mouseDistance                -0.0006      0.000     -1.729      0.109      -0.001       0.000
+simulatedLoadingTime_sec     -0.1296      0.177     -0.732      0.478      -0.515       0.256
+loaderType_bar-color          1.0908      0.957      1.139      0.277      -0.995       3.176
+loaderType_none               0.1057      0.956      0.111      0.914      -1.977       2.189
+loaderType_skeleton           2.7743      0.949      2.924      0.013       0.707       4.842
+loaderType_skeleton-color     0.1387      0.954      0.145      0.887      -1.939       2.216
+loaderType_spinner            1.2751      0.974      1.310      0.215      -0.846       3.396
+loaderType_spinner-color      1.8931      1.047      1.808      0.096      -0.389       4.175
+==============================================================================
+Omnibus:                        0.828   Durbin-Watson:                   2.861
+Prob(Omnibus):                  0.661   Jarque-Bera (JB):                0.704
+Skew:                           0.033   Prob(JB):                        0.703
+Kurtosis:                       2.105   Cond. No.                     1.47e+19
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 2.69e-30. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.
