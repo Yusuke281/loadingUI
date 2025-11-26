@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // --- GoogleフォームのURL ---
-    const SURVEY_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeNm6z4Aj-gI1O4mEVCt5jzXbdq8FDYU3jf4lHNsvjIVMze4Q/viewform?usp=header';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxo82MOpCb-UXoW68DbP1QUWJZ3FgIu4I5bXnkz-T9-i75hSCYl2TiZlMLRm5YONL8c7A/exec';
 
     // --- DOM要素の取得 ---
     const startScreen = document.getElementById('start-screen');
@@ -180,9 +180,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const completeTaskBtn = document.getElementById('complete-task-btn');
     const downloadCsvBtn = document.getElementById('download-csv-btn');
     const surveyTaskNumber = document.getElementById('survey-task-number');
-    const nextTaskBtn = document.getElementById('next-task-btn');
     const cartCount = document.getElementById('cart-count');
     const cartSidebarBody = document.getElementById('cart-sidebar-body');
+
+    // 新しいDOM要素
+    const taskSurveyForm = document.getElementById('task-survey-form');
+    const perceivedTimeInput = document.getElementById('perceived-time');
+    const submitSurveyBtn = document.getElementById('submit-survey-btn');
 
     // --- デバッグモード ---
     let isDebugMode = false;
@@ -577,9 +581,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (isTutorial) {
-            // チュートリアルでもアンケート画面を表示
-            showScreen(surveyScreen);
-            surveyTaskNumber.textContent = `チュートリアル ${tutorialTrialIndex + 1}`;
+            // チュートリアルではアンケートをスキップして次のタスクへ
+            showToast('チュートリアルタスク完了！');
+            nextTaskLogic();
         } else {
             isMeasuringMouseDistance = false;
             const taskDuration = performance.now() - taskStartTime;
@@ -692,7 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    nextTaskBtn.addEventListener('click', () => {
+    function nextTaskLogic() {
         if (isTutorial) {
             tutorialTrialIndex++;
             if (tutorialTrialIndex < tutorialTrials.length) {
@@ -708,6 +712,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 showScreen(experimentCompleteScreen);
                 console.log("Experiment finished. All data:", taskTimings);
             }
+        }
+        // フォームをリセット
+        taskSurveyForm.reset();
+    }
+
+    // アンケート送信ボタンのイベントリスナー
+    taskSurveyForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // フォームのデフォルト送信を防止
+        
+        // チュートリアル完了画面での空送信を許可
+        if (isTutorial) {
+            nextTaskLogic();
+            return;
+        }
+
+        const satisfactionRadio = document.querySelector('input[name="satisfaction"]:checked');
+
+        // バリデーション
+        if (!perceivedTimeInput.value || !satisfactionRadio) {
+            alert('体感時間と満足度の両方を入力してください。');
+            return;
+        }
+
+        // ローディング表示
+        submitSurveyBtn.disabled = true;
+        submitSurveyBtn.textContent = '送信中...';
+
+        const perceivedTime = parseFloat(perceivedTimeInput.value);
+        const satisfaction = parseInt(satisfactionRadio.value, 10);
+
+        // 現在のタスク情報からloaderTypeとisColorを抽出
+        const currentTrialData = experimentTrials[currentPatternIndex];
+        const loaderType = currentTrialData.loader;
+        const isColor = loaderType.includes('color');
+
+        const postData = {
+            taskNumber: currentPatternIndex + 1,
+            loaderType: loaderType,
+            isColor: isColor,
+            perceivedTime: perceivedTime,
+            satisfaction: satisfaction
+        };
+
+        try {
+            const response = await fetch(GAS_WEB_APP_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(postData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.status === 'success') {
+                showToast('アンケートを送信しました！');
+                nextTaskLogic(); // 次のタスクへ進む
+            } else {
+                throw new Error(result.message || `サーバーエラー: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('Error submitting survey:', error);
+            alert('アンケートの送信中にエラーが発生しました。もう一度お試しください。\n' + error.message);
+        } finally {
+            submitSurveyBtn.disabled = false;
+            submitSurveyBtn.textContent = 'アンケートを送信して次のタスクへ';
         }
     });
 

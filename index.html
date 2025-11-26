@@ -97,12 +97,24 @@
 
         <div id="survey-screen" class="hidden">
             <h2>アンケート</h2>
-            <p>タスク<span id="survey-task-number"></span>のアンケートです。</p>
-            <p>アンケートを記入して下さい。</p>
-            <p>アンケートの記入が終わったら次のタスクへ移動してください。</p>
-            <div class="next-task-container">
-                <button id="next-task-btn">次のタスクへ</button>
-            </div>
+            <p>現在のタスク(<span id="survey-task-number"></span>)について、以下の質問にご回答ください。</p>
+            <form id="task-survey-form">
+                <div class="form-group">
+                    <label for="perceived-time">読み込みに「何秒」かかったと感じましたか？ (半角数字)</label>
+                    <input type="number" id="perceived-time" name="perceived-time" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label>今の待ち時間に対する「満足度」を評価してください。</label>
+                    <div class="satisfaction-rating">
+                        <input type="radio" id="satisfaction-5" name="satisfaction" value="5" required><label for="satisfaction-5">非常に満足</label>
+                        <input type="radio" id="satisfaction-4" name="satisfaction" value="4"><label for="satisfaction-4">満足</label>
+                        <input type="radio" id="satisfaction-3" name="satisfaction" value="3"><label for="satisfaction-3">どちらでもない</label>
+                        <input type="radio" id="satisfaction-2" name="satisfaction" value="2"><label for="satisfaction-2">不満</label>
+                        <input type="radio" id="satisfaction-1" name="satisfaction" value="1"><label for="satisfaction-1">非常に不満</label>
+                    </div>
+                </div>
+                <button type="submit" id="submit-survey-btn">アンケートを送信して次のタスクへ</button>
+            </form>
         </div>
         <div id="experiment-complete-screen" class="hidden">
             <h2>実験終了</h2>

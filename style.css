@@ -955,3 +955,79 @@ main {
     bottom: 20px;
     right: 20px;
 }
+
+/* --- New Survey Form Styles --- */
+#task-survey-form {
+    width: 100%;
+    max-width: 600px;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+#task-survey-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#task-survey-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+#task-survey-form input[type="number"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+#task-survey-form .satisfaction-rating {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse; /* ラベルをクリックしやすくするため逆順に */
+}
+
+#task-survey-form .satisfaction-rating input[type="radio"] {
+    display: none; /* ラジオボタン自体は非表示に */
+}
+
+#task-survey-form .satisfaction-rating label {
+    font-size: 1.5rem; /* 星のサイズ */
+    color: #ddd; /* デフォルトの星の色 */
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+/* ホバーした星と、それより左（DOM上は後）の星を色付け */
+#task-survey-form .satisfaction-rating:not(:hover) input:checked ~ label,
+#task-survey-form .satisfaction-rating:hover label:hover ~ label {
+    color: #fdd835; /* Gold */
+}
+
+/* ホバーした星自体を色付け */
+#task-survey-form .satisfaction-rating label:hover,
+#task-survey-form .satisfaction-rating input:checked ~ label:hover {
+    color: #fdd835;
+}
+
+
+#task-survey-form button[type="submit"] {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 0.8rem 2rem;
+    cursor: pointer;
+    border: none;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+#task-survey-form button[type="submit"]:hover {
+    background-color: #218838;
+}
