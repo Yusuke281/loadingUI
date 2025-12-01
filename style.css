@@ -959,7 +959,7 @@ main {
 /* --- New Survey Form Styles --- */
 #task-survey-form {
     width: 100%;
-    max-width: 600px;
+    max-width: 800px; /* ボックスを全体的に大きくするために最大幅を増やす */
     background: #fff;
     padding: 2rem;
     border-radius: 8px;
@@ -988,31 +988,34 @@ main {
 
 #task-survey-form .satisfaction-rating {
     display: flex;
-    justify-content: space-between;
-    flex-direction: row-reverse; /* ラベルをクリックしやすくするため逆順に */
-}
-
-#task-survey-form .satisfaction-rating input[type="radio"] {
-    display: none; /* ラジオボタン自体は非表示に */
+    justify-content: center; /* 中央揃えに変更 */
+    gap: 0.3rem; /* 各選択肢の間隔を縮小 */
+    /* flex-wrap: wrap; を削除して折り返しを防ぐ */
 }
 
 #task-survey-form .satisfaction-rating label {
-    font-size: 1.5rem; /* 星のサイズ */
-    color: #ddd; /* デフォルトの星の色 */
+    font-size: 0.9rem; /* 標準的なフォントサイズに変更 */
+    color: #333;
+    background-color: #f0f0f0;
     cursor: pointer;
-    transition: color 0.2s;
+    transition: all 0.2s ease-in-out;
+    padding: 0.5rem 1rem; /* パディングを縮小 */
+    border-radius: 20px; /* 角を丸くしてタグのように */
+    border: 2px solid #f0f0f0;
 }
 
-/* ホバーした星と、それより左（DOM上は後）の星を色付け */
-#task-survey-form .satisfaction-rating:not(:hover) input:checked ~ label,
-#task-survey-form .satisfaction-rating:hover label:hover ~ label {
-    color: #fdd835; /* Gold */
+/* ホバーしたラベルのスタイル */
+#task-survey-form .satisfaction-rating label:hover {
+    border-color: #007bff;
+    background-color: #e9f5ff;
 }
 
-/* ホバーした星自体を色付け */
-#task-survey-form .satisfaction-rating label:hover,
-#task-survey-form .satisfaction-rating input:checked ~ label:hover {
-    color: #fdd835;
+/* 選択されたラベルのスタイル */
+#task-survey-form .satisfaction-rating input:checked + label {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+    font-weight: bold;
 }
 
 
@@ -1030,4 +1033,55 @@ main {
 
 #task-survey-form button[type="submit"]:hover {
     background-color: #218838;
+}
+/* Slider Container for Perceived Time */
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.slider-container input[type="range"] {
+    flex-grow: 1;
+    -webkit-appearance: none; /* Remove default styling */
+    appearance: none;
+    height: 8px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+
+.slider-container input[type="range"]:hover {
+    opacity: 1;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+.slider-container input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+#perceived-time-value {
+    min-width: 60px; /* Adjust as needed */
+    text-align: right;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #007bff;
 }

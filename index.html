@@ -100,8 +100,11 @@
             <p>現在のタスク(<span id="survey-task-number"></span>)について、以下の質問にご回答ください。</p>
             <form id="task-survey-form">
                 <div class="form-group">
-                    <label for="perceived-time">読み込みに「何秒」かかったと感じましたか？ (半角数字)</label>
-                    <input type="number" id="perceived-time" name="perceived-time" step="0.1" required>
+                    <label for="perceived-time">読み込みに「何秒」かかったと感じましたか？</label>
+                    <div class="slider-container">
+                        <input type="range" id="perceived-time" name="perceived-time" min="1" max="8" step="0.1" value="4" required>
+                        <span id="perceived-time-value">4.0 秒</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>今の待ち時間に対する「満足度」を評価してください。</label>

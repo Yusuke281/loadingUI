@@ -156,8 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    // --- GoogleフォームのURL ---
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxo82MOpCb-UXoW68DbP1QUWJZ3FgIu4I5bXnkz-T9-i75hSCYl2TiZlMLRm5YONL8c7A/exec';
+    // --- GoogleフォームのURL (削除) ---
 
     // --- DOM要素の取得 ---
     const startScreen = document.getElementById('start-screen');
@@ -185,8 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 新しいDOM要素
     const taskSurveyForm = document.getElementById('task-survey-form');
-    const perceivedTimeInput = document.getElementById('perceived-time');
+    const perceivedTimeInput = document.getElementById('perceived-time'); // Slider input
+    const perceivedTimeValueSpan = document.getElementById('perceived-time-value'); // Span to display slider value
     const submitSurveyBtn = document.getElementById('submit-survey-btn');
+
+    // Perceived Time Sliderの値をリアルタイムで表示
+    perceivedTimeInput.addEventListener('input', () => {
+        perceivedTimeValueSpan.textContent = `${perceivedTimeInput.value} 秒`;
+    });
 
     // --- デバッグモード ---
     let isDebugMode = false;
@@ -580,27 +585,28 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        isMeasuringMouseDistance = false; // Stop measuring for both tutorial and main task
+
         if (isTutorial) {
-            // チュートリアルではアンケートをスキップして次のタスクへ
-            showToast('チュートリアルタスク完了！');
-            nextTaskLogic();
+            // チュートリアルでもアンケート画面を表示する
+            showScreen(surveyScreen);
+            surveyTaskNumber.textContent = `チュートリアル ${tutorialTrialIndex + 1}`;
         } else {
-            isMeasuringMouseDistance = false;
+            // 本番タスクではパフォーマンスを記録
             const taskDuration = performance.now() - taskStartTime;
 
             // --- 最適距離の計算 ---
             let optimalMouseDistance = 0;
-            const requiredItems = (currentTrial.taskHTML.match(/<strong>(.*?)<\/strong>/g) || []).map(item => item.replace(/<\/?strong>/g, ''));
+            const requiredItemsForOptimal = (currentTrial.taskHTML.match(/<strong>(.*?)<\/strong>/g) || []).map(item => item.replace(/<\/?strong>/g, ''));
             
-            const itemClickPos = requiredItems.map(itemName => {
+            const itemClickPos = requiredItemsForOptimal.map(itemName => {
                 const clickRecord = taskClickData.find(c => c.target === `product-${itemName}`);
                 return clickRecord ? clickRecord.pos : null;
             }).filter(pos => pos !== null);
 
             const completeClickPos = taskClickData.find(c => c.target === 'complete-task')?.pos;
 
-            if (itemClickPos.length === requiredItems.length && completeClickPos && itemClickPos.length > 0) {
-                // A->B->Complete のような単純なパスで計算
+            if (itemClickPos.length === requiredItemsForOptimal.length && completeClickPos && itemClickPos.length > 0) {
                 let lastPos = itemClickPos[0];
                 for (let i = 1; i < itemClickPos.length; i++) {
                     optimalMouseDistance += calculateDistance(lastPos, itemClickPos[i]);
@@ -615,7 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 action: 'Task Completed', 
                 rageClicks: rageClickCount, 
                 mouseDistance: totalMouseDistance,
-                optimalMouseDistance: optimalMouseDistance, // 新しいデータを追加
+                optimalMouseDistance: optimalMouseDistance,
                 taskDuration: taskDuration, 
                 loaderType: selectedLoader, 
                 simulatedLoadingTime: loadingTimeMs,
@@ -623,6 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 timestamp: new Date().toISOString()
             });
             console.log(`Trial ${currentPatternIndex + 1} completed. Data:`, taskTimings[taskTimings.length - 1]);
+            
             showScreen(surveyScreen);
             surveyTaskNumber.textContent = currentPatternIndex + 1;
         }
@@ -680,17 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
     downloadCsvBtn.addEventListener('click', () => {
         const completedTasks = taskTimings.filter(task => task.action === 'Task Completed');
         if (completedTasks.length > 0) {
-            const keysToExtract = ['trial', 'rageClicks', 'mouseDistance', 'taskDuration', 'loaderType', 'simulatedLoadingTime'];
-            const filteredData = completedTasks.map(task => {
-                        const filteredTask = {};
-                        keysToExtract.forEach(key => {
-                            if (task[key] !== undefined) {
-                                filteredTask[key] = task[key];
-                            }
-                        });
-                        return filteredTask;
-                    });
-            downloadCSV(filteredData);
+            downloadCSV(completedTasks);
         } else {
             alert('データがありません。');
         }
@@ -718,10 +715,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // アンケート送信ボタンのイベントリスナー
-    taskSurveyForm.addEventListener('submit', async (e) => {
+    taskSurveyForm.addEventListener('submit', (e) => {
         e.preventDefault(); // フォームのデフォルト送信を防止
-        
-        // チュートリアル完了画面での空送信を許可
+
         if (isTutorial) {
             nextTaskLogic();
             return;
@@ -735,49 +731,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // ローディング表示
-        submitSurveyBtn.disabled = true;
-        submitSurveyBtn.textContent = '送信中...';
-
         const perceivedTime = parseFloat(perceivedTimeInput.value);
         const satisfaction = parseInt(satisfactionRadio.value, 10);
 
-        // 現在のタスク情報からloaderTypeとisColorを抽出
-        const currentTrialData = experimentTrials[currentPatternIndex];
-        const loaderType = currentTrialData.loader;
-        const isColor = loaderType.includes('color');
+        // 最後のタスク完了レコードを見つける
+        const lastCompletedTask = taskTimings.filter(t => t.action === 'Task Completed').pop();
 
-        const postData = {
-            taskNumber: currentPatternIndex + 1,
-            loaderType: loaderType,
-            isColor: isColor,
-            perceivedTime: perceivedTime,
-            satisfaction: satisfaction
-        };
-
-        try {
-            const response = await fetch(GAS_WEB_APP_URL, {
-                method: 'POST',
-                mode: 'cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(postData),
-            });
-
-            const result = await response.json();
-
-            if (response.ok && result.status === 'success') {
-                showToast('アンケートを送信しました！');
-                nextTaskLogic(); // 次のタスクへ進む
-            } else {
-                throw new Error(result.message || `サーバーエラー: ${response.status}`);
-            }
-        } catch (error) {
-            console.error('Error submitting survey:', error);
-            alert('アンケートの送信中にエラーが発生しました。もう一度お試しください。\n' + error.message);
-        } finally {
-            submitSurveyBtn.disabled = false;
-            submitSurveyBtn.textContent = 'アンケートを送信して次のタスクへ';
+        if (lastCompletedTask) {
+            lastCompletedTask.perceivedTime = perceivedTime;
+            lastCompletedTask.satisfaction = satisfaction;
+            console.log('Survey data added to task record:', lastCompletedTask);
+        } else {
+            console.error('Could not find the last completed task to add survey data to.');
         }
+        
+        showToast('アンケートを記録しました。');
+        nextTaskLogic(); // 次のタスクへ進む
     });
 
     // 初期画面表示
@@ -807,17 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
             debugDownloadBtn.addEventListener('click', () => {
                 const completedTasks = taskTimings.filter(task => task.action === 'Task Completed');
                 if (completedTasks.length > 0) {
-                    const keysToExtract = ['trial', 'rageClicks', 'mouseDistance', 'taskDuration', 'loaderType', 'simulatedLoadingTime'];
-                    const filteredData = completedTasks.map(task => {
-                        const filteredTask = {};
-                        keysToExtract.forEach(key => {
-                            if (task[key] !== undefined) {
-                                filteredTask[key] = task[key];
-                            }
-                        });
-                        return filteredTask;
-                    });
-                    downloadCSV(filteredData);
+                    downloadCSV(completedTasks);
                 } else {
                     alert('ダウンロード対象の完了済みタスクデータがありません。');
                 }
