@@ -47,8 +47,59 @@ document.addEventListener('DOMContentLoaded', () => {
         { taskHTML: '<strong>ケーキ</strong>をカートに入れてください', loader: 'spinner', time: 3000 },
     ];
 
-    // --- 実験トライアル定義 (固定タスク + UI/時間) ---
-    const experimentTrials = [
+    // --- 制約付きシャッフル関数 ---
+    function createConstrainedShuffle(trials) {
+        let attempts = 0;
+        while (attempts < 100) { // 無限ループを避けるための安全装置
+            let shuffled = [];
+            let pool = [...trials];
+
+            while (pool.length > 0) {
+                const last = shuffled[shuffled.length - 1];
+                const secondLast = shuffled[shuffled.length - 2];
+
+                const candidates = pool.filter(candidate => {
+                    // ルール1: 同じUIは2回連続しない
+                    if (last && candidate.loader === last.loader) {
+                        return false;
+                    }
+                    // ルール2: 同じ時間は3回連続しない
+                    if (last && secondLast && candidate.time === last.time && last.time === secondLast.time) {
+                        return false;
+                    }
+                    return true;
+                });
+
+                if (candidates.length === 0) {
+                    // 行き止まり。この試行を中断して再試行
+                    break;
+                }
+
+                const nextIndex = Math.floor(Math.random() * candidates.length);
+                const nextTrial = candidates[nextIndex];
+                
+                shuffled.push(nextTrial);
+                
+                const originalIndexInPool = pool.findIndex(t => t === nextTrial);
+                pool.splice(originalIndexInPool, 1);
+            }
+
+            if (shuffled.length === trials.length) {
+                // 成功
+                console.log(`シャッフル成功 (${attempts + 1}回目)`);
+                return shuffled;
+            }
+
+            attempts++;
+        }
+
+        // 100回試行しても失敗した場合、警告を出して元の順序を返す
+        console.warn("有効なシャッフルを作成できませんでした。元の順序を使用します。");
+        return trials;
+    }
+
+    // --- 実験トライアル定義 (元の定義) ---
+    const originalExperimentTrials = [
         {
             "taskHTML": "<strong>ブロッコリー</strong>と<strong>クッキー</strong>をカートに入れてください",
             "loader": "bar-color",
@@ -155,6 +206,15 @@ document.addEventListener('DOMContentLoaded', () => {
             "time": 3000
         }
     ];
+
+    // 元の課題番号を付与
+    const experimentTrialsWithId = originalExperimentTrials.map((trial, index) => ({
+        ...trial,
+        originalTrialNumber: index + 1
+    }));
+    
+    // シャッフルされた実験トライアル
+    const experimentTrials = createConstrainedShuffle(experimentTrialsWithId);
 
     // --- GoogleフォームのURL (削除) ---
 
@@ -617,7 +677,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- 計算終了 ---
 
             taskTimings.push({
-                trial: currentPatternIndex + 1,
+                executionOrder: currentPatternIndex + 1,
+                originalTrialNumber: currentTrial.originalTrialNumber,
                 action: 'Task Completed', 
                 rageClicks: rageClickCount, 
                 mouseDistance: totalMouseDistance,
