@@ -1,0 +1,9 @@
+Current Progress Summary (from TODO list):
+
+1. [completed] Implement constrained shuffling in `script.js`.
+2. [completed] Add `originalTrialNumber` and `executionOrder` to data collection in `script.js`.
+3. [completed] Analyze and update `consolidate_data.py`.
+4. [completed] Analyze and update `analysis.py`.
+5. [completed] Analyze and update `survey_analysis.py`.
+6. [completed] Analyze and update `advanced_analysis.py`.
+7. [completed] Analyze and update `color_vs_nocolor_analysis.py`.
