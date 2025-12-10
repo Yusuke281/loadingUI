@@ -93,7 +93,7 @@ def analyze_color_data(filepath):
         'pureTaskDuration': {'title': '「色あり/なし」別 純粋なタスク時間', 'ylabel': '純粋なタスク時間 (ms)'},
         'mouseDistance': {'title': '「色あり/なし」別 マウス移動距離', 'ylabel': 'マウス移動距離 (pixels)'},
         'rageClicks': {'title': '「色あり/なし」別 平均レイジクリック数', 'ylabel': '平均レイジクリック数', 'plot_type': 'bar'},
-        'perceivedLoadingTime': {'title': '「色あり/なし」別 体感読み込み時間', 'ylabel': '体感読み込み時間 (秒)'},
+        'perceivedLoadingTime': {'title': '「色あり/なし」別 体感読み込み時間', 'ylabel': '体感時間 (VAS評価 0-100)'},
         'satisfaction_score': {'title': '「色あり/なし」別 満足度スコア', 'ylabel': '満足度スコア (1-5)'}
     }
 

@@ -186,7 +186,7 @@ main {
     width: 48px;
     height: 48px;
     border: 4px solid #f3f3f3;
-    border-top: 4px solid #007bff;
+    border-top: 4px solid #6c757d; /* Monochrome dark gray */
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 20px;
@@ -209,10 +209,64 @@ main {
 .progress-bar {
     width: 0; /* 初期幅を0に */
     height: 100%;
-    background-color: #007bff;
+    background-color: #6c757d; /* Monochrome dark gray */
     border-radius: 4px;
     /* 加速的な動きを表現するtransition */
     transition: width 0s cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+/* 砂時計ローダー */
+.hourglass {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 80px;
+    animation: hourglass-rotate 2s infinite;
+}
+
+.hourglass:after,
+.hourglass:before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 0;
+    left: 20px;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+}
+
+.hourglass:before {
+    border-bottom: 20px solid #6c757d;
+    animation: hourglass-sand-top 2s infinite;
+}
+
+.hourglass:after {
+    border-top: 20px solid #6c757d;
+    animation: hourglass-sand-bottom 2s infinite;
+}
+
+@keyframes hourglass-rotate {
+    0% { transform: rotate(0); }
+    50% { transform: rotate(0); }
+    100% { transform: rotate(180deg); }
+}
+
+@keyframes hourglass-sand-top {
+    0% { height: 0; top: 40px; }
+    5% { height: 0; top: 40px; }
+    50% { height: 40px; top: 0; }
+    95% { height: 40px; top: 0; }
+    100% { height: 0; top: 40px; }
+}
+
+@keyframes hourglass-sand-bottom {
+    0% { height: 0; top: 40px; }
+    5% { height: 0; top: 40px; }
+    50% { height: 40px; top: 40px; }
+    95% { height: 40px; top: 40px; }
+    100% { height: 0; top: 40px; }
 }
 
 
@@ -553,7 +607,8 @@ main {
 
 .skeleton-card-wrapper {
     width: 100%;
-    height: 250px;
+    /* product-cardのmin-heightに合わせる */
+    height: 310px; 
     background-color: #fff; /* Ensure skeleton background is white */
 }
 
@@ -561,6 +616,7 @@ main {
 .modal-skeleton-card {
     background: #fff;
     border: 1px solid #eee;
+    /* .product-cardに合わせてradiusを調整 */
     border-radius: 8px;
     overflow: hidden;
     display: flex;
@@ -570,29 +626,35 @@ main {
 }
 
 .modal-loader-card .skeleton-image {
-    height: 50%;
+    /* .product-card imgのheightに合わせる */
+    height: 140px;
 }
 
 .modal-skeleton-card .skeleton-content {
-    padding: 1rem;
+    /* .product-card-contentのpaddingに合わせる */
+    padding: 0.8rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
 .modal-skeleton-card .skeleton-text {
+    /* .skeleton-textに合わせる */
     height: 1rem;
     border-radius: 4px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .modal-skeleton-card .skeleton-text.short {
+    /* .skeleton-text.shortに合わせる */
     width: 60%;
+    margin-bottom: 0.8rem;
 }
 
 .modal-skeleton-card .skeleton-button {
-    height: 30px;
-    margin: 1rem;
+    /* .skeleton-buttonに合わせる */
+    height: calc(0.5rem * 2 + 0.9rem);
+    margin: 0.8rem;
     margin-top: auto;
     border-radius: 5px;
 }
@@ -713,7 +775,7 @@ main {
 
 /* --- ホーム画面の追加スタイル --- */
 
-#product-list:not(:has(.product-card)) {
+#product-list:not(:has(.product-card)):not(:has(.skeleton-card)) {
     display: block;
     padding: 0;
 }
@@ -1034,15 +1096,20 @@ main {
 #task-survey-form button[type="submit"]:hover {
     background-color: #218838;
 }
-/* Slider Container for Perceived Time */
-.slider-container {
+/* VAS Container for Perceived Time */
+.vas-container {
     display: flex;
     align-items: center;
     gap: 1rem;
     width: 100%;
 }
 
-.slider-container input[type="range"] {
+.vas-container span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.vas-container input[type="range"] {
     flex-grow: 1;
     -webkit-appearance: none; /* Remove default styling */
     appearance: none;
@@ -1054,11 +1121,11 @@ main {
     border-radius: 5px;
 }
 
-.slider-container input[type="range"]:hover {
+.vas-container input[type="range"]:hover {
     opacity: 1;
 }
 
-.slider-container input[type="range"]::-webkit-slider-thumb {
+.vas-container input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -1069,19 +1136,11 @@ main {
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
 }
 
-.slider-container input[type="range"]::-moz-range-thumb {
+.vas-container input[type="range"]::-moz-range-thumb {
     width: 20px;
     height: 20px;
     border-radius: 50%;
     background: #007bff;
     cursor: pointer;
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
-}
-
-#perceived-time-value {
-    min-width: 60px; /* Adjust as needed */
-    text-align: right;
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #007bff;
 }

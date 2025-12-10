@@ -18,7 +18,7 @@
         <!-- チュートリアル開始画面 -->
         <div id="tutorial-start-screen" class="hidden">
             <h2>チュートリアル</h2>
-            <p>まずはじめに、操作に慣れていただくためのチュートリアルを2回行います。</p>
+            <p>まずはじめに、操作に慣れていただくためのチュートリアルを4回行います。</p>
             <button id="start-tutorial-btn">チュートリアル開始</button>
         </div>
 
@@ -100,10 +100,11 @@
             <p>現在のタスク(<span id="survey-task-number"></span>)について、以下の質問にご回答ください。</p>
             <form id="task-survey-form">
                 <div class="form-group">
-                    <label for="perceived-time">読み込みに「何秒」かかったと感じましたか？</label>
-                    <div class="slider-container">
-                        <input type="range" id="perceived-time" name="perceived-time" min="1" max="8" step="0.1" value="4" required>
-                        <span id="perceived-time-value">4.0 秒</span>
+                    <label for="perceived-time">体感的な読み込み時間の長さ</label>
+                    <div class="vas-container">
+                        <span>短い</span>
+                        <input type="range" id="perceived-time" name="perceived-time" min="0" max="100" step="1" value="50" required>
+                        <span>長い</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -155,6 +156,11 @@
                     <div class="progress-bar-container">
                         <div class="progress-bar color"></div>
                     </div>
+                </div>
+                <!-- Hourglass -->
+                <div class="modal-loader-card">
+                    <h3>Hourglass</h3>
+                    <div class="hourglass"></div>
                 </div>
                 <!-- Skeleton -->
                 <div class="modal-loader-card skeleton-card-wrapper">

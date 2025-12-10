@@ -44,7 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const tutorialTrials = [
         { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'none', time: 3000 },
-        { taskHTML: '<strong>ケーキ</strong>をカートに入れてください', loader: 'spinner', time: 3000 },
+        { taskHTML: '<strong>ケーキ</strong>をカートに入れてください', loader: 'hourglass', time: 3000 },
+        { taskHTML: '<strong>ほうれん草</strong>をカートに入れてください', loader: 'hourglass', time: 1500 }, // 短い例
+        { taskHTML: '<strong>牛乳</strong>をカートに入れてください', loader: 'hourglass', time: 6000 },       // 長い例
     ];
 
     // --- 制約付きシャッフル関数 ---
@@ -245,13 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 新しいDOM要素
     const taskSurveyForm = document.getElementById('task-survey-form');
     const perceivedTimeInput = document.getElementById('perceived-time'); // Slider input
-    const perceivedTimeValueSpan = document.getElementById('perceived-time-value'); // Span to display slider value
     const submitSurveyBtn = document.getElementById('submit-survey-btn');
-
-    // Perceived Time Sliderの値をリアルタイムで表示
-    perceivedTimeInput.addEventListener('input', () => {
-        perceivedTimeValueSpan.textContent = `${perceivedTimeInput.value} 秒`;
-    });
 
     // --- デバッグモード ---
     let isDebugMode = false;
@@ -458,6 +454,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingOverlay.innerHTML = '<div class="spinner"></div>';
             const spinner = loadingOverlay.querySelector('.spinner');
             if (spinner && loaderType === 'spinner-color') spinner.classList.add('color');
+        } else if (loaderType === 'hourglass') {
+            loadingOverlay.innerHTML = '<div class="hourglass"></div>';
         }
         loadingOverlay.style.display = 'flex';
     }

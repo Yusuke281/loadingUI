@@ -85,21 +85,20 @@ def analyze_survey_data(filepath):
     sns.boxplot(data=df, x='loaderType', y='perceivedLoadingTime', palette='viridis')
     plt.title('ローダーの種類別 体感読み込み時間', fontsize=16)
     plt.xlabel('ローダーの種類', fontsize=12)
-    plt.ylabel('体感読み込み時間 (秒)', fontsize=12)
+    plt.ylabel('体感時間 (VAS評価 0-100)', fontsize=12)
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'perceived_time_by_loader.png'))
     plt.close()
 
-    # c. 実際の待ち時間と体感読み込み時間の関係
+    # c. 実際の待ち時間と体感時間の関係 (VAS評価)
     plt.figure(figsize=(12, 7))
     # 'simulatedLoadingTime_sec' を使用するように修正
     sns.scatterplot(data=df, x='simulatedLoadingTime_sec', y='perceivedLoadingTime', hue='loaderType', palette='viridis', s=100, alpha=0.7)
-    max_val = max(df['simulatedLoadingTime_sec'].max(), df['perceivedLoadingTime'].max())
-    plt.plot([0, max_val], [0, max_val], ls="--", c=".3")
-    plt.title('実際の待ち時間と体感読み込み時間の関係', fontsize=16)
+    # y=xの補助線とmax_valの計算は、Y軸がVASスケールになったため不適切であり、削除
+    plt.title('実際の待ち時間と体感時間の関係', fontsize=16)
     plt.xlabel('実際の待ち時間 (秒)', fontsize=12)
-    plt.ylabel('体感読み込み時間 (秒)', fontsize=12)
+    plt.ylabel('体感時間 (VAS評価 0-100)', fontsize=12)
     plt.grid(True)
     plt.legend(title='ローダーの種類')
     plt.tight_layout()

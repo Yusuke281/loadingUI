@@ -20,11 +20,10 @@ def run_correlation_analysis(df):
 
     plt.figure(figsize=(10, 8))
     sns.scatterplot(data=df, x='simulatedLoadingTime_sec', y='perceivedLoadingTime', hue='loaderType', style='loaderType', s=100, alpha=0.7)
-    max_val = max(df['simulatedLoadingTime_sec'].max(), df['perceivedLoadingTime'].max())
-    plt.plot([0, max_val + 1], [0, max_val + 1], ls="--", c=".3", label="y=x (実時間と体感が一致)")
-    plt.title('実際の待ち時間 vs 体感待ち時間', fontsize=16)
+    # y=xの補助線とmax_valの計算は、Y軸がVASスケールになったため不適切であり、削除
+    plt.title('実際の待ち時間 vs 体感時間 (VAS評価)', fontsize=16)
     plt.xlabel('実際の待ち時間 (秒)', fontsize=12)
-    plt.ylabel('体感待ち時間 (秒)', fontsize=12)
+    plt.ylabel('体感時間 (VAS評価 0-100)', fontsize=12)
     plt.legend(title='ローダーの種類', bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.grid(True)
     plt.tight_layout()
