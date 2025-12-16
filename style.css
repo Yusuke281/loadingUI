@@ -215,58 +215,38 @@ main {
     transition: width 0s cubic-bezier(0.5, 0, 0.75, 0);
 }
 
-/* 砂時計ローダー */
-.hourglass {
-    display: inline-block;
-    position: relative;
-    width: 40px;
-    height: 80px;
-    animation: hourglass-rotate 2s infinite;
+/* バウンシング・ドットローダー */
+.bouncing-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px; /* Adjust as needed */
 }
 
-.hourglass:after,
-.hourglass:before {
-    content: '';
-    display: block;
-    width: 0;
-    height: 0;
-    position: absolute;
-    top: 0;
-    left: 20px;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
+.bouncing-dots div {
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
 }
 
-.hourglass:before {
-    border-bottom: 20px solid #6c757d;
-    animation: hourglass-sand-top 2s infinite;
+.bouncing-dots div:nth-child(1) {
+    animation-delay: -0.32s;
 }
 
-.hourglass:after {
-    border-top: 20px solid #6c757d;
-    animation: hourglass-sand-bottom 2s infinite;
+.bouncing-dots div:nth-child(2) {
+    animation-delay: -0.16s;
 }
 
-@keyframes hourglass-rotate {
-    0% { transform: rotate(0); }
-    50% { transform: rotate(0); }
-    100% { transform: rotate(180deg); }
-}
-
-@keyframes hourglass-sand-top {
-    0% { height: 0; top: 40px; }
-    5% { height: 0; top: 40px; }
-    50% { height: 40px; top: 0; }
-    95% { height: 40px; top: 0; }
-    100% { height: 0; top: 40px; }
-}
-
-@keyframes hourglass-sand-bottom {
-    0% { height: 0; top: 40px; }
-    5% { height: 0; top: 40px; }
-    50% { height: 40px; top: 40px; }
-    95% { height: 40px; top: 40px; }
-    100% { height: 0; top: 40px; }
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
 }
 
 
@@ -372,20 +352,30 @@ main {
 }
 
 /* 開始・タスク・終了画面共通スタイル */
-#start-screen, #task-screen, #experiment-complete-screen {
+#start-screen, #task-screen, #experiment-complete-screen, #tutorial-start-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
     text-align: center;
-    padding: 2rem;
+    padding: 3rem; /* paddingを少し大きく */
 }
 
-#start-screen button, #task-screen button, #next-task-btn {
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
-    margin-top: 2rem;
+#start-screen h2, #task-screen h2, #tutorial-start-screen h2 {
+    font-size: 2.5rem; /* H2のフォントサイズを大きく */
+    margin-bottom: 1.5rem;
+}
+
+#start-screen p, #task-screen p, #tutorial-start-screen p {
+    font-size: 1.3rem; /* Pタグのフォントサイズを大きく */
+    margin-bottom: 2rem;
+}
+
+#start-screen button, #task-screen button, #next-task-btn, #tutorial-start-screen button {
+    font-size: 1.5rem; /* ボタンのフォントサイズを大きく */
+    padding: 1.2rem 2.5rem; /* ボタンのパディングを大きく */
+    margin-top: 2.5rem;
     cursor: pointer;
     border: 1px solid #007bff;
     background-color: #007bff;
@@ -398,12 +388,16 @@ main {
     background-color: #0056b3;
 }
 
-/* タスク指示の強調 */
-#task-description strong {
-    background-color: yellow;
-    color: #000;
-    padding: 2px 4px;
-    border-radius: 3px;
+/* タスク指示の強調 (ポップな感じに) */
+#task-description strong, #header-task-description strong {
+    background-image: linear-gradient(45deg, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: inline-block; /* transformとanimationのために必要 */
+    margin: 0 2px;
 }
 
 

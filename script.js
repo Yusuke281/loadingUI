@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const tutorialTrials = [
-        { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'none', time: 3000 },
-        { taskHTML: '<strong>ケーキ</strong>をカートに入れてください', loader: 'hourglass', time: 3000 },
-        { taskHTML: '<strong>ほうれん草</strong>をカートに入れてください', loader: 'hourglass', time: 1500 }, // 短い例
-        { taskHTML: '<strong>牛乳</strong>をカートに入れてください', loader: 'hourglass', time: 6000 },       // 長い例
+        { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'bouncing-dots', time: 3000 },
+        { taskHTML: '<strong>ケーキ</strong>をカートに入れてください', loader: 'bouncing-dots', time: 3000 },
+        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">次に、読み込み時間が短い例を体験していただきます。</p><strong>ほうれん草</strong>をカートに入れてください', loader: 'bouncing-dots', time: 1500 }, // 短い例
+        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">最後に、読み込み時間が長い例を体験していただきます。</p><strong>牛乳</strong>をカートに入れてください', loader: 'bouncing-dots', time: 6000 },       // 長い例
     ];
 
     // --- 制約付きシャッフル関数 ---
@@ -454,8 +454,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingOverlay.innerHTML = '<div class="spinner"></div>';
             const spinner = loadingOverlay.querySelector('.spinner');
             if (spinner && loaderType === 'spinner-color') spinner.classList.add('color');
-        } else if (loaderType === 'hourglass') {
-            loadingOverlay.innerHTML = '<div class="hourglass"></div>';
+        } else if (loaderType === 'bouncing-dots') {
+            loadingOverlay.innerHTML = '<div class="bouncing-dots"><div></div><div></div><div></div></div>';
         }
         loadingOverlay.style.display = 'flex';
     }
@@ -498,7 +498,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     startTaskBtn.addEventListener('click', () => {
-        const taskDescriptionHTML = taskDescription.innerHTML;
+        // Create a temporary clone to manipulate for the header
+        const tempDescription = document.getElementById('task-description').cloneNode(true);
+        const descriptor = tempDescription.querySelector('.tutorial-descriptor');
+        if (descriptor) {
+            descriptor.remove();
+        }
+        const taskDescriptionHTML = tempDescription.innerHTML;
+
         const headerTaskDescription = document.getElementById('header-task-description');
         if (isTutorial) {
             headerTaskDescription.innerHTML = `チュートリアル ${tutorialTrialIndex + 1}/${tutorialTrials.length}: ${taskDescriptionHTML}`;
