@@ -53,7 +53,7 @@ def analyze_color_data(filepath):
     # 分析対象の指標を定義
     all_metrics = [
         'taskDuration', 'pureTaskDuration', 'mouseDistance', 'rageClicks',
-        'perceivedLoadingTime', 'satisfaction_score'
+        'perceivedLoadingTime', 'discomfort', 'reliability'
     ]
     # 存在する列のみにフィルタリング
     all_metrics = [m for m in all_metrics if m in df_analysis.columns]
@@ -94,7 +94,8 @@ def analyze_color_data(filepath):
         'mouseDistance': {'title': '「色あり/なし」別 マウス移動距離', 'ylabel': 'マウス移動距離 (pixels)'},
         'rageClicks': {'title': '「色あり/なし」別 平均レイジクリック数', 'ylabel': '平均レイジクリック数', 'plot_type': 'bar'},
         'perceivedLoadingTime': {'title': '「色あり/なし」別 体感読み込み時間', 'ylabel': '体感時間 (VAS評価 0-100)'},
-        'satisfaction_score': {'title': '「色あり/なし」別 満足度スコア', 'ylabel': '満足度スコア (1-5)'}
+        'discomfort': {'title': '「色あり/なし」別 不快感スコア', 'ylabel': '不快感スコア (1-5)'},
+        'reliability': {'title': '「色あり/なし」別 信頼度スコア', 'ylabel': '信頼度スコア (1-5)'}
     }
 
     for metric, config in plot_configs.items():

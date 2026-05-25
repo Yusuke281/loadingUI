@@ -1,132 +1,113 @@
-/* --- Global Styles & Dark Theme --- */
-:root {
-    --bg-color: #1a1a1a;
-    --card-color: #2a2a2a;
-    --font-color: #e0e0e0;
-    --border-color: #444;
-    --primary-color: #007bff;
-    --code-bg-color: #1e1e1e;
+/* --- Demo Page Layout --- */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 2rem;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    background-color: var(--bg-color);
-    color: var(--font-color);
-    line-height: 1.6;
+.demo-container {
+    width: 100%;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 header {
     text-align: center;
-    padding: 3rem 1rem;
-    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #ddd;
+    background-color: #f7f8fa;
 }
 
 header h1 {
-    margin: 0;
-    font-size: 2.5rem;
-    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.75rem;
 }
 
 header p {
-    font-size: 1.1rem;
-    color: #aaa;
-    margin-top: 0.5rem;
-}
-
-main {
-    padding: 2rem;
-}
-
-/* --- Showcase Layout --- */
-.showcase-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.showcase-card {
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.showcase-card h2 {
     margin: 0;
-    padding: 1rem 1.5rem;
-    font-size: 1.2rem;
-    border-bottom: 1px solid var(--border-color);
+    color: #606770;
 }
 
-/* --- Demo Box --- */
-.demo-box {
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.control-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4B4F56;
+    background-color: #E4E6EB;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.control-btn:hover {
+    background-color: #d8dbdf;
+}
+
+.control-btn.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.display-area {
     padding: 2rem;
-    min-height: 120px;
+    min-height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--bg-color);
 }
 
-.skeleton-demo-box {
-    height: 280px;
-    padding: 1.5rem;
+.loader-wrapper {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
-
-/* --- Code Box --- */
-.code-box {
-    position: relative;
-    background-color: var(--code-bg-color);
-    border-top: 1px solid var(--border-color);
-    font-size: 0.85rem;
-    flex-grow: 1;
+.loader-wrapper.active {
+    display: flex;
 }
 
-.code-box pre {
-    margin: 0;
-    padding: 1.5rem;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+.loader-wrapper p {
+    font-size: 1.2rem;
+    color: #606770;
 }
 
-.copy-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #333;
-    color: var(--font-color);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 0.4rem 0.8rem;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: background-color 0.2s;
-}
-
-.copy-btn:hover {
-    background-color: #444;
-}
-
-.copy-btn.copied {
-    background-color: #28a745;
-    color: white;
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
 }
 
 
-/* --- Loader Styles (Copied from original project) --- */
+/* --- Copied Loader Styles --- */
 
-/* 1. Spinner */
+/* スピナー */
 .spinner {
     width: 48px;
     height: 48px;
-    border: 4px solid #555; /* Adjusted for dark theme */
-    border-top: 4px solid var(--primary-color);
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #6c757d; /* Monochrome dark gray */
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -136,19 +117,11 @@ main {
     100% { transform: rotate(360deg); }
 }
 
-.spinner.color {
-    /* Re-style for conic gradient */
-    border: none; /* Remove the old border */
-    background: conic-gradient(from 90deg at 50% 50%, #4285F4, #DB4437, #F4B400, #0F9D58, #4285F4);
-    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
-    mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
-}
-
-/* 2. Progress Bar */
+/* プログレスバー */
 .progress-bar-container {
     width: 80%;
     height: 8px;
-    background-color: #3e3e3e;
+    background-color: #e0e0e0;
     border-radius: 4px;
     overflow: hidden;
 }
@@ -156,45 +129,69 @@ main {
 .progress-bar {
     width: 0;
     height: 100%;
-    background-color: var(--primary-color);
+    background-color: #6c757d; /* Monochrome dark gray */
     border-radius: 4px;
-    transition: width 2s ease-in-out;
+    transition: width 2s cubic-bezier(0.5, 0, 0.75, 0);
 }
 
-.progress-bar.color {
-    background: linear-gradient(90deg, #4285F4, #0F9D58, #F4B400, #DB4437);
+/* バウンシング・ドットローダー */
+.bouncing-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* 3. Skeleton */
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+.bouncing-dots div {
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
 }
 
+.bouncing-dots div:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.bouncing-dots div:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+}
+
+/* スケルトンスクリーン */
 .skeleton-card {
-    background: var(--card-color);
-    border: 1px solid var(--border-color);
+    background: #fff;
     border-radius: 8px;
+    border: 1px solid #e5e5e5;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
+    padding: 0.8rem;
 }
 
 .skeleton-image, .skeleton-text, .skeleton-button {
-    background: linear-gradient(90deg, #3c3c3c 25%, #444 50%, #3c3c3c 75%);
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
 }
 
 .skeleton-image {
-    height: 50%;
     width: 100%;
+    height: 120px;
+    border-radius: 4px;
 }
 
 .skeleton-content {
-    padding: 1rem;
+    padding-top: 0.8rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -203,7 +200,11 @@ main {
 .skeleton-text {
     height: 1rem;
     border-radius: 4px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.skeleton-text:last-child {
+    margin-bottom: 0;
 }
 
 .skeleton-text.short {
@@ -212,19 +213,50 @@ main {
 
 .skeleton-button {
     height: 30px;
-    margin: 1rem;
     margin-top: auto;
     border-radius: 5px;
+    margin-top: 1rem;
 }
 
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+
+/* --- カラーバージョン --- */
+
+/* カラースピナー */
+.spinner.color {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    background-image: none;
+    -webkit-mask: none;
+    mask: none;
+}
+
+/* カラープログレスバー */
+.progress-bar.color {
+    background: linear-gradient(90deg, #007bff, #66b2ff);
+}
+
+/* カラースケルトン */
 .skeleton-card.color .skeleton-image,
 .skeleton-card.color .skeleton-text,
 .skeleton-card.color .skeleton-button {
     background: linear-gradient(
         90deg,
-        #522d2d, #58432a, #5a5a31,
-        #3a583a, #315858, #334459,
-        #522d2d
+        #e3f2fd, /* Light Blue */
+        #bbdefb, /* Lighter Blue */
+        #90caf9, /* Sky Blue */
+        #64b5f6, /* Brighter Blue */
+        #42a5f5, /* Rich Blue */
+        #2196f3, /* Standard Blue */
+        #e3f2fd  /* Loop back */
     );
     background-size: 200% 100%;
 }

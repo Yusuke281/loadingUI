@@ -57,25 +57,22 @@ def consolidate_data():
     df_all = pd.concat(all_participants_data, ignore_index=True)
     
     # データ型を調整
-    # errors='coerce'は、数値に変換できない値をNaN（Not a Number）にする
     df_all['perceivedLoadingTime'] = pd.to_numeric(df_all['perceivedLoadingTime'], errors='coerce')
-    df_all['satisfaction'] = pd.to_numeric(df_all['satisfaction'], errors='coerce')
+    df_all['discomfort'] = pd.to_numeric(df_all['discomfort'], errors='coerce')
+    df_all['reliability'] = pd.to_numeric(df_all['reliability'], errors='coerce')
     df_all['simulatedLoadingTime_sec'] = df_all['simulatedLoadingTime'] / 1000
     df_all['taskDuration_sec'] = df_all['taskDuration'] / 1000
     
-    # 満足度列の名前を 'satisfaction_score' に変更して他のスクリプトとの一貫性を保つ
-    df_all.rename(columns={'satisfaction': 'satisfaction_score'}, inplace=True)
-
     # 欠損値を含む行を削除（アンケートに回答しなかった場合など）
-    df_all.dropna(subset=['perceivedLoadingTime', 'satisfaction_score'], inplace=True)
+    df_all.dropna(subset=['perceivedLoadingTime', 'discomfort', 'reliability'], inplace=True)
     
     # 最終的な列の順序を定義
-    # 'trial' を 'executionOrder' と 'originalTrialNumber' に変更
     final_columns = [
         'participant_id', 'executionOrder', 'originalTrialNumber', 
         'loaderType', 'simulatedLoadingTime', 'simulatedLoadingTime_sec',
         'rageClicks', 'mouseDistance', 'taskDuration', 'taskDuration_sec',
-        'perceivedLoadingTime', 'satisfaction_score'
+        'totalLoadingTime', 'pureTaskDuration',
+        'perceivedLoadingTime', 'discomfort', 'reliability'
     ]
     # df_allに存在する列のみを抽出して順序を適用
     df_final = df_all[[col for col in final_columns if col in df_all.columns]]
