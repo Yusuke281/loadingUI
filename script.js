@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <h3>${product.name}</h3>
                                 <p class="price">¥${product.price.toLocaleString()}</p>
                             </div>
-                            <button class="add-to-cart-btn" data-product-id="${product.id}">カートに入れる</button>
+                            <a href="#" class="add-to-cart-btn" data-product-id="${product.id}" role="button">カートに入れる</a>
                         </div>
                     `).join('')}
                 </div>
@@ -398,8 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
             productListContainer.innerHTML = '<p>このカテゴリーの商品は現在ありません。</p>';
             return;
         }
-        const categoryTitle = categoryNav.querySelector(`[data-category="${category}"]`).textContent;
-        productListContainer.innerHTML = `<h2>${categoryTitle}</h2>` + productData.map(product => `
+        productListContainer.innerHTML = productData.map(product => `
             <div class="product-card">
                 <img src="${product.image}" alt="${product.name}">
                 <div class="product-card-content">
@@ -621,7 +620,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (loaderType.startsWith('skeleton') && newCategory !== 'home') {
             productListContainer.style.display = 'grid';
-            const categoryTitle = categoryNav.querySelector(`[data-category="${newCategory}"]`).textContent;
             const skeletonClass = loaderType === 'skeleton-color' ? 'skeleton-card color' : 'skeleton-card';
             
             // 表示する商品の数を取得し、その数だけスケルトンを生成する
@@ -637,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="skeleton-button"></div>
                 </div>
             `).join('');
-            productListContainer.innerHTML = `<h2>${categoryTitle}</h2>` + skeletonHtml;
+            productListContainer.innerHTML = skeletonHtml;
         } else if (loaderType !== 'none') {
             showLoading();
         }
@@ -694,6 +692,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartItems.push({ ...product, cartId: cartItemIdCounter++ });
                 renderCart();
                 showToast(`「${product.name}」をカートに追加しました！`);
+                
+                // ボタンの状態を変更
+                e.target.classList.add('added');
+                e.target.textContent = '追加済み';
             }
         }
     });
@@ -865,13 +867,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const reliabilityRadio = document.querySelector('input[name="reliability"]:checked');
         const isTouched = perceivedTimeInput.classList.contains('touched');
 
+        const errorMessage = document.getElementById('survey-error-message');
+        const discomfortGroup = document.getElementById('discomfort-group');
+        const reliabilityGroup = document.getElementById('reliability-group');
+        const vasGroup = document.getElementById('vas-group');
+
+        // Reset error states
+        errorMessage.style.display = 'none';
+        if (discomfortGroup) discomfortGroup.style.border = 'none';
+        if (reliabilityGroup) reliabilityGroup.style.border = 'none';
+        if (vasGroup) vasGroup.style.border = 'none';
+
         // バリデーション
         if (!isTouched || !discomfortRadio || !reliabilityRadio) {
-            let message = '回答に不足があります：\n';
-            if (!isTouched) message += '・「体感的な読み込み時間の長さ」をスライダーで回答してください。\n';
-            if (!discomfortRadio) message += '・「不快感」を選択してください。\n';
-            if (!reliabilityRadio) message += '・「信頼性」を選択してください。';
-            alert(message);
+            let errorList = [];
+            if (!isTouched) {
+                errorList.push('・「体感的な読み込み時間の長さ」をスライダーで回答してください。');
+                if (vasGroup) {
+                    vasGroup.style.border = '2px solid #c9302c';
+                    vasGroup.style.borderRadius = '5px';
+                    vasGroup.style.padding = '0.5rem';
+                }
+            }
+            if (!discomfortRadio) {
+                errorList.push('・「不快感」を選択してください。');
+                if (discomfortGroup) {
+                    discomfortGroup.style.border = '2px solid #c9302c';
+                    discomfortGroup.style.borderRadius = '5px';
+                    discomfortGroup.style.padding = '0.5rem';
+                }
+            }
+            if (!reliabilityRadio) {
+                errorList.push('・「信頼性」を選択してください。');
+                if (reliabilityGroup) {
+                    reliabilityGroup.style.border = '2px solid #c9302c';
+                    reliabilityGroup.style.borderRadius = '5px';
+                    reliabilityGroup.style.padding = '0.5rem';
+                }
+            }
+            
+            if (errorMessage) {
+                errorMessage.innerHTML = `<strong>回答に不足があります：</strong><br>${errorList.join('<br>')}`;
+                errorMessage.style.display = 'block';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            showToast('回答に不足があります。');
             return;
         }
 
