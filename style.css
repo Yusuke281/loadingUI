@@ -26,6 +26,16 @@ header {
 header h1 {
     font-size: 1.5rem; /* 1.1remから拡大 */
     margin: 0;
+    white-space: nowrap; /* 改行を防ぐ */
+}
+
+#header-task-description {
+    margin: 0 0 0 2rem !important; /* 左側に余白を取り、他はリセット */
+    padding: 0;
+    font-size: 1.3rem;
+    color: #c9302c;
+    font-weight: 600;
+    flex-grow: 1; /* 残りのスペースを埋める（中央寄せや右寄せの調整用） */
 }
 
 /* --- メインレイアウトコンテナ --- */
@@ -69,6 +79,12 @@ header h1 {
     background-color: #e9f5ff;
     border-left-color: #007bff;
     box-shadow: 0 2px 5px rgba(0, 123, 255, 0.1);
+}
+
+.nav-separator {
+    height: 1px;
+    background-color: #eee;
+    margin: 0.6rem 0.8rem;
 }
 
 /* --- メインコンテンツエリア --- */
@@ -228,41 +244,6 @@ main {
     transition: width 0s cubic-bezier(0.5, 0, 0.75, 0);
 }
 
-/* バウンシング・ドットローダー */
-.bouncing-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80px; /* Adjust as needed */
-}
-
-.bouncing-dots div {
-    width: 12px;
-    height: 12px;
-    margin: 0 5px;
-    background-color: #6c757d;
-    border-radius: 50%;
-    animation: bounce 1.4s infinite ease-in-out both;
-}
-
-.bouncing-dots div:nth-child(1) {
-    animation-delay: -0.32s;
-}
-
-.bouncing-dots div:nth-child(2) {
-    animation-delay: -0.16s;
-}
-
-@keyframes bounce {
-    0%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-20px);
-    }
-}
-
-
 /* トースト通知 */
 #toast-notification {
     position: fixed;
@@ -365,7 +346,7 @@ main {
 }
 
 /* 開始・タスク・終了画面共通スタイル */
-#start-screen, #task-screen, #experiment-complete-screen, #tutorial-start-screen, #tutorial-complete-screen, #tutorial-task-complete-screen {
+#start-screen, #intro-viewing-start-screen, #task-screen, #experiment-complete-screen, #tutorial-start-screen, #tutorial-complete-screen, #tutorial-task-complete-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -375,17 +356,17 @@ main {
     padding: 3rem; /* paddingを少し大きく */
 }
 
-#start-screen h2, #task-screen h2, #tutorial-start-screen h2, #tutorial-complete-screen h2, #tutorial-task-complete-screen h2 {
-    font-size: 2.5rem; /* H2のフォントサイズを大きく */
+#start-screen h2, #intro-viewing-start-screen h2, #task-screen h2, #tutorial-start-screen h2, #tutorial-complete-screen h2, #tutorial-task-complete-screen h2 {
+    font-size: 3rem; /* 2.5remから拡大 */
     margin-bottom: 1.5rem;
 }
 
-#start-screen p, #task-screen p, #tutorial-start-screen p, #tutorial-complete-screen p, #tutorial-task-complete-screen p {
-    font-size: 1.3rem; /* Pタグのフォントサイズを大きく */
+#start-screen p, #intro-viewing-start-screen p, #task-screen p, #tutorial-start-screen p, #tutorial-complete-screen p, #tutorial-task-complete-screen p {
+    font-size: 1.6rem; /* 1.3remから拡大 */
     margin-bottom: 2rem;
 }
 
-#start-screen button, #task-screen button, #next-task-btn, #tutorial-start-screen button, #tutorial-complete-screen button, #tutorial-task-complete-screen button {
+#start-screen button, #intro-viewing-start-screen button, #task-screen button, #next-task-btn, #tutorial-start-screen button, #tutorial-complete-screen button, #tutorial-task-complete-screen button {
     font-size: 1.5rem; /* ボタンのフォントサイズを大きく */
     padding: 1.2rem 2.5rem; /* ボタンのパディングを大きく */
     margin-top: 2.5rem;
@@ -510,11 +491,6 @@ main {
 /* カラープログレスバー */
 .progress-bar.color {
     background: linear-gradient(90deg, #007bff, #66b2ff);
-}
-
-/* カラーバウンシングドット */
-.bouncing-dots.color div {
-    background-color: #007bff;
 }
 
 /* カラースケルトン */

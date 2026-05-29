@@ -45,10 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const tutorialTrials = [
-        { taskHTML: '<strong>Tシャツ</strong>と<strong>スマートフォン</strong>をカートに入れてください', loader: 'bouncing-dots', time: 2500 },
-        { taskHTML: '<strong>カメラ</strong>と<strong>イス</strong>をカートに入れてください', loader: 'bouncing-dots', time: 2500 },
-        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">次に、読み込み時間が短い例を体験していただきます。</p><strong>イス</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'bouncing-dots', time: 1000 }, // 短い例
-        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">最後に、読み込み時間が長い例を体験していただきます。</p><strong>コーヒー</strong>と<strong>パーカー</strong>をカートに入れてください', loader: 'bouncing-dots', time: 6000 },       // 長い例
+        { taskHTML: '<strong>Tシャツ</strong>と<strong>スマートフォン</strong>をカートに入れてください', loader: 'spinner', time: 2500 },
+        { taskHTML: '<strong>カメラ</strong>と<strong>イス</strong>をカートに入れてください', loader: 'spinner', time: 2500 },
+        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">次に、読み込み時間が短い例を体験していただきます。</p><strong>イス</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'spinner', time: 1000 }, // 短い例
+        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">最後に、読み込み時間が長い例を体験していただきます。</p><strong>コーヒー</strong>と<strong>パーカー</strong>をカートに入れてください', loader: 'spinner', time: 6000 },       // 長い例
     ];
 
     // --- 制約付きシャッフル関数 ---
@@ -131,25 +131,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const conditionPool = [
         { id: 1, loader: "bar-color", time: 5000 },
         { id: 2, loader: "bar", time: 5000 },
-        { id: 3, loader: "none", time: 1500 },
-        { id: 4, loader: "spinner", time: 3000 },
-        { id: 5, loader: "none", time: 3000 },
+        { id: 3, loader: "none", time: 1000 },
+        { id: 4, loader: "spinner", time: 2500 },
+        { id: 5, loader: "none", time: 2500 },
         { id: 6, loader: "skeleton-color", time: 5000 },
-        { id: 7, loader: "spinner", time: 1500 },
-        { id: 8, loader: "bar-color", time: 1500 },
+        { id: 7, loader: "spinner", time: 1000 },
+        { id: 8, loader: "bar-color", time: 1000 },
         { id: 9, loader: "none", time: 5000 },
-        { id: 10, loader: "bar", time: 3000 },
-        { id: 11, loader: "bar", time: 1500 },
+        { id: 10, loader: "bar", time: 2500 },
+        { id: 11, loader: "bar", time: 1000 },
         { id: 12, loader: "skeleton", time: 5000 },
-        { id: 13, loader: "spinner-color", time: 3000 },
-        { id: 14, loader: "skeleton-color", time: 1500 },
+        { id: 13, loader: "spinner-color", time: 2500 },
+        { id: 14, loader: "skeleton-color", time: 1000 },
         { id: 15, loader: "spinner", time: 5000 },
-        { id: 16, loader: "skeleton-color", time: 3000 },
-        { id: 17, loader: "skeleton", time: 1500 },
+        { id: 16, loader: "skeleton-color", time: 2500 },
+        { id: 17, loader: "skeleton", time: 1000 },
         { id: 18, loader: "spinner-color", time: 5000 },
-        { id: 19, loader: "spinner-color", time: 1500 },
-        { id: 20, loader: "bar-color", time: 3000 },
-        { id: 21, loader: "skeleton", time: 3000 }
+        { id: 19, loader: "spinner-color", time: 1000 },
+        { id: 20, loader: "bar-color", time: 2500 },
+        { id: 21, loader: "skeleton", time: 2500 }
     ];
 
     function shuffleArray(array) {
@@ -258,6 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 状態管理 ---
     let isTutorial = true;
+    let isIntroViewing = false; // UI確認フェーズ用
     let tutorialTrialIndex = 0;
     let currentPatternIndex = 0;
     let selectedLoader = 'spinner';
@@ -267,12 +268,64 @@ document.addEventListener('DOMContentLoaded', () => {
     let cartItemIdCounter = 0;
     let homeVersion = 1;
 
+    // UI確認フェーズ用のリスト
+    const introUIs = [
+        { id: 'spinner', name: 'スピナー' },
+        { id: 'spinner-color', name: 'スピナー(カラー)' },
+        { type: 'separator' },
+        { id: 'bar', name: 'プログレスバー' },
+        { id: 'bar-color', name: 'プログレスバー(カラー)' },
+        { type: 'separator' },
+        { id: 'none', name: 'UIなし' },
+        { type: 'separator' },
+        { id: 'skeleton', name: 'スケルトン' },
+        { id: 'skeleton-color', name: 'スケルトン(カラー)' }
+    ];
+
     // --- 関数定義 ---
     function showScreen(screenToShow) {
-        [startScreen, tutorialStartScreen, tutorialCompleteScreen, taskScreen, ecSiteScreen, surveyScreen, experimentCompleteScreen].forEach(screen => {
+        const screens = [
+            startScreen, 
+            document.getElementById('intro-viewing-start-screen'),
+            tutorialStartScreen, 
+            tutorialCompleteScreen, 
+            taskScreen, 
+            ecSiteScreen, 
+            surveyScreen, 
+            experimentCompleteScreen
+        ];
+        screens.forEach(screen => {
             if(screen) screen.classList.add('hidden');
         });
         if(screenToShow) screenToShow.classList.remove('hidden');
+    }
+
+    function startIntroViewing() {
+        isIntroViewing = true;
+        showScreen(ecSiteScreen);
+        
+        // ヘッダーのタイトルを変更
+        const headerH1 = document.querySelector('header h1');
+        if (headerH1) headerH1.textContent = '読み込み画面の確認';
+
+        // ナビゲーションをUI名に書き換える（セパレーター対応）
+        categoryNav.innerHTML = introUIs.map(item => {
+            if (item.type === 'separator') {
+                return '<div class="nav-separator"></div>';
+            }
+            return `<a href="#" data-category="${item.id}">${item.name}</a>`;
+        }).join('');
+        
+        // ヘッダー指示を更新
+        document.getElementById('header-task-description').innerHTML = 
+            '<span style="color: #333;">左のメニューからUI名を選択して、表示を確認してください。終了したら右のボタンを押してください。</span>';
+        
+        // 完了ボタンを表示
+        completeTaskBtn.textContent = '確認を終了してチュートリアルへ';
+        completeTaskBtn.style.display = 'block';
+
+        renderHome();
+        currentCategory = 'home';
     }
 
     function startTutorialTrial(trialIndex) {
@@ -317,7 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="hero-content">
                     <h1><span style="white-space: nowrap;">理想のライフスタイルを、</span><br>ここから。</h1>
                     <p>最新のガジェットからトレンドのファッションまで、幅広く取り揃えています。</p>
-                    <button class="hero-cta-btn" onclick="document.querySelector('[data-category=fashion]').click()">商品を見る</button>
                 </div>
             </div>
 
@@ -342,15 +394,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             </div>
-
-            <div class="home-section home-search-container">
-                <h2>商品を検索</h2>
-                <div class="search-bar">
-                    <input type="search" placeholder="キーワードを入力...">
-                    <button type="button">検索</button>
-                </div>
-            </div>
-            <button id="switch-home-layout-btn">別のホーム画面</button>
         `;
     }
 
@@ -362,10 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="hero-content-2">
                     <h1>お気に入りの一品、見つけよう。</h1>
                     <p>人気のガジェットや、季節の新作アイテムはいかがですか？</p>
-                    <div class="search-bar-2">
-                        <input type="search" placeholder="例: スマートフォン, スニーカー">
-                        <button type="button">検索</button>
-                    </div>
                 </div>
                 <div class="hero-image-2">
                     <img src="images/スマートフォン.png" alt="Hero Image">
@@ -387,17 +426,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     `).join('')}
                 </div>
             </div>
-            <button id="switch-home-layout-btn">別のホーム画面</button>
         `;
     }
 
     function renderProducts(category) {
         productListContainer.style.display = 'grid';
-        const productData = products[category];
+        let productData = products[category];
+        
+        // カテゴリが存在しない場合（UI確認フェーズなど）、全商品からランダムに8件表示する
         if (!productData) {
-            productListContainer.innerHTML = '<p>このカテゴリーの商品は現在ありません。</p>';
-            return;
+            const allProducts = Object.values(products).flat();
+            productData = shuffleArray([...allProducts]).slice(0, 8);
         }
+
         productListContainer.innerHTML = productData.map(product => `
             <div class="product-card">
                 <img src="${product.image}" alt="${product.name}">
@@ -415,6 +456,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function showLoading() {
         const loaderType = getLoaderType();
         loadingOverlay.innerHTML = '';
+        let hasContent = false;
+
         if (loaderType.startsWith('bar')) {
             loadingOverlay.innerHTML = '<div class="progress-bar-container"><div class="progress-bar"></div></div>';
             const progressBar = loadingOverlay.querySelector('.progress-bar');
@@ -423,16 +466,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 progressBar.style.transitionDuration = `${loadingTimeMs}ms`;
                 setTimeout(() => { progressBar.style.width = '100%'; }, 10);
             }
+            hasContent = true;
         } else if (loaderType.startsWith('spinner')) {
             loadingOverlay.innerHTML = '<div class="spinner"></div>';
             const spinner = loadingOverlay.querySelector('.spinner');
             if (spinner && loaderType === 'spinner-color') spinner.classList.add('color');
-        } else if (loaderType.startsWith('bouncing-dots')) {
-            loadingOverlay.innerHTML = '<div class="bouncing-dots"><div></div><div></div><div></div></div>';
-            const dots = loadingOverlay.querySelector('.bouncing-dots');
-            if (dots && loaderType === 'bouncing-dots-color') dots.classList.add('color');
+            hasContent = true;
         }
-        loadingOverlay.style.display = 'flex';
+
+        if (hasContent) {
+            loadingOverlay.style.display = 'flex';
+        }
     }
 
     function hideLoading() { loadingOverlay.style.display = 'none'; }
@@ -518,8 +562,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startExperimentBtn.addEventListener('click', () => {
         isDebugMode = false;
-        showScreen(tutorialStartScreen);
+        showScreen(document.getElementById('intro-viewing-start-screen'));
     });
+
+    const startIntroViewingBtn = document.getElementById('start-intro-viewing-btn');
+    if (startIntroViewingBtn) {
+        startIntroViewingBtn.addEventListener('click', () => {
+            startIntroViewing();
+        });
+    }
 
     enterDebugModeBtn.addEventListener('click', () => {
         isDebugMode = true;
@@ -578,6 +629,13 @@ document.addEventListener('DOMContentLoaded', () => {
             headerTaskDescription.innerHTML = `タスク ${currentPatternIndex + 1}/${experimentTrials.length}: ${taskDescriptionHTML}`;
         }
         
+        // ヘッダーのタイトルとボタンの状態をリセット
+        const headerH1 = document.querySelector('header h1');
+        if (headerH1) headerH1.textContent = 'ECサイト';
+        
+        completeTaskBtn.textContent = '完了を報告する';
+        completeTaskBtn.style.display = 'block';
+
         const strongElements = headerTaskDescription.getElementsByTagName('strong');
         for (let strong of strongElements) {
             strong.style.backgroundColor = 'yellow';
@@ -587,6 +645,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         showScreen(ecSiteScreen);
+
+        // ナビゲーションを元に戻す（UI確認フェーズで書き換えられている可能性があるため）
+        categoryNav.innerHTML = `
+            <a href="#" data-category="home" class="active">ホーム</a>
+            <a href="#" data-category="fashion">ファッション</a>
+            <a href="#" data-category="electronics">家電・ガジェット</a>
+            <a href="#" data-category="furniture">家具・インテリア</a>
+            <a href="#" data-category="food_drink">食べ物・飲み物</a>
+        `;
 
         currentCategory = 'home';
         const homeLink = categoryNav.querySelector('[data-category="home"]');
@@ -616,7 +683,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newCategory === currentCategory) return;
 
         const startTime = performance.now();
-        const loaderType = getLoaderType();
+        let loaderType = getLoaderType();
+
+        // UI確認フェーズの場合、カテゴリIDがそのままローダータイプになる
+        if (isIntroViewing) {
+            loaderType = newCategory;
+            selectedLoader = newCategory; // showLoading内で使用
+            loadingTimeMs = 2000; // 確認用は一律2秒
+        }
 
         if (loaderType.startsWith('skeleton') && newCategory !== 'home') {
             productListContainer.style.display = 'grid';
@@ -636,7 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `).join('');
             productListContainer.innerHTML = skeletonHtml;
-        } else if (loaderType !== 'none') {
+        } else if (loaderType !== 'none' && !loaderType.startsWith('skeleton')) {
             showLoading();
         }
 
@@ -644,7 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.classList.add('active');
 
         setTimeout(() => {
-            if (loaderType !== 'none' && !loaderType.startsWith('skeleton')) hideLoading();
+            hideLoading();
             if (newCategory === 'home') {
                 if (homeVersion === 1) {
                     renderHome();
@@ -709,6 +783,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     completeTaskBtn.addEventListener('click', () => {
+        if (isIntroViewing) {
+            isIntroViewing = false;
+            // 完了ボタンを元に戻す
+            completeTaskBtn.textContent = '完了を報告する';
+            completeTaskBtn.style.display = 'none';
+            showScreen(tutorialStartScreen);
+            return;
+        }
+
         const currentTrial = isTutorial ? tutorialTrials[tutorialTrialIndex] : experimentTrials[currentPatternIndex];
         const requiredItems = (currentTrial.taskHTML.match(/<strong>(.*?)<\/strong>/g) || []).map(item => item.replace(/<\/?strong>/g, ''));
         const cartItemNames = cartItems.map(item => item.name);
@@ -974,4 +1057,3 @@ document.addEventListener('DOMContentLoaded', () => {
         currentCategory = shortcutCategory;
     }
 });
-
