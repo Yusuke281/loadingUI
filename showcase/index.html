@@ -3,127 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading UI Showcase</title>
+    <title>ローディングUIデモ</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Loading UI Showcase</h1>
-        <p>A collection of loading indicators from the experiment project.</p>
-    </header>
 
-    <main class="showcase-grid">
+    <div class="demo-container">
+        <header>
+            <h1>ローディングUIデモ</h1>
+            <p>この研究プロジェクトで分析されたローディングUIの一覧です。</p>
+        </header>
 
-        <!-- Spinner -->
-        <div class="showcase-card">
-            <h2>Spinner</h2>
-            <div class="demo-box">
+        <nav class="controls">
+            <button class="control-btn" data-loader="spinner">Spinner</button>
+            <button class="control-btn" data-loader="spinner-color">Spinner (Color)</button>
+            <button class="control-btn" data-loader="bar">Progress Bar</button>
+            <button class="control-btn" data-loader="bar-color">Progress Bar (Color)</button>
+            <button class="control-btn" data-loader="bouncing-dots">Bouncing Dots</button>
+            <button class="control-btn" data-loader="skeleton">Skeleton</button>
+            <button class="control-btn" data-loader="skeleton-color">Skeleton (Color)</button>
+            <button class="control-btn" data-loader="none">None</button>
+        </nav>
+
+        <main class="display-area">
+            <div id="loader-placeholder" class="loader-wrapper active">
+                <p>上のボタンをクリックして、デモを開始してください。</p>
+            </div>
+
+            <!-- ローダーをここに定義（デフォルトは非表示） -->
+            <div id="spinner" class="loader-wrapper">
                 <div class="spinner"></div>
             </div>
-            <div class="code-box">
-                <button class="copy-btn">Copy</button>
-                <pre><code class="language-css">/* HTML */
-&lt;div class="spinner"&gt;&lt;/div&gt;
-
-/* CSS */
-.spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #007bff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}</code></pre>
-            </div>
-        </div>
-
-        <!-- Spinner (Color) -->
-        <div class="showcase-card">
-            <h2>Spinner (Color)</h2>
-            <div class="demo-box">
+            <div id="spinner-color" class="loader-wrapper">
                 <div class="spinner color"></div>
             </div>
-            <div class="code-box">
-                <button class="copy-btn">Copy</button>
-                <pre><code class="language-css">/* HTML */
-&lt;div class="spinner color"&gt;&lt;/div&gt;
-
-/* CSS */
-.spinner.color {
-    border-color: #f3f3f3;
-    border-top-color: #4285F4;
-    border-right-color: #DB4437;
-    border-bottom-color: #F4B400;
-    border-left-color: #0F9D58;
-}</code></pre>
-            </div>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="showcase-card">
-            <h2>Progress Bar</h2>
-            <div class="demo-box">
+            <div id="bar" class="loader-wrapper">
                 <div class="progress-bar-container">
                     <div class="progress-bar"></div>
                 </div>
             </div>
-            <div class="code-box">
-                <button class="copy-btn">Copy</button>
-                <pre><code class="language-css">/* HTML */
-&lt;div class="progress-bar-container"&gt;
-    &lt;div class="progress-bar"&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-/* CSS */
-.progress-bar-container {
-    width: 80%;
-    height: 8px;
-    background-color: #3e3e3e;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-bar {
-    width: 0;
-    height: 100%;
-    background-color: #007bff;
-    border-radius: 4px;
-    transition: width 2s ease-in-out;
-}</code></pre>
-            </div>
-        </div>
-
-        <!-- Progress Bar (Color) -->
-        <div class="showcase-card">
-            <h2>Progress Bar (Color)</h2>
-            <div class="demo-box">
+            <div id="bar-color" class="loader-wrapper">
                 <div class="progress-bar-container">
                     <div class="progress-bar color"></div>
                 </div>
             </div>
-            <div class="code-box">
-                <button class="copy-btn">Copy</button>
-                <pre><code class="language-css">/* HTML */
-&lt;div class="progress-bar-container"&gt;
-    &lt;div class="progress-bar color"&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-/* CSS */
-.progress-bar.color {
-    background: linear-gradient(90deg, #4285F4, #0F9D58, #F4B400, #DB4437);
-}</code></pre>
+            <div id="bouncing-dots" class="loader-wrapper">
+                <div class="bouncing-dots"><div></div><div></div><div></div></div>
             </div>
-        </div>
-
-        <!-- Skeleton -->
-        <div class="showcase-card">
-            <h2>Skeleton</h2>
-            <div class="demo-box skeleton-demo-box">
+            <div id="skeleton" class="loader-wrapper skeleton-grid">
+                <!-- 3x Skeleton Cards -->
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text short"></div>
+                    </div>
+                    <div class="skeleton-button"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text short"></div>
+                    </div>
+                    <div class="skeleton-button"></div>
+                </div>
                 <div class="skeleton-card">
                     <div class="skeleton-image"></div>
                     <div class="skeleton-content">
@@ -133,50 +77,24 @@
                     <div class="skeleton-button"></div>
                 </div>
             </div>
-            <div class="code-box">
-                <button class="copy-btn">Copy</button>
-                <pre><code class="language-css">/* HTML */
-&lt;div class="skeleton-card"&gt;
-    &lt;div class="skeleton-image"&gt;&lt;/div&gt;
-    &lt;div class="skeleton-content"&gt;
-        &lt;div class="skeleton-text"&gt;&lt;/div&gt;
-        &lt;div class="skeleton-text short"&gt;&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="skeleton-button"&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-/* CSS */
-.skeleton-card {
-    background: #2a2a2a;
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-}
-.skeleton-image, .skeleton-text, .skeleton-button {
-    background: linear-gradient(90deg, #3c3c3c 25%, #444 50%, #3c3c3c 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-}
-.skeleton-image { height: 50%; }
-.skeleton-content { padding: 1rem; flex-grow: 1; }
-.skeleton-text { height: 1rem; border-radius: 4px; margin-bottom: 0.5rem; }
-.skeleton-text.short { width: 60%; }
-.skeleton-button { height: 30px; margin: 1rem; margin-top: auto; border-radius: 5px; }
-
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}</code></pre>
-            </div>
-        </div>
-
-        <!-- Skeleton (Color) -->
-        <div class="showcase-card">
-            <h2>Skeleton (Color)</h2>
-            <div class="demo-box skeleton-demo-box">
+            <div id="skeleton-color" class="loader-wrapper skeleton-grid">
+                <!-- 3x Skeleton Cards (Color) -->
+                <div class="skeleton-card color">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text short"></div>
+                    </div>
+                    <div class="skeleton-button"></div>
+                </div>
+                <div class="skeleton-card color">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text short"></div>
+                    </div>
+                    <div class="skeleton-button"></div>
+                </div>
                 <div class="skeleton-card color">
                     <div class="skeleton-image"></div>
                     <div class="skeleton-content">
@@ -186,29 +104,11 @@
                     <div class="skeleton-button"></div>
                 </div>
             </div>
-            <div class="code-box">
-                <button class="copy-btn">Copy</button>
-                <pre><code class="language-css">/* HTML */
-&lt;div class="skeleton-card color"&gt;
-    ...
-&lt;/div&gt;
-
-/* CSS */
-.skeleton-card.color .skeleton-image,
-.skeleton-card.color .skeleton-text,
-.skeleton-card.color .skeleton-button {
-    background: linear-gradient(
-        90deg,
-        #522d2d, #58432a, #5a5a31,
-        #3a583a, #315858, #334459,
-        #522d2d
-    );
-    background-size: 200% 100%;
-}</code></pre>
+            <div id="none" class="loader-wrapper">
+                <p>（ローダーなし）</p>
             </div>
-        </div>
-
-    </main>
+        </main>
+    </div>
 
     <script src="script.js"></script>
 </body>

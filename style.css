@@ -13,8 +13,8 @@ body {
 /* ヘッダーとナビゲーション */
 header {
     background-color: #fff;
-    padding: 0 1rem; /* ← 左右のpaddingを縮小 */
-    height: 60px;
+    padding: 0 1rem;
+    height: 60px; /* 40pxから60pxに拡大 */
     display: flex;
     align-items: center;
     border-bottom: 1px solid #eee;
@@ -24,8 +24,18 @@ header {
 }
 
 header h1 {
-    font-size: 1.5rem;
+    font-size: 1.5rem; /* 1.1remから拡大 */
     margin: 0;
+    white-space: nowrap; /* 改行を防ぐ */
+}
+
+#header-task-description {
+    margin: 0 0 0 2rem !important; /* 左側に余白を取り、他はリセット */
+    padding: 0;
+    font-size: 1.3rem;
+    color: #c9302c;
+    font-weight: 600;
+    flex-grow: 1; /* 残りのスペースを埋める（中央寄せや右寄せの調整用） */
 }
 
 /* --- メインレイアウトコンテナ --- */
@@ -36,36 +46,45 @@ header h1 {
 
 /* --- サイドバーナビゲーション --- */
 #category-nav {
-    flex: 0 0 240px; /* サイドバーの幅を固定 */
+    flex: 0 0 220px; /* 180pxから広げて安定感を出す */
     background-color: #fdfdfd;
     border-right: 1px solid #eee;
-    padding: 1.5rem 1rem;
-    height: calc(100vh - 60px); /* ヘッダーの高さを引いたビューポートの高さ */
+    padding: 1rem 0.6rem; /* 余白を確保 */
+    height: calc(100vh - 60px);
     position: sticky;
-    top: 60px; /* ヘッダーの高さ分オフセット */
+    top: 60px;
 }
 
 #category-nav a {
     display: block;
     text-decoration: none;
     color: #333;
-    padding: 0.75rem 1.5rem;
-    margin-bottom: 0.5rem;
-    border-radius: 6px;
+    padding: 1rem 1.2rem; /* パディングを大幅に増やしてクリックしやすく */
+    margin-bottom: 0.8rem; /* 項目間の距離を広げてミスを防ぐ */
+    border-radius: 8px;
     font-weight: 500;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    border-left: 3px solid transparent;
+    font-size: 1.1rem; /* 文字を大きく */
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
 }
 
 #category-nav a:hover {
     background-color: #f0f0f0;
+    transform: translateX(3px); /* 少し動かしてフィードバックを出す */
 }
 
 #category-nav a.active {
     color: #007bff;
-    font-weight: 600;
+    font-weight: 700;
     background-color: #e9f5ff;
     border-left-color: #007bff;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.1);
+}
+
+.nav-separator {
+    height: 1px;
+    background-color: #eee;
+    margin: 0.6rem 0.8rem;
 }
 
 /* --- メインコンテンツエリア --- */
@@ -77,31 +96,25 @@ main {
 /* 商品一覧 */
 #product-list {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5列に固定 */
-    gap: 1rem; /* 隙間を縮小 */
-    padding: 1.5rem;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-#product-list h2 {
-    grid-column: 1 / -1; /* h2をグリッドの全幅に広げる */
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #eee;
+    /* 1行に4つ固定 */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem; /* 0.5remから戻す */
+    padding: 1rem; /* 0.5remから戻す */
+    max-width: 100%;
+    margin: 0;
 }
 
 /* 商品カード */
 .product-card {
     background: #fff;
-    border-radius: 8px; /* 少し小さく */
+    border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
-    min-width: 0; /* グリッドアイテムの最小幅問題を解決 */
-    min-height: 310px; /* カードの高さを統一し、スクロールバーの出現を防ぐ */
+    min-width: 0;
+    min-height: 340px; /* 2段収まる限界の高さ */
 }
 
 .product-card:hover {
@@ -111,33 +124,41 @@ main {
 
 .product-card img {
     width: 100%;
-    height: 140px; /* 画像高さを縮小 */
+    height: 160px; /* 画像を大きく復元 */
     object-fit: contain;
+    margin-top: 10px;
 }
 
 .product-card-content {
-    padding: 0.8rem; /* パディングを縮小 */
+    padding: 0.8rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* コンテンツのはみ出しによる幅の拡張を防ぐ */
+    overflow: hidden;
 }
 
 .product-card h3 {
     margin-top: 0;
     margin-bottom: 0.4rem;
-    font-size: 1rem; /* 文字サイズを縮小 */
-    word-break: break-all; /* 長い単語による幅の拡張を防ぐ */
+    font-size: 1.1rem;
+    word-break: break-all;
+    line-height: 1.3;
 }
 
 .product-card p {
-    font-size: 0.9rem; /* 文字サイズを縮小 */
+    display: block; /* 説明文を再表示 */
+    font-size: 0.85rem;
     color: #666;
+    margin-bottom: 0.5rem;
     flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .product-card .price {
-    font-size: 1rem; /* 文字サイズを縮小 */
+    font-size: 1.1rem;
     font-weight: bold;
     color: #e63946;
     margin-bottom: 0.8rem;
@@ -145,24 +166,32 @@ main {
 
 /* カートに入れるボタン */
 .add-to-cart-btn {
-    display: block; /* aタグになったため追加 */
-    text-align: center; /* aタグになったため追加 */
-    text-decoration: none; /* aタグになったため追加 */
+    display: block;
+    text-align: center;
+    text-decoration: none;
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 0.5rem 0.8rem; /* パディングを縮小 */
+    padding: 0.6rem;
     margin: 0.8rem;
-    margin-top: auto; /* ボタンをカード下部に固定 */
+    margin-top: auto;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9rem; /* 文字サイズを縮小 */
+    font-size: 0.9rem;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
 .add-to-cart-btn:hover {
     background-color: #0056b3;
+}
+
+.add-to-cart-btn.added {
+    background-color: #28a745;
+}
+
+.add-to-cart-btn.added:hover {
+    background-color: #218838;
 }
 
 /* ローディングオーバーレイ */
@@ -186,7 +215,7 @@ main {
     width: 48px;
     height: 48px;
     border: 4px solid #f3f3f3;
-    border-top: 4px solid #007bff;
+    border-top: 4px solid #6c757d; /* Monochrome dark gray */
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 20px;
@@ -209,12 +238,46 @@ main {
 .progress-bar {
     width: 0; /* 初期幅を0に */
     height: 100%;
-    background-color: #007bff;
+    background-color: #6c757d; /* Monochrome dark gray */
     border-radius: 4px;
     /* 加速的な動きを表現するtransition */
     transition: width 0s cubic-bezier(0.5, 0, 0.75, 0);
 }
 
+/* バウンシングドット */
+.bouncing-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.bouncing-dots .dot {
+    width: 12px;
+    height: 12px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    animation: bounce 0.6s infinite alternate;
+}
+
+.bouncing-dots .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.bouncing-dots .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-15px);
+        opacity: 0.6;
+    }
+}
 
 /* トースト通知 */
 #toast-notification {
@@ -318,20 +381,30 @@ main {
 }
 
 /* 開始・タスク・終了画面共通スタイル */
-#start-screen, #task-screen, #experiment-complete-screen {
+#start-screen, #intro-viewing-start-screen, #task-screen, #experiment-complete-screen, #tutorial-start-screen, #tutorial-complete-screen, #tutorial-task-complete-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
     text-align: center;
-    padding: 2rem;
+    padding: 3rem; /* paddingを少し大きく */
 }
 
-#start-screen button, #task-screen button, #next-task-btn {
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
-    margin-top: 2rem;
+#start-screen h2, #intro-viewing-start-screen h2, #task-screen h2, #tutorial-start-screen h2, #tutorial-complete-screen h2, #tutorial-task-complete-screen h2 {
+    font-size: 3rem; /* 2.5remから拡大 */
+    margin-bottom: 1.5rem;
+}
+
+#start-screen p, #intro-viewing-start-screen p, #task-screen p, #tutorial-start-screen p, #tutorial-complete-screen p, #tutorial-task-complete-screen p {
+    font-size: 1.6rem; /* 1.3remから拡大 */
+    margin-bottom: 2rem;
+}
+
+#start-screen button, #intro-viewing-start-screen button, #task-screen button, #next-task-btn, #tutorial-start-screen button, #tutorial-complete-screen button, #tutorial-task-complete-screen button {
+    font-size: 1.5rem; /* ボタンのフォントサイズを大きく */
+    padding: 1.2rem 2.5rem; /* ボタンのパディングを大きく */
+    margin-top: 2.5rem;
     cursor: pointer;
     border: 1px solid #007bff;
     background-color: #007bff;
@@ -340,16 +413,20 @@ main {
     transition: all 0.3s ease;
 }
 
-#start-screen button:hover, #task-screen button:hover, #next-task-btn:hover {
+#start-screen button:hover, #task-screen button:hover, #next-task-btn:hover, #tutorial-start-screen button:hover, #tutorial-complete-screen button:hover, #tutorial-task-complete-screen button:hover {
     background-color: #0056b3;
 }
 
-/* タスク指示の強調 */
-#task-description strong {
-    background-color: yellow;
-    color: #000;
-    padding: 2px 4px;
-    border-radius: 3px;
+/* タスク指示の強調 (ポップな感じに) */
+#task-description strong, #header-task-description strong {
+    background-image: linear-gradient(45deg, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: inline-block; /* transformとanimationのために必要 */
+    margin: 0 2px;
 }
 
 
@@ -361,8 +438,8 @@ main {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    min-width: 0; /* グリッドアイテムの最小幅問題を解決 */
-    min-height: 310px; /* カードの高さを統一し、スクロールバーの出現を防ぐ */
+    min-width: 0;
+    min-height: 340px; /* product-cardに合わせる */
 }
 
 .skeleton-image, .skeleton-text, .skeleton-button {
@@ -373,30 +450,30 @@ main {
 
 .skeleton-image {
     width: 100%;
-    height: 140px; /* product-cardと一致 */
+    height: 160px; /* product-cardに合わせる */
 }
 
 .skeleton-content {
-    padding: 0.8rem; /* product-card-contentと一致 */
+    padding: 0.8rem; /* product-card-contentに合わせる */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
 .skeleton-text {
-    height: 1rem; /* h3のfont-sizeに合わせる */
+    height: 1.1rem; /* product-card h3に合わせる */
     border-radius: 4px;
-    margin-bottom: 0.4rem; /* h3のmargin-bottomに合わせる */
+    margin-bottom: 0.4rem;
 }
 
 .skeleton-text.short {
     width: 60%;
-    margin-bottom: 0.8rem; /* priceのmargin-bottomに合わせる */
+    margin-bottom: 0.8rem;
 }
 
 .skeleton-button {
     /* .add-to-cart-btnに合わせる */
-    height: calc(0.5rem * 2 + 0.9rem);
+    height: 2.2rem;
     margin: 0.8rem;
     margin-top: auto;
     border-radius: 5px;
@@ -435,16 +512,20 @@ main {
 
 /* カラースピナー */
 .spinner.color {
-    /* Re-style for conic gradient */
-    border: none; /* Remove the old border */
-    background: conic-gradient(from 90deg at 50% 50%, #4285F4, #DB4437, #F4B400, #0F9D58, #4285F4);
-    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
-    mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 0);
+    border-top-color: #007bff; /* Blue */
+    /* If the background-image based one is being used, we should revert to border if we want a simple blue spinner, 
+       but let's keep the conic-gradient approach with blue shades for "color" feel if preferred, 
+       or just a solid blue. The user said "blue", so a blue gradient or solid blue. */
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    background-image: none;
+    -webkit-mask: none;
+    mask: none;
 }
 
 /* カラープログレスバー */
 .progress-bar.color {
-    background: linear-gradient(90deg, #4285F4, #0F9D58, #F4B400, #DB4437);
+    background: linear-gradient(90deg, #007bff, #66b2ff);
 }
 
 /* カラースケルトン */
@@ -453,13 +534,13 @@ main {
 .skeleton-card.color .skeleton-button {
     background: linear-gradient(
         90deg,
-        #e57373, /* Refined Red */
-        #ffb74d, /* Refined Orange */
-        #fff176, /* Refined Yellow */
-        #81c784, /* Refined Green */
-        #64b5f6, /* Refined Blue */
-        #7986cb, /* Refined Indigo */
-        #e57373  /* Repeat Red for smooth loop */
+        #e3f2fd, /* Light Blue */
+        #bbdefb, /* Lighter Blue */
+        #90caf9, /* Sky Blue */
+        #64b5f6, /* Brighter Blue */
+        #42a5f5, /* Rich Blue */
+        #2196f3, /* Standard Blue */
+        #e3f2fd  /* Loop back */
     );
     background-size: 200% 100%;
 }
@@ -553,7 +634,8 @@ main {
 
 .skeleton-card-wrapper {
     width: 100%;
-    height: 250px;
+    /* product-cardのmin-heightに合わせる */
+    height: 310px; 
     background-color: #fff; /* Ensure skeleton background is white */
 }
 
@@ -561,6 +643,7 @@ main {
 .modal-skeleton-card {
     background: #fff;
     border: 1px solid #eee;
+    /* .product-cardに合わせてradiusを調整 */
     border-radius: 8px;
     overflow: hidden;
     display: flex;
@@ -570,29 +653,35 @@ main {
 }
 
 .modal-loader-card .skeleton-image {
-    height: 50%;
+    /* .product-card imgのheightに合わせる */
+    height: 140px;
 }
 
 .modal-skeleton-card .skeleton-content {
-    padding: 1rem;
+    /* .product-card-contentのpaddingに合わせる */
+    padding: 0.8rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
 .modal-skeleton-card .skeleton-text {
+    /* .skeleton-textに合わせる */
     height: 1rem;
     border-radius: 4px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .modal-skeleton-card .skeleton-text.short {
+    /* .skeleton-text.shortに合わせる */
     width: 60%;
+    margin-bottom: 0.8rem;
 }
 
 .modal-skeleton-card .skeleton-button {
-    height: 30px;
-    margin: 1rem;
+    /* .skeleton-buttonに合わせる */
+    height: calc(0.5rem * 2 + 0.9rem);
+    margin: 0.8rem;
     margin-top: auto;
     border-radius: 5px;
 }
@@ -612,13 +701,13 @@ main {
 .modal-skeleton-card.color .skeleton-button {
     background: linear-gradient(
         90deg,
-        #522d2d, /* Dark Red */
-        #58432a, /* Dark Orange */
-        #5a5a31, /* Dark Yellow */
-        #3a583a, /* Dark Green */
-        #315858, /* Dark Blue */
-        #334459, /* Dark Indigo */
-        #522d2d
+        #e3f2fd, /* Light Blue */
+        #bbdefb, /* Lighter Blue */
+        #90caf9, /* Sky Blue */
+        #64b5f6, /* Brighter Blue */
+        #42a5f5, /* Rich Blue */
+        #2196f3, /* Standard Blue */
+        #e3f2fd  /* Loop back */
     );
     background-size: 200% 100%;
 }
@@ -713,7 +802,7 @@ main {
 
 /* --- ホーム画面の追加スタイル --- */
 
-#product-list:not(:has(.product-card)) {
+#product-list:not(:has(.product-card)):not(:has(.skeleton-card)) {
     display: block;
     padding: 0;
 }
@@ -935,12 +1024,12 @@ main {
     justify-content: flex-start; /* 上寄せに変更 */
     height: 100vh;
     text-align: center;
-    padding: 2rem;
-    font-size: 1.2rem;
+    padding: 1rem; /* 2remから1remに縮小 */
+    font-size: 1.1rem; /* 1.2remから1.1remに微調整 */
 }
 
 #survey-screen p, #survey-screen a {
-    margin: 1rem 0;
+    margin: 0.8rem 0;
 }
 
 #survey-frame {
@@ -958,64 +1047,64 @@ main {
 
 /* --- New Survey Form Styles --- */
 #task-survey-form {
-    width: 100%;
-    max-width: 800px; /* ボックスを全体的に大きくするために最大幅を増やす */
+    width: 95%; /* 幅を広げる */
+    max-width: 900px; /* 700pxから900pxに拡大 */
     background: #fff;
-    padding: 2rem;
+    padding: 2rem; /* 1.5remから戻す */
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: left;
 }
 
 #task-survey-form .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem; /* 余白を広げて見やすく */
 }
 
 #task-survey-form label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 
-#task-survey-form input[type="number"] {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-#task-survey-form .satisfaction-rating {
+#task-survey-form .likert-rating {
     display: flex;
-    justify-content: center; /* 中央揃えに変更 */
-    gap: 0.3rem; /* 各選択肢の間隔を縮小 */
-    /* flex-wrap: wrap; を削除して折り返しを防ぐ */
+    justify-content: space-between; /* 均等配置に変更 */
+    gap: 0.5rem;
+    flex-wrap: nowrap; /* 絶対に改行させない */
 }
 
-#task-survey-form .satisfaction-rating label {
-    font-size: 0.9rem; /* 標準的なフォントサイズに変更 */
+#task-survey-form .likert-rating label {
+    flex: 1; /* すべて同じ幅にする */
+    text-align: center;
+    font-size: 0.9rem;
     color: #333;
     background-color: #f0f0f0;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-    padding: 0.5rem 1rem; /* パディングを縮小 */
-    border-radius: 20px; /* 角を丸くしてタグのように */
+    padding: 0.8rem 0.4rem; /* 左右のパディングを詰め、上下を広げる */
+    border-radius: 8px; /* タグ型からボタン型へ */
     border: 2px solid #f0f0f0;
+    white-space: nowrap; /* 文字列自体も改行させない */
+    margin: 0; /* ラベル自体のマージンをリセット */
 }
 
 /* ホバーしたラベルのスタイル */
-#task-survey-form .satisfaction-rating label:hover {
+#task-survey-form .likert-rating label:hover {
     border-color: #007bff;
     background-color: #e9f5ff;
 }
 
 /* 選択されたラベルのスタイル */
-#task-survey-form .satisfaction-rating input:checked + label {
+#task-survey-form .likert-rating input:checked + label {
     background-color: #007bff;
     color: #fff;
     border-color: #007bff;
     font-weight: bold;
+}
+
+#task-survey-form .likert-rating input[type="radio"] {
+    display: none;
 }
 
 
@@ -1034,15 +1123,20 @@ main {
 #task-survey-form button[type="submit"]:hover {
     background-color: #218838;
 }
-/* Slider Container for Perceived Time */
-.slider-container {
+/* VAS Container for Perceived Time */
+.vas-container {
     display: flex;
     align-items: center;
     gap: 1rem;
     width: 100%;
 }
 
-.slider-container input[type="range"] {
+.vas-container span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.vas-container input[type="range"] {
     flex-grow: 1;
     -webkit-appearance: none; /* Remove default styling */
     appearance: none;
@@ -1054,11 +1148,11 @@ main {
     border-radius: 5px;
 }
 
-.slider-container input[type="range"]:hover {
+.vas-container input[type="range"]:hover {
     opacity: 1;
 }
 
-.slider-container input[type="range"]::-webkit-slider-thumb {
+.vas-container input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -1067,21 +1161,25 @@ main {
     background: #007bff;
     cursor: pointer;
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
+    opacity: 0; /* 初期状態で非表示 */
+    transition: opacity 0.2s ease;
 }
 
-.slider-container input[type="range"]::-moz-range-thumb {
+.vas-container input[type="range"].touched::-webkit-slider-thumb {
+    opacity: 1; /* 操作後に表示 */
+}
+
+.vas-container input[type="range"]::-moz-range-thumb {
     width: 20px;
     height: 20px;
     border-radius: 50%;
     background: #007bff;
     cursor: pointer;
     box-shadow: 0 0 2px rgba(0,0,0,0.3);
+    opacity: 0; /* 初期状態で非表示 */
+    transition: opacity 0.2s ease;
 }
 
-#perceived-time-value {
-    min-width: 60px; /* Adjust as needed */
-    text-align: right;
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #007bff;
+.vas-container input[type="range"].touched::-moz-range-thumb {
+    opacity: 1; /* 操作後に表示 */
 }

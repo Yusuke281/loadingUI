@@ -1,0 +1,22 @@
+                            Mixed Linear Model Regression Results
+=============================================================================================
+Model:                        MixedLM            Dependent Variable:            reliability_z
+No. Observations:             210                Method:                        REML         
+No. Groups:                   10                 Scale:                         0.4649       
+Min. group size:              21                 Log-Likelihood:                -225.9520    
+Max. group size:              21                 Converged:                     Yes          
+Mean group size:              21.0                                                           
+---------------------------------------------------------------------------------------------
+                                                   Coef.  Std.Err.   z    P>|z| [0.025 0.975]
+---------------------------------------------------------------------------------------------
+Intercept                                          -0.050    0.149 -0.339 0.735 -0.342  0.241
+C(loaderType, Treatment('none'))[T.bar]             1.079    0.177  6.113 0.000  0.733  1.426
+C(loaderType, Treatment('none'))[T.bar-color]       1.098    0.177  6.218 0.000  0.752  1.445
+C(loaderType, Treatment('none'))[T.skeleton]        1.015    0.178  5.696 0.000  0.666  1.364
+C(loaderType, Treatment('none'))[T.skeleton-color]  0.367    0.177  2.070 0.038  0.020  0.715
+C(loaderType, Treatment('none'))[T.spinner]         0.817    0.178  4.599 0.000  0.469  1.164
+C(loaderType, Treatment('none'))[T.spinner-color]   0.916    0.178  5.153 0.000  0.568  1.264
+simulatedLoadingTime_sec                           -0.249    0.029 -8.684 0.000 -0.305 -0.193
+mouseDistance_z                                     0.003    0.048  0.070 0.944 -0.091  0.098
+Group Var                                           0.000                                    
+=============================================================================================

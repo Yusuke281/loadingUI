@@ -2,49 +2,53 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- 商品データ ---
     const products = {
-        vegetables: [
-            { id: 'v1', name: 'トマト', price: 150, image: 'images/tomato.jpg' },
-            { id: 'v2', name: 'ピーマン', price: 120, image: 'images/bell-pepper.jpg' },
-            { id: 'v3', name: 'ブロッコリー', price: 180, image: 'images/broccoli.jpg' },
-            { id: 'v4', name: 'にんじん', price: 100, image: 'images/carrot.jpg' },
-            { id: 'v5', name: 'カリフラワー', price: 200, image: 'images/cauliflower.jpg' },
-            { id: 'v6', name: 'きゅうり', price: 90, image: 'images/cucumber.jpg' },
-            { id: 'v7', name: 'なす', price: 130, image: 'images/eggplant.jpg' },
-            { id: 'v8', name: 'ほうれん草', price: 160, image: 'images/spinach.jpg' }
+        fashion: [
+            { id: 'fa1', name: 'Tシャツ', price: 2500, image: 'images/Tシャツ.png' },
+            { id: 'fa2', name: 'パーカー', price: 5800, image: 'images/パーカー.png' },
+            { id: 'fa3', name: 'ジーンズ', price: 8900, image: 'images/ジーンズ.png' },
+            { id: 'fa4', name: 'スカート', price: 4500, image: 'images/スカート.png' },
+            { id: 'fa5', name: 'スニーカー', price: 12000, image: 'images/スニーカー.png' },
+            { id: 'fa6', name: '帽子', price: 3200, image: 'images/帽子.png' },
+            { id: 'fa7', name: 'リュックサック', price: 7500, image: 'images/リュックサック.png' },
+            { id: 'fa8', name: '靴下', price: 1200, image: 'images/靴下.png' }
         ],
-        fruits: [
-            { id: 'f1', name: 'りんご', price: 200, image: 'images/apple.jpg' },
-            { id: 'f2', name: 'バナナ', price: 100, image: 'images/banana.jpg' },
-            { id: 'f3', name: 'キウイ', price: 150, image: 'images/kiwi.jpg' },
-            { id: 'f4', name: 'メロン', price: 1200, image: 'images/melon.jpg' },
-            { id: 'f5', name: 'オレンジ', price: 180, image: 'images/orange.jpg' },
-            { id: 'f6', name: 'パイナップル', price: 500, image: 'images/pineapple.jpg' },
-            { id: 'f7', name: 'いちご', price: 450, image: 'images/strawberry.jpg' }
+        electronics: [
+            { id: 'el1', name: 'カメラ', price: 65000, image: 'images/カメラ.png' },
+            { id: 'el2', name: 'スマートフォン', price: 98000, image: 'images/スマートフォン.png' },
+            { id: 'el3', name: 'パソコン', price: 125000, image: 'images/パソコン.png' },
+            { id: 'el4', name: 'ヘッドホン', price: 28000, image: 'images/ヘッドホン.png' },
+            { id: 'el5', name: 'スピーカー', price: 15000, image: 'images/スピーカー.png' },
+            { id: 'el6', name: '掃除機', price: 35000, image: 'images/掃除機.jpg' },
+            { id: 'el7', name: 'テレビ', price: 80000, image: 'images/テレビ.png' },
+            { id: 'el8', name: 'タブレット', price: 45000, image: 'images/タブレット.png' }
         ],
-        sweets: [
-            { id: 's1', name: 'ケーキ', price: 500, image: 'images/cake.jpg' },
-            { id: 's2', name: 'チーズケーキ', price: 550, image: 'images/cheesecake.jpg' },
-            { id: 's3', name: 'チョコレート', price: 250, image: 'images/chocolate.jpg' },
-            { id: 's4', name: 'クッキー', price: 300, image: 'images/cookies.jpg' },
-            { id: 's5', name: 'アイスクリーム', price: 200, image: 'images/ice-cream.jpg' },
-            { id: 's6', name: 'プリン', price: 220, image: 'images/pudding.jpg' },
-            { id: 's7', name: 'ポテトチップス', price: 150, image: 'images/potato-chips.jpg' }
+        furniture: [
+            { id: 'fu1', name: 'イス', price: 8500, image: 'images/イス.png' },
+            { id: 'fu2', name: '机', price: 22000, image: 'images/机.png' },
+            { id: 'fu3', name: 'ソファー', price: 45000, image: 'images/ソファー.png' },
+            { id: 'fu4', name: 'ベッド', price: 60000, image: 'images/ベッド.png' },
+            { id: 'fu5', name: '棚', price: 12000, image: 'images/棚.png' },
+            { id: 'fu6', name: 'カーテン', price: 5500, image: 'images/カーテン.png' },
+            { id: 'fu7', name: '鏡', price: 4800, image: 'images/鏡.png' },
+            { id: 'fu8', name: 'フロアライト', price: 9800, image: 'images/フロアライト.png' }
         ],
-        drinks: [
-            { id: 'd1', name: '緑茶', price: 120, image: 'images/greentea.jpg' },
-            { id: 'd2', name: 'コーラ', price: 150, image: 'images/cola.jpg' },
-            { id: 'd3', name: 'オレンジジュース', price: 160, image: 'images/orange-juice.jpg' },
-            { id: 'd4', name: 'コーヒー', price: 180, image: 'images/coffee.jpg' },
-            { id: 'd5', name: '紅茶', price: 180, image: 'images/black-tea.jpg' },
-            { id: 'd6', name: '牛乳', price: 140, image: 'images/milk.jpg' },
-            { id: 'd7', name: '麦茶', price: 110, image: 'images/barley-tea.jpg' },
-            { id: 'd8', name: 'スポーツドリンク', price: 150, image: 'images/sports-drink.jpg' }
+        food_drink: [
+            { id: 'fd1', name: 'りんご', price: 200, image: 'images/りんご.png' },
+            { id: 'fd2', name: 'ミネラルウォーター', price: 120, image: 'images/ミネラルウォーター.png' },
+            { id: 'fd3', name: 'コーヒー', price: 450, image: 'images/コーヒー.png' },
+            { id: 'fd4', name: 'クロワッサン', price: 180, image: 'images/クロワッサン.png' },
+            { id: 'fd5', name: 'パスタ', price: 300, image: 'images/パスタ.png' },
+            { id: 'fd6', name: 'チョコレート', price: 250, image: 'images/チョコレート.png' },
+            { id: 'fd7', name: 'クッキー', price: 350, image: 'images/クッキー.png' },
+            { id: 'fd8', name: 'イチゴジャム', price: 480, image: 'images/イチゴジャム.png' }
         ]
     };
 
     const tutorialTrials = [
-        { taskHTML: '<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'none', time: 3000 },
-        { taskHTML: '<strong>ケーキ</strong>をカートに入れてください', loader: 'spinner', time: 3000 },
+        { taskHTML: '<strong>Tシャツ</strong>と<strong>スマートフォン</strong>をカートに入れてください', loader: 'bouncing-dots', time: 2500 },
+        { taskHTML: '<strong>カメラ</strong>と<strong>イス</strong>をカートに入れてください', loader: 'bouncing-dots', time: 2500 },
+        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">次に、読み込み時間が短い例を体験していただきます。</p><strong>イス</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'bouncing-dots', time: 1000 }, // 短い例
+        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">最後に、読み込み時間が長い例を体験していただきます。</p><strong>コーヒー</strong>と<strong>パーカー</strong>をカートに入れてください', loader: 'bouncing-dots', time: 5000 },       // 長い例
     ];
 
     // --- 制約付きシャッフル関数 ---
@@ -98,123 +102,82 @@ document.addEventListener('DOMContentLoaded', () => {
         return trials;
     }
 
-    // --- 実験トライアル定義 (元の定義) ---
-    const originalExperimentTrials = [
-        {
-            "taskHTML": "<strong>ブロッコリー</strong>と<strong>クッキー</strong>をカートに入れてください",
-            "loader": "bar-color",
-            "time": 5000
-        },
-        {
-            "taskHTML": "<strong>なす</strong>と<strong>オレンジジュース</strong>をカートに入れてください",
-            "loader": "bar",
-            "time": 5000
-        },
-        {
-            "taskHTML": "<strong>トマト</strong>と<strong>りんご</strong>をカートに入れてください",
-            "loader": "none",
-            "time": 1500
-        },
-        {
-            "taskHTML": "<strong>キウイ</strong>と<strong>コーラ</strong>をカートに入れてください",
-            "loader": "spinner",
-            "time": 3000
-        },
-        {
-            "taskHTML": "<strong>ピーマン</strong>と<strong>ケーキ</strong>をカートに入れてください",
-            "loader": "none",
-            "time": 3000
-        },
-        {
-            "taskHTML": "<strong>ほうれん草</strong>と<strong>オレンジ</strong>をカートに入れてください",
-            "loader": "skeleton-color",
-            "time": 5000
-        },
-        {
-            "taskHTML": "<strong>バナナ</strong>と<strong>チーズケーキ</strong>をカートに入れてください",
-            "loader": "spinner",
-            "time": 1500
-        },
-        {
-            "taskHTML": "<strong>にんじん</strong>と<strong>コーヒー</strong>をカートに入れてください",
-            "loader": "bar-color",
-            "time": 1500
-        },
-        {
-            "taskHTML": "<strong>ブロッコリー</strong>と<strong>緑茶</strong>をカートに入れてください",
-            "loader": "none",
-            "time": 5000
-        },
-        {
-            "taskHTML": "<strong>きゅうり</strong>と<strong>クッキー</strong>をカートに入れてください",
-            "loader": "bar",
-            "time": 3000
-        },
-        {
-            "taskHTML": "<strong>カリフラワー</strong>と<strong>メロン</strong>をカートに入れてください",
-            "loader": "bar",
-            "time": 1500
-        },
-        {
-            "taskHTML": "<strong>プリン</strong>と<strong>緑茶</strong>をカートに入れてください",
-            "loader": "skeleton",
-            "time": 5000
-        },
-        {
-            "taskHTML": "<strong>ピーマン</strong>と<strong>ポテトチップス</strong>をカートに入れてください",
-            "loader": "spinner-color",
-            "time": 3000
-        },
-        {
-            "taskHTML": "<strong>キウイ</strong>と<strong>なす</strong>をカートに入れてください",
-            "loader": "skeleton-color",
-            "time": 1500
-        },
-        {
-            "taskHTML": "<strong>チョコレート</strong>と<strong>にんじん</strong>をカートに入れてください",
-            "loader": "spinner",
-            "time": 5000
-        },
-        {
-            "taskHTML": "<strong>チーズケーキ</strong>と<strong>緑茶</strong>をカートに入れてください",
-            "loader": "skeleton-color",
-            "time": 3000
-        },
-        {
-            "taskHTML": "<strong>オレンジ</strong>と<strong>アイスクリーム</strong>をカートに入れてください",
-            "loader": "skeleton",
-            "time": 1500
-        },
-        {
-            "taskHTML": "<strong>りんご</strong>と<strong>ケーキ</strong>をカートに入れてください",
-            "loader": "spinner-color",
-            "time": 5000
-        },
-        {
-            "taskHTML": "<strong>トマト</strong>と<strong>いちご</strong>をカートに入れてください",
-            "loader": "spinner-color",
-            "time": 1500
-        },
-        {
-            "taskHTML": "<strong>バナナ</strong>と<strong>チョコレート</strong>をカートに入れてください",
-            "loader": "bar-color",
-            "time": 3000
-        },
-        {
-            "taskHTML": "<strong>パイナップル</strong>と<strong>ほうれん草</strong>をカートに入れてください",
-            "loader": "skeleton",
-            "time": 3000
-        }
+    // --- タスクの文章プール ---
+    const taskPool = [
+        "<strong>パーカー</strong>と<strong>パソコン</strong>をカートに入れてください",
+        "<strong>スマートフォン</strong>と<strong>ソファー</strong>をカートに入れてください",
+        "<strong>りんご</strong>と<strong>靴下</strong>をカートに入れてください",
+        "<strong>リュックサック</strong>と<strong>掃除機</strong>をカートに入れてください",
+        "<strong>机</strong>と<strong>チョコレート</strong>をカートに入れてください",
+        "<strong>パソコン</strong>と<strong>スカート</strong>をカートに入れてください",
+        "<strong>チョコレート</strong>と<strong>テレビ</strong>をカートに入れてください",
+        "<strong>ソファー</strong>と<strong>クロワッサン</strong>をカートに入れてください",
+        "<strong>靴下</strong>と<strong>棚</strong>をカートに入れてください",
+        "<strong>掃除機</strong>と<strong>りんご</strong>をカートに入れてください",
+        "<strong>棚</strong>と<strong>ヘッドホン</strong>をカートに入れてください",
+        "<strong>クロワッサン</strong>と<strong>スニーカー</strong>をカートに入れてください",
+        "<strong>テレビ</strong>と<strong>鏡</strong>をカートに入れてください",
+        "<strong>鏡</strong>と<strong>パスタ</strong>をカートに入れてください",
+        "<strong>パスタ</strong>と<strong>スマートフォン</strong>をカートに入れてください",
+        "<strong>スニーカー</strong>と<strong>ベッド</strong>をカートに入れてください",
+        "<strong>カメラ</strong>と<strong>帽子</strong>をカートに入れてください",
+        "<strong>りんご</strong>と<strong>フロアライト</strong>をカートに入れてください",
+        "<strong>チョコレート</strong>と<strong>ジーンズ</strong>をカートに入れてください",
+        "<strong>ジーンズ</strong>と<strong>スピーカー</strong>をカートに入れてください",
+        "<strong>フロアライト</strong>と<strong>コーヒー</strong>をカートに入れてください"
     ];
 
-    // 元の課題番号を付与
-    const experimentTrialsWithId = originalExperimentTrials.map((trial, index) => ({
-        ...trial,
-        originalTrialNumber: index + 1
-    }));
+    // --- 実験条件（UIと時間）のプール ---
+    const conditionPool = [
+        { id: 1, loader: "bar-color", time: 5000 },
+        { id: 2, loader: "bar", time: 5000 },
+        { id: 3, loader: "none", time: 1000 },
+        { id: 4, loader: "spinner", time: 2500 },
+        { id: 5, loader: "none", time: 2500 },
+        { id: 6, loader: "skeleton-color", time: 5000 },
+        { id: 7, loader: "spinner", time: 1000 },
+        { id: 8, loader: "bar-color", time: 1000 },
+        { id: 9, loader: "none", time: 5000 },
+        { id: 10, loader: "bar", time: 2500 },
+        { id: 11, loader: "bar", time: 1000 },
+        { id: 12, loader: "skeleton", time: 5000 },
+        { id: 13, loader: "spinner-color", time: 2500 },
+        { id: 14, loader: "skeleton-color", time: 1000 },
+        { id: 15, loader: "spinner", time: 5000 },
+        { id: 16, loader: "skeleton-color", time: 2500 },
+        { id: 17, loader: "skeleton", time: 1000 },
+        { id: 18, loader: "spinner-color", time: 5000 },
+        { id: 19, loader: "spinner-color", time: 1000 },
+        { id: 20, loader: "bar-color", time: 2500 },
+        { id: 21, loader: "skeleton", time: 2500 }
+    ];
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function createPairedTrials(tasks, conditions) {
+        const shuffledTasks = shuffleArray([...tasks]);
+        const shuffledConditions = shuffleArray([...conditions]);
+        
+        // タスク数と条件数が一致していることを前提とする
+        return shuffledTasks.map((task, index) => ({
+            taskHTML: task,
+            loader: shuffledConditions[index].loader,
+            time: shuffledConditions[index].time,
+            originalTrialNumber: shuffledConditions[index].id
+        }));
+    }
+
+    // ランダムにペアリングされた実験トライアルを作成
+    const trialsToShuffle = createPairedTrials(taskPool, conditionPool);
     
-    // シャッフルされた実験トライアル
-    const experimentTrials = createConstrainedShuffle(experimentTrialsWithId);
+    // シャッフル（制約付き）された実験トライアル
+    const experimentTrials = createConstrainedShuffle(trialsToShuffle);
 
     // --- GoogleフォームのURL (削除) ---
 
@@ -229,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskDescription = document.getElementById('task-description');
     
     const startExperimentBtn = document.getElementById('start-experiment-btn');
+    const enterDebugModeBtn = document.getElementById('enter-debug-mode-btn');
     const startTutorialBtn = document.getElementById('start-tutorial-btn');
     const startMainExperimentBtn = document.getElementById('start-main-experiment-btn');
     const startTaskBtn = document.getElementById('start-task-btn');
@@ -245,16 +209,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // 新しいDOM要素
     const taskSurveyForm = document.getElementById('task-survey-form');
     const perceivedTimeInput = document.getElementById('perceived-time'); // Slider input
-    const perceivedTimeValueSpan = document.getElementById('perceived-time-value'); // Span to display slider value
     const submitSurveyBtn = document.getElementById('submit-survey-btn');
 
-    // Perceived Time Sliderの値をリアルタイムで表示
-    perceivedTimeInput.addEventListener('input', () => {
-        perceivedTimeValueSpan.textContent = `${perceivedTimeInput.value} 秒`;
-    });
+    // --- URLパラメータの取得 ---
+    const urlParams = new URLSearchParams(window.location.search);
 
     // --- デバッグモード ---
-    let isDebugMode = false;
+    let isDebugMode = urlParams.get('debug') === 'true';
+
+    // デバッグモードが有効な場合、隠しボタンを表示する
+    if (isDebugMode) {
+        const debugBtn = document.getElementById('enter-debug-mode-btn');
+        const backBtn = document.getElementById('back-to-loader-selection-btn');
+        if (debugBtn) debugBtn.style.display = 'block';
+        if (backBtn) backBtn.style.display = 'block';
+    }
 
     // --- 計測用変数 ---
     let rageClickCount = 0;
@@ -266,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastMouseY = 0;
     let isMeasuringMouseDistance = false;
     let taskStartTime = 0;
+    let accumulatedLoadingTime = 0;
     const taskTimings = [];
     let taskClickData = []; // For optimal distance calculation
 
@@ -288,6 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 状態管理 ---
     let isTutorial = true;
+    let isIntroViewing = false; // UI確認フェーズ用
     let tutorialTrialIndex = 0;
     let currentPatternIndex = 0;
     let selectedLoader = 'spinner';
@@ -297,12 +268,64 @@ document.addEventListener('DOMContentLoaded', () => {
     let cartItemIdCounter = 0;
     let homeVersion = 1;
 
+    // UI確認フェーズ用のリスト
+    const introUIs = [
+        { id: 'spinner', name: 'スピナー' },
+        { id: 'spinner-color', name: 'スピナー(カラー)' },
+        { type: 'separator' },
+        { id: 'bar', name: 'プログレスバー' },
+        { id: 'bar-color', name: 'プログレスバー(カラー)' },
+        { type: 'separator' },
+        { id: 'none', name: 'UIなし' },
+        { type: 'separator' },
+        { id: 'skeleton', name: 'スケルトン' },
+        { id: 'skeleton-color', name: 'スケルトン(カラー)' }
+    ];
+
     // --- 関数定義 ---
     function showScreen(screenToShow) {
-        [startScreen, tutorialStartScreen, tutorialCompleteScreen, taskScreen, ecSiteScreen, surveyScreen, experimentCompleteScreen].forEach(screen => {
+        const screens = [
+            startScreen, 
+            document.getElementById('intro-viewing-start-screen'),
+            tutorialStartScreen, 
+            tutorialCompleteScreen, 
+            taskScreen, 
+            ecSiteScreen, 
+            surveyScreen, 
+            experimentCompleteScreen
+        ];
+        screens.forEach(screen => {
             if(screen) screen.classList.add('hidden');
         });
         if(screenToShow) screenToShow.classList.remove('hidden');
+    }
+
+    function startIntroViewing() {
+        isIntroViewing = true;
+        showScreen(ecSiteScreen);
+        
+        // ヘッダーのタイトルを変更
+        const headerH1 = document.querySelector('header h1');
+        if (headerH1) headerH1.textContent = '読み込み画面の確認';
+
+        // ナビゲーションをUI名に書き換える（セパレーター対応）
+        categoryNav.innerHTML = introUIs.map(item => {
+            if (item.type === 'separator') {
+                return '<div class="nav-separator"></div>';
+            }
+            return `<a href="#" data-category="${item.id}">${item.name}</a>`;
+        }).join('');
+        
+        // ヘッダー指示を更新
+        document.getElementById('header-task-description').innerHTML = 
+            '<span style="color: #333;">左のメニューからUI名を選択して、表示を確認してください。終了したら右のボタンを押してください。</span>';
+        
+        // 完了ボタンを表示
+        completeTaskBtn.textContent = '確認を終了してチュートリアルへ';
+        completeTaskBtn.style.display = 'block';
+
+        renderHome();
+        currentCategory = 'home';
     }
 
     function startTutorialTrial(trialIndex) {
@@ -345,60 +368,46 @@ document.addEventListener('DOMContentLoaded', () => {
         productListContainer.innerHTML = `
             <div class="hero-section">
                 <div class="hero-content">
-                    <h1>新鮮な食材を、<br>もっと手軽に。</h1>
-                    <p>毎日の食卓を彩る、旬の野菜や果物を取り揃えています。</p>
-                    <button class="hero-cta-btn" onclick="document.querySelector('[data-category=vegetables]').click()">商品を見る</button>
+                    <h1><span style="white-space: nowrap;">理想のライフスタイルを、</span><br>ここから。</h1>
+                    <p>最新のガジェットからトレンドのファッションまで、幅広く取り揃えています。</p>
                 </div>
             </div>
 
             <div class="home-section">
                 <h2>カテゴリーから探す</h2>
                 <div class="category-grid">
-                    <div class="category-card" data-category="vegetables">
-                        <img src="images/tomato.jpg" alt="野菜">
-                        <span>野菜</span>
+                    <div class="category-card" data-category="fashion">
+                        <img src="images/Tシャツ.png" alt="ファッション">
+                        <span>ファッション</span>
                     </div>
-                    <div class="category-card" data-category="fruits">
-                        <img src="images/strawberry.jpg" alt="果物">
-                        <span>果物</span>
+                    <div class="category-card" data-category="electronics">
+                        <img src="images/カメラ.png" alt="家電・ガジェット">
+                        <span>家電・ガジェット</span>
                     </div>
-                    <div class="category-card" data-category="sweets">
-                        <img src="images/cake.jpg" alt="お菓子・デザート">
-                        <span>お菓子・デザート</span>
+                    <div class="category-card" data-category="furniture">
+                        <img src="images/イス.png" alt="家具・インテリア">
+                        <span>家具・インテリア</span>
                     </div>
-                    <div class="category-card" data-category="drinks">
-                        <img src="images/greentea.jpg" alt="飲み物">
-                        <span>飲み物</span>
+                    <div class="category-card" data-category="food_drink">
+                        <img src="images/りんご.png" alt="食べ物・飲み物">
+                        <span>食べ物・飲み物</span>
                     </div>
                 </div>
             </div>
-
-            <div class="home-section home-search-container">
-                <h2>商品を検索</h2>
-                <div class="search-bar">
-                    <input type="search" placeholder="キーワードを入力...">
-                    <button type="button">検索</button>
-                </div>
-            </div>
-            <button id="switch-home-layout-btn">別のホーム画面</button>
         `;
     }
 
     function renderHome2() {
         productListContainer.style.display = 'block';
-        const featuredProducts = [...products.sweets.slice(0, 2), ...products.fruits.slice(0, 2)];
+        const featuredProducts = [...products.electronics.slice(0, 2), ...products.fashion.slice(0, 2)];
         productListContainer.innerHTML = `
             <div class="hero-section-2">
                 <div class="hero-content-2">
-                    <h1>新しい味覚、見つけよう。</h1>
-                    <p>季節限定のスイーツや、産地直送のフルーツはいかがですか？</p>
-                    <div class="search-bar-2">
-                        <input type="search" placeholder="例: いちご, ケーキ">
-                        <button type="button">検索</button>
-                    </div>
+                    <h1>お気に入りの一品、見つけよう。</h1>
+                    <p>人気のガジェットや、季節の新作アイテムはいかがですか？</p>
                 </div>
                 <div class="hero-image-2">
-                    <img src="images/cheesecake.jpg" alt="Hero Image">
+                    <img src="images/スマートフォン.png" alt="Hero Image">
                 </div>
             </div>
 
@@ -412,24 +421,25 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <h3>${product.name}</h3>
                                 <p class="price">¥${product.price.toLocaleString()}</p>
                             </div>
-                            <button class="add-to-cart-btn" data-product-id="${product.id}">カートに入れる</button>
+                            <a href="#" class="add-to-cart-btn" data-product-id="${product.id}" role="button">カートに入れる</a>
                         </div>
                     `).join('')}
                 </div>
             </div>
-            <button id="switch-home-layout-btn">別のホーム画面</button>
         `;
     }
 
     function renderProducts(category) {
         productListContainer.style.display = 'grid';
-        const productData = products[category];
+        let productData = products[category];
+        
+        // カテゴリが存在しない場合（UI確認フェーズなど）、全商品からランダムに8件表示する
         if (!productData) {
-            productListContainer.innerHTML = '<p>このカテゴリーの商品は現在ありません。</p>';
-            return;
+            const allProducts = Object.values(products).flat();
+            productData = shuffleArray([...allProducts]).slice(0, 8);
         }
-        const categoryTitle = categoryNav.querySelector(`[data-category="${category}"]`).textContent;
-        productListContainer.innerHTML = `<h2>${categoryTitle}</h2>` + productData.map(product => `
+
+        productListContainer.innerHTML = productData.map(product => `
             <div class="product-card">
                 <img src="${product.image}" alt="${product.name}">
                 <div class="product-card-content">
@@ -446,6 +456,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function showLoading() {
         const loaderType = getLoaderType();
         loadingOverlay.innerHTML = '';
+        let hasContent = false;
+
         if (loaderType.startsWith('bar')) {
             loadingOverlay.innerHTML = '<div class="progress-bar-container"><div class="progress-bar"></div></div>';
             const progressBar = loadingOverlay.querySelector('.progress-bar');
@@ -454,12 +466,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 progressBar.style.transitionDuration = `${loadingTimeMs}ms`;
                 setTimeout(() => { progressBar.style.width = '100%'; }, 10);
             }
+            hasContent = true;
         } else if (loaderType.startsWith('spinner')) {
             loadingOverlay.innerHTML = '<div class="spinner"></div>';
             const spinner = loadingOverlay.querySelector('.spinner');
             if (spinner && loaderType === 'spinner-color') spinner.classList.add('color');
+            hasContent = true;
+        } else if (loaderType === 'bouncing-dots') {
+            loadingOverlay.innerHTML = '<div class="bouncing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+            hasContent = true;
         }
-        loadingOverlay.style.display = 'flex';
+
+        if (hasContent) {
+            loadingOverlay.style.display = 'flex';
+        }
     }
 
     function hideLoading() { loadingOverlay.style.display = 'none'; }
@@ -483,9 +503,106 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- イベントリスナー ---
+    function setupDebugUI() {
+        const headerRight = document.querySelector('.header-right');
+        if (!headerRight || document.getElementById('debug-controls')) return;
+
+        const debugControls = document.createElement('div');
+        debugControls.id = 'debug-controls';
+        debugControls.style.display = 'flex';
+        debugControls.style.gap = '10px';
+        debugControls.style.marginRight = '20px';
+
+        const debugDownloadBtn = document.createElement('button');
+        debugDownloadBtn.textContent = 'CSV DL';
+        debugDownloadBtn.style.backgroundColor = '#6c757d';
+        debugDownloadBtn.style.color = 'white';
+        debugDownloadBtn.style.border = 'none';
+        debugDownloadBtn.style.padding = '0.5rem 1rem';
+        debugDownloadBtn.style.borderRadius = '5px';
+        debugDownloadBtn.style.cursor = 'pointer';
+        debugDownloadBtn.addEventListener('click', () => {
+            const completedTasks = taskTimings.filter(task => task.action === 'Task Completed');
+            if (completedTasks.length > 0) {
+                downloadCSV(completedTasks);
+            } else {
+                alert('データがありません。');
+            }
+        });
+
+        const viewLoadersBtn = document.createElement('button');
+        viewLoadersBtn.textContent = 'ローダー確認';
+        viewLoadersBtn.style.backgroundColor = '#007bff';
+        viewLoadersBtn.style.color = 'white';
+        viewLoadersBtn.style.border = 'none';
+        viewLoadersBtn.style.padding = '0.5rem 1rem';
+        viewLoadersBtn.style.borderRadius = '5px';
+        viewLoadersBtn.style.cursor = 'pointer';
+        
+        const loaderModal = document.getElementById('debug-loader-modal');
+        viewLoadersBtn.addEventListener('click', () => {
+            loaderModal.classList.remove('hidden');
+            // プログレスバーのアニメーションを開始
+            const bars = loaderModal.querySelectorAll('.progress-bar');
+            bars.forEach(bar => {
+                bar.style.width = '0';
+                bar.style.transitionDuration = '0s';
+                setTimeout(() => {
+                    bar.style.transitionDuration = '2500ms';
+                    bar.style.width = '100%';
+                }, 50);
+            });
+        });
+        loaderModal.querySelector('.modal-close-btn').addEventListener('click', () => loaderModal.classList.add('hidden'));
+
+        debugControls.appendChild(debugDownloadBtn);
+        debugControls.appendChild(viewLoadersBtn);
+        headerRight.prepend(debugControls);
+
+        completeTaskBtn.style.display = 'none';
+        document.getElementById('header-task-description').innerHTML = '<span style="color: #666;">デバッグモード実行中</span>';
+    }
+
     startExperimentBtn.addEventListener('click', () => {
-        showScreen(tutorialStartScreen);
+        isDebugMode = false;
+        showScreen(document.getElementById('intro-viewing-start-screen'));
     });
+
+    const startIntroViewingBtn = document.getElementById('start-intro-viewing-btn');
+    if (startIntroViewingBtn) {
+        startIntroViewingBtn.addEventListener('click', () => {
+            startIntroViewing();
+        });
+    }
+
+    enterDebugModeBtn.addEventListener('click', () => {
+        isDebugMode = true;
+        isTutorial = false;
+        showScreen(ecSiteScreen);
+        setupDebugUI();
+        renderHome();
+        currentCategory = 'home';
+    });
+
+    const backToLoaderBtn = document.getElementById('back-to-loader-selection-btn');
+    if (backToLoaderBtn) {
+        backToLoaderBtn.addEventListener('click', () => {
+            const loaderModal = document.getElementById('debug-loader-modal');
+            if (loaderModal) {
+                loaderModal.classList.remove('hidden');
+                // プログレスバーのアニメーションを開始
+                const bars = loaderModal.querySelectorAll('.progress-bar');
+                bars.forEach(bar => {
+                    bar.style.width = '0';
+                    bar.style.transitionDuration = '0s';
+                    setTimeout(() => {
+                        bar.style.transitionDuration = '2500ms';
+                        bar.style.width = '100%';
+                    }, 50);
+                });
+            }
+        });
+    }
 
     startTutorialBtn.addEventListener('click', () => {
         isTutorial = true;
@@ -500,7 +617,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     startTaskBtn.addEventListener('click', () => {
-        const taskDescriptionHTML = taskDescription.innerHTML;
+        // Create a temporary clone to manipulate for the header
+        const tempDescription = document.getElementById('task-description').cloneNode(true);
+        const descriptor = tempDescription.querySelector('.tutorial-descriptor');
+        if (descriptor) {
+            descriptor.remove();
+        }
+        const taskDescriptionHTML = tempDescription.innerHTML;
+
         const headerTaskDescription = document.getElementById('header-task-description');
         if (isTutorial) {
             headerTaskDescription.innerHTML = `チュートリアル ${tutorialTrialIndex + 1}/${tutorialTrials.length}: ${taskDescriptionHTML}`;
@@ -508,6 +632,13 @@ document.addEventListener('DOMContentLoaded', () => {
             headerTaskDescription.innerHTML = `タスク ${currentPatternIndex + 1}/${experimentTrials.length}: ${taskDescriptionHTML}`;
         }
         
+        // ヘッダーのタイトルとボタンの状態をリセット
+        const headerH1 = document.querySelector('header h1');
+        if (headerH1) headerH1.textContent = 'ECサイト';
+        
+        completeTaskBtn.textContent = '完了を報告する';
+        completeTaskBtn.style.display = 'block';
+
         const strongElements = headerTaskDescription.getElementsByTagName('strong');
         for (let strong of strongElements) {
             strong.style.backgroundColor = 'yellow';
@@ -517,6 +648,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         showScreen(ecSiteScreen);
+
+        // ナビゲーションを元に戻す（UI確認フェーズで書き換えられている可能性があるため）
+        categoryNav.innerHTML = `
+            <a href="#" data-category="home" class="active">ホーム</a>
+            <a href="#" data-category="fashion">ファッション</a>
+            <a href="#" data-category="electronics">家電・ガジェット</a>
+            <a href="#" data-category="furniture">家具・インテリア</a>
+            <a href="#" data-category="food_drink">食べ物・飲み物</a>
+        `;
 
         currentCategory = 'home';
         const homeLink = categoryNav.querySelector('[data-category="home"]');
@@ -533,6 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lastMouseY = 0;
         isMeasuringMouseDistance = true;
         taskStartTime = performance.now();
+        accumulatedLoadingTime = 0;
         taskClickData = []; // Reset click data for new task
         cartItems = [];
         renderCart();
@@ -545,11 +686,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newCategory === currentCategory) return;
 
         const startTime = performance.now();
-        const loaderType = getLoaderType();
+        let loaderType = getLoaderType();
+
+        // UI確認フェーズの場合、カテゴリIDがそのままローダータイプになる
+        if (isIntroViewing) {
+            loaderType = newCategory;
+            selectedLoader = newCategory; // showLoading内で使用
+            loadingTimeMs = 2000; // 確認用は一律2秒
+        }
 
         if (loaderType.startsWith('skeleton') && newCategory !== 'home') {
             productListContainer.style.display = 'grid';
-            const categoryTitle = categoryNav.querySelector(`[data-category="${newCategory}"]`).textContent;
             const skeletonClass = loaderType === 'skeleton-color' ? 'skeleton-card color' : 'skeleton-card';
             
             // 表示する商品の数を取得し、その数だけスケルトンを生成する
@@ -565,8 +712,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="skeleton-button"></div>
                 </div>
             `).join('');
-            productListContainer.innerHTML = `<h2>${categoryTitle}</h2>` + skeletonHtml;
-        } else if (loaderType !== 'none') {
+            productListContainer.innerHTML = skeletonHtml;
+        } else if (loaderType !== 'none' && !loaderType.startsWith('skeleton')) {
             showLoading();
         }
 
@@ -574,7 +721,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.classList.add('active');
 
         setTimeout(() => {
-            if (loaderType !== 'none' && !loaderType.startsWith('skeleton')) hideLoading();
+            hideLoading();
             if (newCategory === 'home') {
                 if (homeVersion === 1) {
                     renderHome();
@@ -586,6 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const endTime = performance.now();
             if (!isTutorial) {
+                accumulatedLoadingTime += loadingTimeMs;
                 taskTimings.push({ action: 'Category Change', from: currentCategory, to: newCategory, loader: loaderType, time: endTime - startTime, simulatedDelay: loadingTimeMs });
             }
             currentCategory = newCategory;
@@ -621,6 +769,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartItems.push({ ...product, cartId: cartItemIdCounter++ });
                 renderCart();
                 showToast(`「${product.name}」をカートに追加しました！`);
+                
+                // ボタンの状態を変更
+                e.target.classList.add('added');
+                e.target.textContent = '追加済み';
             }
         }
     });
@@ -634,6 +786,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     completeTaskBtn.addEventListener('click', () => {
+        if (isIntroViewing) {
+            isIntroViewing = false;
+            // 完了ボタンを元に戻す
+            completeTaskBtn.textContent = '完了を報告する';
+            completeTaskBtn.style.display = 'none';
+            showScreen(tutorialStartScreen);
+            return;
+        }
+
         const currentTrial = isTutorial ? tutorialTrials[tutorialTrialIndex] : experimentTrials[currentPatternIndex];
         const requiredItems = (currentTrial.taskHTML.match(/<strong>(.*?)<\/strong>/g) || []).map(item => item.replace(/<\/?strong>/g, ''));
         const cartItemNames = cartItems.map(item => item.name);
@@ -654,6 +815,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // 本番タスクではパフォーマンスを記録
             const taskDuration = performance.now() - taskStartTime;
+            const pureTaskDuration = taskDuration - accumulatedLoadingTime;
 
             // --- 最適距離の計算 ---
             let optimalMouseDistance = 0;
@@ -684,6 +846,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 mouseDistance: totalMouseDistance,
                 optimalMouseDistance: optimalMouseDistance,
                 taskDuration: taskDuration, 
+                totalLoadingTime: accumulatedLoadingTime,
+                pureTaskDuration: pureTaskDuration,
                 loaderType: selectedLoader, 
                 simulatedLoadingTime: loadingTimeMs,
                 taskSuccess: true,
@@ -773,34 +937,91 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         // フォームをリセット
         taskSurveyForm.reset();
+        perceivedTimeInput.classList.remove('touched');
     }
+
+    // VASスライダーのつまみ表示制御
+    // 'input'イベントだけだと、初期値（50）を直接クリックした際に値が変わらず、
+    // イベントが発生しないため、'pointerdown'なども追加して反応するようにする。
+    ['input', 'pointerdown', 'touchstart'].forEach(eventType => {
+        perceivedTimeInput.addEventListener(eventType, () => {
+            perceivedTimeInput.classList.add('touched');
+        });
+    });
 
     // アンケート送信ボタンのイベントリスナー
     taskSurveyForm.addEventListener('submit', (e) => {
         e.preventDefault(); // フォームのデフォルト送信を防止
+
+        const discomfortRadio = document.querySelector('input[name="discomfort"]:checked');
+        const reliabilityRadio = document.querySelector('input[name="reliability"]:checked');
+        const isTouched = perceivedTimeInput.classList.contains('touched');
+
+        const errorMessage = document.getElementById('survey-error-message');
+        const discomfortGroup = document.getElementById('discomfort-group');
+        const reliabilityGroup = document.getElementById('reliability-group');
+        const vasGroup = document.getElementById('vas-group');
+
+        // Reset error states
+        errorMessage.style.display = 'none';
+        if (discomfortGroup) discomfortGroup.style.border = 'none';
+        if (reliabilityGroup) reliabilityGroup.style.border = 'none';
+        if (vasGroup) vasGroup.style.border = 'none';
+
+        // バリデーション
+        if (!isTouched || !discomfortRadio || !reliabilityRadio) {
+            let errorList = [];
+            if (!isTouched) {
+                errorList.push('・「体感的な読み込み時間の長さ」をスライダーで回答してください。');
+                if (vasGroup) {
+                    vasGroup.style.border = '2px solid #c9302c';
+                    vasGroup.style.borderRadius = '5px';
+                    vasGroup.style.padding = '0.5rem';
+                }
+            }
+            if (!discomfortRadio) {
+                errorList.push('・「不快感」を選択してください。');
+                if (discomfortGroup) {
+                    discomfortGroup.style.border = '2px solid #c9302c';
+                    discomfortGroup.style.borderRadius = '5px';
+                    discomfortGroup.style.padding = '0.5rem';
+                }
+            }
+            if (!reliabilityRadio) {
+                errorList.push('・「信頼性」を選択してください。');
+                if (reliabilityGroup) {
+                    reliabilityGroup.style.border = '2px solid #c9302c';
+                    reliabilityGroup.style.borderRadius = '5px';
+                    reliabilityGroup.style.padding = '0.5rem';
+                }
+            }
+            
+            if (errorMessage) {
+                errorMessage.innerHTML = `<strong>回答に不足があります：</strong><br>${errorList.join('<br>')}`;
+                errorMessage.style.display = 'block';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            showToast('回答に不足があります。');
+            return;
+        }
 
         if (isTutorial) {
             nextTaskLogic();
             return;
         }
 
-        const satisfactionRadio = document.querySelector('input[name="satisfaction"]:checked');
-
-        // バリデーション
-        if (!perceivedTimeInput.value || !satisfactionRadio) {
-            alert('体感時間と満足度の両方を入力してください。');
-            return;
-        }
-
         const perceivedTime = parseFloat(perceivedTimeInput.value);
-        const satisfaction = parseInt(satisfactionRadio.value, 10);
+        const discomfort = parseInt(discomfortRadio.value, 10);
+        const reliability = parseInt(reliabilityRadio.value, 10);
 
         // 最後のタスク完了レコードを見つける
         const lastCompletedTask = taskTimings.filter(t => t.action === 'Task Completed').pop();
 
         if (lastCompletedTask) {
             lastCompletedTask.perceivedTime = perceivedTime;
-            lastCompletedTask.satisfaction = satisfaction;
+            lastCompletedTask.discomfort = discomfort;
+            lastCompletedTask.reliability = reliability;
             console.log('Survey data added to task record:', lastCompletedTask);
         } else {
             console.error('Could not find the last completed task to add survey data to.');
@@ -812,87 +1033,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 初期画面表示
     showScreen(startScreen);
-
-    // --- デバッグモード有効化 ---
-    const urlParams = new URLSearchParams(window.location.search);
-    isDebugMode = urlParams.get('debug') === 'true';
-
-    if (isDebugMode) {
-        const headerRight = document.querySelector('.header-right');
-        if (headerRight) {
-            // --- Debug Download Button ---
-            const debugDownloadBtn = document.createElement('button');
-            debugDownloadBtn.id = 'debug-download-btn';
-            debugDownloadBtn.textContent = 'CSV DL (Debug)';
-            debugDownloadBtn.style.marginLeft = '10px';
-            debugDownloadBtn.style.backgroundColor = '#6c757d';
-            debugDownloadBtn.style.color = 'white';
-            debugDownloadBtn.style.border = 'none';
-            debugDownloadBtn.style.padding = '0.6rem 1.2rem';
-            debugDownloadBtn.style.fontSize = '0.9rem';
-            debugDownloadBtn.style.fontWeight = 'bold';
-            debugDownloadBtn.style.borderRadius = '5px';
-            debugDownloadBtn.style.cursor = 'pointer';
-
-            debugDownloadBtn.addEventListener('click', () => {
-                const completedTasks = taskTimings.filter(task => task.action === 'Task Completed');
-                if (completedTasks.length > 0) {
-                    downloadCSV(completedTasks);
-                } else {
-                    alert('ダウンロード対象の完了済みタスクデータがありません。');
-                }
-            });
-            headerRight.appendChild(debugDownloadBtn);
-
-            // --- Loader Showcase Button & Modal Logic ---
-            const viewLoadersBtn = document.createElement('button');
-            viewLoadersBtn.id = 'view-loaders-btn';
-            viewLoadersBtn.textContent = 'ローダー一覧';
-            viewLoadersBtn.style.marginLeft = '10px';
-            viewLoadersBtn.style.backgroundColor = '#007bff';
-            viewLoadersBtn.style.color = 'white';
-            viewLoadersBtn.style.border = 'none';
-            viewLoadersBtn.style.padding = '0.6rem 1.2rem';
-            viewLoadersBtn.style.fontSize = '0.9rem';
-            viewLoadersBtn.style.fontWeight = 'bold';
-            viewLoadersBtn.style.borderRadius = '5px';
-            viewLoadersBtn.style.cursor = 'pointer';
-            headerRight.appendChild(viewLoadersBtn);
-
-            const loaderModal = document.getElementById('debug-loader-modal');
-            const closeModalBtn = loaderModal.querySelector('.modal-close-btn');
-
-            function showLoaderModal() {
-                if (loaderModal) {
-                    loaderModal.classList.remove('hidden');
-                    // Animate progress bars when modal is shown
-                    const progressBars = loaderModal.querySelectorAll('.progress-bar');
-                    progressBars.forEach(bar => {
-                        bar.style.transition = 'none';
-                        bar.style.width = '0%';
-                        setTimeout(() => {
-                            bar.style.transition = 'width 2s ease-in-out';
-                            bar.style.width = '100%';
-                        }, 100);
-                    });
-                }
-            }
-
-            function hideLoaderModal() {
-                if (loaderModal) loaderModal.classList.add('hidden');
-            }
-
-            viewLoadersBtn.addEventListener('click', showLoaderModal);
-            closeModalBtn.addEventListener('click', hideLoaderModal);
-            loaderModal.addEventListener('click', (e) => {
-                if (e.target === loaderModal) {
-                    hideLoaderModal();
-                }
-            });
-
-            console.log("デバッグモードが有効です。");
-        }
-    }
 
     // --- ショートカット機能 ---
     const shortcutTask = urlParams.get('task');
@@ -924,4 +1064,3 @@ document.addEventListener('DOMContentLoaded', () => {
         currentCategory = shortcutCategory;
     }
 });
-

@@ -1,48 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const controls = document.querySelector('.controls');
+    const loaderWrappers = document.querySelectorAll('.loader-wrapper');
+    const controlButtons = document.querySelectorAll('.control-btn');
 
-    // --- Progress Bar Animation ---
-    function animateProgressBars() {
-        const progressBars = document.querySelectorAll('.progress-bar');
-        progressBars.forEach(bar => {
-            // Reset animation
-            bar.style.width = '0%';
-            // Trigger animation after a short delay
-            setTimeout(() => {
-                bar.style.width = '100%';
-            }, 100);
-        });
-    }
+    controls.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('control-btn')) return;
 
-    // Animate on load
-    animateProgressBars();
+        const loaderName = e.target.dataset.loader;
 
-    // Re-run animation every 4 seconds for demonstration
-    setInterval(animateProgressBars, 4000);
+        // Deactivate all wrappers and buttons
+        loaderWrappers.forEach(wrapper => wrapper.classList.remove('active'));
+        controlButtons.forEach(button => button.classList.remove('active'));
 
-
-    // --- Copy to Clipboard Logic ---
-    const copyButtons = document.querySelectorAll('.copy-btn');
-
-    copyButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const codeBlock = button.nextElementSibling; // The <pre> element
-            const codeToCopy = codeBlock.querySelector('code').innerText;
-
-            navigator.clipboard.writeText(codeToCopy).then(() => {
-                // Success feedback
-                button.textContent = 'Copied!';
-                button.classList.add('copied');
-                
-                // Revert back after 2 seconds
-                setTimeout(() => {
-                    button.textContent = 'Copy';
-                    button.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-                button.textContent = 'Error';
-            });
-        });
+        // Activate the selected one
+        const targetWrapper = document.getElementById(loaderName);
+        if (targetWrapper) {
+            targetWrapper.classList.add('active');
+        }
+        e.target.classList.add('active');
+        
+        // Special handling for progress bars to restart animation
+        if (loaderName.startsWith('bar')) {
+            const progressBar = targetWrapper.querySelector('.progress-bar');
+            if (progressBar) {
+                // Reset animation
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                // Trigger reflow
+                progressBar.offsetHeight; // eslint-disable-line no-unused-expressions
+                // Re-apply animation
+                progressBar.style.transition = 'width 2s ease-out';
+                progressBar.style.width = '100%';
+            }
+        }
     });
 
+    // Set initial state (optional, can show placeholder)
+    document.getElementById('loader-placeholder').classList.add('active');
 });
