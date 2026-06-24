@@ -1,0 +1,22 @@
+                            Mixed Linear Model Regression Results
+=============================================================================================
+Model:                         MixedLM            Dependent Variable:            discomfort_z
+No. Observations:              210                Method:                        REML        
+No. Groups:                    10                 Scale:                         0.4939      
+Min. group size:               21                 Log-Likelihood:                -232.0481   
+Max. group size:               21                 Converged:                     Yes         
+Mean group size:               21.0                                                          
+---------------------------------------------------------------------------------------------
+                                                   Coef.  Std.Err.   z    P>|z| [0.025 0.975]
+---------------------------------------------------------------------------------------------
+Intercept                                          -0.456    0.153 -2.976 0.003 -0.756 -0.156
+C(loaderType, Treatment('none'))[T.bar]            -0.848    0.182 -4.659 0.000 -1.205 -0.491
+C(loaderType, Treatment('none'))[T.bar-color]      -0.727    0.182 -3.995 0.000 -1.084 -0.371
+C(loaderType, Treatment('none'))[T.skeleton]       -0.777    0.184 -4.230 0.000 -1.136 -0.417
+C(loaderType, Treatment('none'))[T.skeleton-color] -0.502    0.183 -2.747 0.006 -0.860 -0.144
+C(loaderType, Treatment('none'))[T.spinner]        -0.750    0.183 -4.101 0.000 -1.109 -0.392
+C(loaderType, Treatment('none'))[T.spinner-color]  -0.710    0.183 -3.878 0.000 -1.070 -0.351
+simulatedLoadingTime_sec                            0.379    0.030 12.805 0.000  0.321  0.436
+mouseDistance_z                                     0.063    0.050  1.262 0.207 -0.035  0.160
+Group Var                                           0.000                                    
+=============================================================================================

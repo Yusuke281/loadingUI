@@ -15,58 +15,77 @@ def consolidate_data():
     """
     all_participants_data = []
     
-    # 'task_timings_p*.csv'のパターンに一致するすべてのファイルを探す
-    # このファイルには、すでに行動データとアンケートデータが含まれている
-    participant_files = sorted(glob.glob('task_timings_p*.csv'))
+    # 探索パターンの定義
+    patterns = [
+        'task_timings_p*.csv',
+        'data/task_timings*.csv'
+    ]
+    
+    participant_files = []
+    for pattern in patterns:
+        participant_files.extend(glob.glob(pattern))
+    
+    participant_files = sorted(list(set(participant_files))) # 重複排除とソート
     
     if not participant_files:
-        print("エラー: 'task_timings_p*.csv' のパターンに一致するファイルが見つかりません。")
-        print("実験データCSVの命名規則が 'task_timings_p1.csv' のようになっているか確認してください。")
+        print("エラー: 統合対象のファイルが見つかりません。")
         return
 
-    print(f"{len(participant_files)} 人の被験者データが見つかりました。")
+    print(f"{len(participant_files)} 件のデータファイルが見つかりました。")
 
-    for p_file in participant_files:
-        # ファイル名から被験者IDを抽出 (例: task_timings_p1.csv -> p1)
-        match = re.search(r'task_timings_(p\d+)\.csv', p_file)
-        if not match:
-            print(f"警告: ファイル名 '{p_file}' から被験者IDを抽出できませんでした。スキップします。")
-            continue
-        participant_id = match.group(1)
+    for i, p_file in enumerate(participant_files):
+        # ファイル名から被験者IDを抽出、または生成
+        # 例: task_timings_p1.csv -> p1, task_timings (7).csv -> participant_7
+        match = re.search(r'p(\d+)', p_file)
+        if match:
+            participant_id = f"p{match.group(1)}"
+        else:
+            # カッコ内の数字を抽出してみる (例: (7) -> participant_7)
+            match_paren = re.search(r'\((\d+)\)', p_file)
+            if match_paren:
+                participant_id = f"participant_{match_paren.group(1)}"
+            else:
+                participant_id = f"participant_{i+1}"
         
-        print(f"--- 被験者ID: {participant_id} のデータ ({p_file}) を処理中 ---")
+        print(f"--- 処理中: {p_file} (ID: {participant_id}) ---")
 
         try:
-            # --- データの読み込み ---
             df_participant = pd.read_csv(p_file)
             
-            # --- 被験者ID列を追加 ---
+            # カラム名の正規化
+            # perceivedTime -> perceivedLoadingTime
+            if 'perceivedTime' in df_participant.columns and 'perceivedLoadingTime' not in df_participant.columns:
+                df_participant = df_participant.rename(columns={'perceivedTime': 'perceivedLoadingTime'})
+            
             df_participant['participant_id'] = participant_id
-
             all_participants_data.append(df_participant)
 
         except Exception as e:
-            print(f"エラー: 被験者 {participant_id} のデータ処理中にエラーが発生しました: {e}")
+            print(f"エラー: {p_file} の処理中にエラーが発生しました: {e}")
             continue
             
     if not all_participants_data:
-        print("統合できる有効なデータがありませんでした。処理を終了します。")
+        print("統合できる有効なデータがありませんでした。")
         return
 
-    # 全被験者のデータを結合
     df_all = pd.concat(all_participants_data, ignore_index=True)
     
     # データ型を調整
-    df_all['perceivedLoadingTime'] = pd.to_numeric(df_all['perceivedLoadingTime'], errors='coerce')
-    df_all['discomfort'] = pd.to_numeric(df_all['discomfort'], errors='coerce')
-    df_all['reliability'] = pd.to_numeric(df_all['reliability'], errors='coerce')
-    df_all['simulatedLoadingTime_sec'] = df_all['simulatedLoadingTime'] / 1000
-    df_all['taskDuration_sec'] = df_all['taskDuration'] / 1000
+    numeric_cols = ['perceivedLoadingTime', 'discomfort', 'reliability']
+    for col in numeric_cols:
+        if col in df_all.columns:
+            df_all[col] = pd.to_numeric(df_all[col], errors='coerce')
     
-    # 欠損値を含む行を削除（アンケートに回答しなかった場合など）
-    df_all.dropna(subset=['perceivedLoadingTime', 'discomfort', 'reliability'], inplace=True)
+    if 'simulatedLoadingTime' in df_all.columns:
+        df_all['simulatedLoadingTime_sec'] = df_all['simulatedLoadingTime'] / 1000
+    if 'taskDuration' in df_all.columns:
+        df_all['taskDuration_sec'] = df_all['taskDuration'] / 1000
     
-    # 最終的な列の順序を定義
+    # 必須カラム（心理指標）が揃っている行のみを残す
+    # 旧形式(p1)はこれらのカラムがないため、ここで除外される
+    df_all.dropna(subset=[col for col in numeric_cols if col in df_all.columns], inplace=True)
+    
+    # 最終的な列の順序
     final_columns = [
         'participant_id', 'executionOrder', 'originalTrialNumber', 
         'loaderType', 'simulatedLoadingTime', 'simulatedLoadingTime_sec',
@@ -74,19 +93,15 @@ def consolidate_data():
         'totalLoadingTime', 'pureTaskDuration',
         'perceivedLoadingTime', 'discomfort', 'reliability'
     ]
-    # df_allに存在する列のみを抽出して順序を適用
     df_final = df_all[[col for col in final_columns if col in df_all.columns]]
 
-    # 統合したデータをCSVファイルに保存
     df_final.to_csv(OUTPUT_FILENAME, index=False, encoding='utf-8')
     
     print("\n" + "="*50)
-    print("すべての被験者データの統合が完了しました。")
+    print("データの統合が完了しました。")
     print(f"出力ファイル: {OUTPUT_FILENAME}")
-    print(f"総試行回数: {len(df_final)}")
-    print(f"ユニーク被験者数: {df_final['participant_id'].nunique()}")
-    print("\n--- 統合後データ (最初の5行) ---")
-    print(df_final.head())
+    print(f"総試行数: {len(df_final)}")
+    print(f"ユニーク被験者数: {df_final['participant_id'].nunique()} ({', '.join(df_final['participant_id'].unique())})")
     print("="*50)
 
 if __name__ == '__main__':

@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 'el3', name: 'パソコン', price: 125000, image: 'images/パソコン.png' },
             { id: 'el4', name: 'ヘッドホン', price: 28000, image: 'images/ヘッドホン.png' },
             { id: 'el5', name: 'スピーカー', price: 15000, image: 'images/スピーカー.png' },
-            { id: 'el6', name: '時計', price: 35000, image: 'images/時計.png' },
+            { id: 'el6', name: '掃除機', price: 35000, image: 'images/掃除機.jpg' },
             { id: 'el7', name: 'テレビ', price: 80000, image: 'images/テレビ.png' },
             { id: 'el8', name: 'タブレット', price: 45000, image: 'images/タブレット.png' }
         ],
@@ -45,10 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const tutorialTrials = [
-        { taskHTML: '<strong>Tシャツ</strong>と<strong>スマートフォン</strong>をカートに入れてください', loader: 'spinner', time: 2500 },
-        { taskHTML: '<strong>カメラ</strong>と<strong>イス</strong>をカートに入れてください', loader: 'spinner', time: 2500 },
-        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">次に、読み込み時間が短い例を体験していただきます。</p><strong>イス</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'spinner', time: 1000 }, // 短い例
-        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">最後に、読み込み時間が長い例を体験していただきます。</p><strong>コーヒー</strong>と<strong>パーカー</strong>をカートに入れてください', loader: 'spinner', time: 6000 },       // 長い例
+        { taskHTML: '<strong>Tシャツ</strong>と<strong>スマートフォン</strong>をカートに入れてください', loader: 'bouncing-dots', time: 2500 },
+        { taskHTML: '<strong>カメラ</strong>と<strong>イス</strong>をカートに入れてください', loader: 'bouncing-dots', time: 2500 },
+        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">次に、読み込み時間が短い例を体験していただきます。</p><strong>イス</strong>と<strong>りんご</strong>をカートに入れてください', loader: 'bouncing-dots', time: 1000 }, // 短い例
+        { taskHTML: '<p class="tutorial-descriptor" style="font-size: 1.2rem; color: #555;">最後に、読み込み時間が長い例を体験していただきます。</p><strong>コーヒー</strong>と<strong>パーカー</strong>をカートに入れてください', loader: 'bouncing-dots', time: 5000 },       // 長い例
     ];
 
     // --- 制約付きシャッフル関数 ---
@@ -107,13 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
         "<strong>パーカー</strong>と<strong>パソコン</strong>をカートに入れてください",
         "<strong>スマートフォン</strong>と<strong>ソファー</strong>をカートに入れてください",
         "<strong>りんご</strong>と<strong>靴下</strong>をカートに入れてください",
-        "<strong>リュックサック</strong>と<strong>時計</strong>をカートに入れてください",
+        "<strong>リュックサック</strong>と<strong>掃除機</strong>をカートに入れてください",
         "<strong>机</strong>と<strong>チョコレート</strong>をカートに入れてください",
         "<strong>パソコン</strong>と<strong>スカート</strong>をカートに入れてください",
         "<strong>チョコレート</strong>と<strong>テレビ</strong>をカートに入れてください",
         "<strong>ソファー</strong>と<strong>クロワッサン</strong>をカートに入れてください",
         "<strong>靴下</strong>と<strong>棚</strong>をカートに入れてください",
-        "<strong>時計</strong>と<strong>りんご</strong>をカートに入れてください",
+        "<strong>掃除機</strong>と<strong>りんご</strong>をカートに入れてください",
         "<strong>棚</strong>と<strong>ヘッドホン</strong>をカートに入れてください",
         "<strong>クロワッサン</strong>と<strong>スニーカー</strong>をカートに入れてください",
         "<strong>テレビ</strong>と<strong>鏡</strong>をカートに入れてください",
@@ -471,6 +471,9 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingOverlay.innerHTML = '<div class="spinner"></div>';
             const spinner = loadingOverlay.querySelector('.spinner');
             if (spinner && loaderType === 'spinner-color') spinner.classList.add('color');
+            hasContent = true;
+        } else if (loaderType === 'bouncing-dots') {
+            loadingOverlay.innerHTML = '<div class="bouncing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
             hasContent = true;
         }
 
@@ -938,8 +941,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // VASスライダーのつまみ表示制御
-    perceivedTimeInput.addEventListener('input', () => {
-        perceivedTimeInput.classList.add('touched');
+    // 'input'イベントだけだと、初期値（50）を直接クリックした際に値が変わらず、
+    // イベントが発生しないため、'pointerdown'なども追加して反応するようにする。
+    ['input', 'pointerdown', 'touchstart'].forEach(eventType => {
+        perceivedTimeInput.addEventListener(eventType, () => {
+            perceivedTimeInput.classList.add('touched');
+        });
     });
 
     // アンケート送信ボタンのイベントリスナー
